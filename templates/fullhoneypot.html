@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Honeypot Logs – NIDPS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Navigation Bar -->
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/honeypot" class="active">🐝 Honeypot</a></li>
+      </ul>
+    </nav>
+
+    <!-- Page Header -->
+    <header>
+      <h1>🐝 Honeypot Log Viewer</h1>
+      <p>Monitor suspicious activities captured by the honeypot.</p>
+    </header>
+
+    <!-- Honeypot Control Panel -->
+    <section class="card">
+      <h2>🛠️ Honeypot Control</h2>
+      <form action="/honeypot/control" method="post" class="form-row">
+        <label for="honeypot_ip">IP:</label>
+        <input type="text" name="ip" id="honeypot_ip" placeholder="0.0.0.0" value="0.0.0.0">
+        
+        <label for="honeypot_port">Port:</label>
+        <input type="number" name="port" id="honeypot_port" placeholder="8000" value="8000">
+
+        <button type="submit" name="action" value="start">Start</button>
+        <button type="submit" name="action" value="stop">Stop</button>
+      </form>
+
+      <p style="margin-top: 10px;">Status: <strong>{{ honeypot_status }}</strong></p>
+    </section>
+
+    <!-- Honeypot Log Filter -->
+    <section class="card">
+      <h2>🔍 Filter Honeypot Logs</h2>
+      <form method="get" action="/honeypot" class="form-row">
+        <label for="date-start">From:</label>
+        <input type="date" id="date-start" name="start">
+        <label for="date-end">To:</label>
+        <input type="date" id="date-end" name="end">
+        <button type="submit">Filter</button>
+        <a href="/honeypot" class="button-secondary">Reset</a>
+        <a href="/export-honeypot" class="button-secondary">📤 Export CSV</a>
+      </form>
+    </section>
+
+    <!-- Honeypot Logs Table -->
+    <section class="card">
+      <h2>📋 Captured Logs</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Source IP</th>
+              <th>Port / Service</th>
+              <th>Payload</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in honeypot_logs %}
+              <tr>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.ip or log.src_ip or log.attacker_ip or log.src or '-' }}</td>
+                <td>{{ log.port or log.service or '-' }}</td>
+                <td><code>{{ log.payload or log.request or '-' }}</code></td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="4">No honeypot interactions logged yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

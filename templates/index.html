@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NIDPS Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Navigation -->
+    <nav>
+      <ul>
+        <li><a href="/" class="active">📊 Dashboard</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+      </ul>
+    </nav>
+
+    <!-- Header -->
+    <header>
+      <h1>🛡️ Network Intrusion Detection & Prevention Dashboard</h1>
+      <p>Monitor and analyze suspicious activity across your network</p>
+    </header>
+
+    <!-- Stats: 4-up responsive grid -->
+    <section class="card-grid grid-auto">
+      <div class="card stat-card">
+        <h2>📡 Total Packets</h2>
+        <p id="packet-count">0</p>
+      </div>
+      <div class="card stat-card">
+        <h2>🚨 Rule Alerts</h2>
+        <p id="rule-count">0</p>
+      </div>
+      <div class="card stat-card">
+        <h2>🧠 ML Alerts</h2>
+        <p id="ml-count">0</p>
+      </div>
+      <div class="card stat-card">
+        <h2>✅ Safe Packets</h2>
+        <p id="safe-count">0</p>
+      </div>
+    </section>
+
+    <!-- ML chart with inline tiny toggle -->
+    <section class="card chart-container">
+      <div class="chart-header">
+        <h2>🧠 ML Alert Stats</h2>
+        <label class="switch-container tiny">
+          <input type="checkbox" id="ml-toggle" onchange="toggleML()" {{ 'checked' if ml_enabled else '' }}>
+          <span class="label-text">ML</span>
+        </label>
+      </div>
+      <canvas id="mlPieChart"></canvas>
+    </section>
+
+    <!-- Row: Alerts trend (left) + Live packets (right) -->
+    <section class="grid-2">
+      <div class="card chart-container">
+        <h2>📈 Alerts Trend (Hourly)</h2>
+        <canvas id="alertTrendChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h2>📡 Live Packets</h2>
+        <div id="packet-stream" class="live-packets"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let mlChart = null; // keep a single instance
+
+    async function fetchStats() {
+      const res = await fetch("/api/stats", { cache: "no-store" });
+      const stats = await res.json();
+      document.getElementById("packet-count").textContent = stats.total;
+      document.getElementById("rule-count").textContent = stats.rule;
+      document.getElementById("ml-count").textContent = stats.ml;
+      document.getElementById("safe-count").textContent = stats.safe;
+      renderMLPie(stats);
+    }
+
+    function renderMLPie(stats) {
+      const ctx = document.getElementById("mlPieChart").getContext("2d");
+
+      // Real counts for display
+      const raw = [
+        Number(stats.ml)   || 0,
+        Number(stats.rule) || 0,
+        Number(stats.safe) || 0
+      ];
+      const sum = raw[0] + raw[1] + raw[2];
+
+      // Drawn data: if all zero, use tiny eps so Chart.js renders a ring
+      const drawn = (sum === 0) ? [0.0001, 0.0001, 0.0001] : raw;
+
+      const config = {
+        type: "doughnut",
+        data: {
+          labels: ["ML Alerts", "Rule Alerts", "Safe"],
+          datasets: [{
+            data: drawn,
+            backgroundColor: ["#ff4081", "#ffeb3b", "#4caf50"],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "55%",
+          plugins: {
+            legend: { position: "bottom", labels: { color: "#333" } },
+            tooltip: {
+              callbacks: { label: (ctx) => `${ctx.label}: ${raw[ctx.dataIndex]}` }
+            }
+          }
+        }
+      };
+
+      if (mlChart) {
+        mlChart.data.datasets[0].data = drawn;
+        mlChart.update();
+      } else {
+        mlChart = new Chart(ctx, config);
+      }
+    }
+
+    async function renderAlertTrendChart() {
+      const res = await fetch("/api/alerts-per-hour", { cache: "no-store" });
+      const data = await res.json();
+      const ctx = document.getElementById("alertTrendChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: "Alerts per Hour",
+            data: data.counts,
+            fill: true,
+            borderColor: "#00e5ff",
+            backgroundColor: "rgba(0,229,255,0.2)",
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#333" } } },
+          scales: {
+            x: { ticks: { color: "#666" } },
+            y: { ticks: { color: "#666" }, beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    function toggleML() {
+      fetch("/toggle-ml", { method: "POST" }).then(() => {
+        alert("ML Detection toggled. Reloading...");
+        location.reload();
+      });
+    }
+
+    async function fetchLivePackets() {
+      try {
+        const res = await fetch("/api/live-packets", { cache: "no-store" });
+        const packets = await res.json();
+        const container = document.getElementById("packet-stream");
+        container.innerHTML = "";
+        packets.slice(-50).reverse().forEach(pkt => {
+          const div = document.createElement("div");
+          div.classList.add("packet-entry");
+          div.innerHTML = `
+            <strong>Time:</strong> ${pkt.timestamp}<br>
+            <strong>Source:</strong> ${pkt.src}<br>
+            <strong>Destination:</strong> ${pkt.dst}<br>
+            <strong>Protocol:</strong> ${pkt.protocol}<br>
+            <strong>Payload Length:</strong> ${pkt.payload_len}<br>
+            <strong>Type:</strong> <span class="${pkt.type === 'safe' ? 'safe-tag' : 'alert-tag'}">${pkt.type}</span>
+            <hr>
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        console.error("Failed to fetch packets:", e);
+      }
+    }
+
+    // Initial load + refresh timers
+    fetchStats();
+    renderAlertTrendChart();
+    fetchLivePackets();
+    setInterval(fetchStats, 10000);
+    setInterval(fetchLivePackets, 5000);
+  </script>
+</body>
+</html>

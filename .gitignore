@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment (Linux/WSL venv — not needed in repo)
+venv/
+env/
+.venv/
+
+# Logs & runtime data (don't commit captured traffic)
+logs.json
+logs/honeypot_log.json
+blacklist.json
+
+# Large dataset files (too big for GitHub)
+dataset/KDDTrain+.csv
+dataset/KDDTrain+.txt
+
+# ML model (generated locally — too large)
+dataset/model.joblib
+
+# Demo/helper scripts (internal use)
+start_honeypot.sh
+honeypot_demo.sh
+check_apis.sh
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Flask session files
+flask_session/

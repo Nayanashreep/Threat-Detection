@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "name": "Port Scan",
+    "description": "Multiple SYN packets to different ports from same IP",
+    "type": "threshold",
+    "field": "SYN",
+    "threshold": 10,
+    "timeframe": 5
+  },
+  {
+    "id": 2,
+    "name": "ICMP Flood",
+    "description": "Multiple ICMP packets from the same IP",
+    "type": "threshold",
+    "field": "ICMP",
+    "threshold": 15,
+    "timeframe": 5
+  },
+  {
+    "id": 3,
+    "name": "UDP Flood",
+    "description": "Multiple UDP packets from the same IP",
+    "type": "threshold",
+    "field": "UDP",
+    "threshold": 20,
+    "timeframe": 5
+  },
+  {
+    "id": 4,
+    "name": "Null Packet Scan",
+    "description": "TCP packet with no flags (possible stealth scan)",
+    "type": "signature",
+    "field": "TCP_NULL"
+  }
+]

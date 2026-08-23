@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rules – NIDPS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Navigation Bar -->
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+        <li><a href="/rules" class="active">⚙️ Rules</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+      </ul>
+    </nav>
+
+    <!-- Header -->
+    <header>
+      <h1>⚙️ Rule Management</h1>
+      <p>Create, update, or delete rules for monitoring suspicious activities.</p>
+    </header>
+
+    <!-- Add New Rule -->
+    <section class="card">
+      <h2>➕ Add New Rule</h2>
+
+      <form action="/add-rule" method="post" class="form-row">
+
+        <input
+          type="text"
+          name="src"
+          placeholder="Source IP (optional)"
+        >
+
+        <input
+          type="text"
+          name="dst"
+          placeholder="Destination IP (optional)"
+        >
+
+        <select name="protocol">
+          <option value="">Any Protocol</option>
+          <option value="ICMP">ICMP</option>
+          <option value="TCP">TCP</option>
+          <option value="UDP">UDP</option>
+        </select>
+
+        <select name="severity">
+          <option value="Low">Low</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="High">High</option>
+          <option value="Critical">Critical</option>
+        </select>
+
+        <input
+          type="text"
+          name="description"
+          placeholder="Description"
+        >
+
+        <button type="submit">Add Rule</button>
+
+      </form>
+    </section>
+
+    <!-- Existing Rules Table -->
+    <section class="card">
+      <h2>📋 Existing Rules</h2>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Source IP</th>
+              <th>Destination IP</th>
+              <th>Protocol</th>
+              <th>Severity</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for rule in rules %}
+            <tr>
+              <td>{{ rule.id }}</td>
+              <td>{{ rule.src or rule.pattern or 'Any' }}</td>
+              <td>{{ rule.dst or 'Any' }}</td>
+              <td>{{ rule.protocol or 'Any' }}</td>
+              <td>{{ rule.severity or 'Medium' }}</td>
+              <td>{{ rule.description or '-' }}</td>
+
+              <td>
+                <form
+                  action="/delete-rule/{{ rule.id }}"
+                  method="post"
+                >
+                  <button type="submit" class="button-danger">
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+
+            {% else %}
+            <tr>
+              <td colspan="7">No rules defined yet.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

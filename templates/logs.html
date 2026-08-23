@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Logs – NIDPS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Navigation Bar -->
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/logs" class="active">📝 Logs</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+      </ul>
+    </nav>
+
+    <!-- Page Header -->
+    <header>
+      <h1>📝 View Captured Logs</h1>
+      <p>Analyze and export intrusion detection logs from the system.</p>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="card">
+      <h2>🔍 Filter Logs</h2>
+      <form method="get" action="/logs" class="form-row">
+        <label for="filter-start">From:</label>
+        <input type="date" id="filter-start" name="start" value="{{ start }}">
+        
+        <label for="filter-end">To:</label>
+        <input type="date" id="filter-end" name="end" value="{{ end }}">
+        
+        <label for="filter-severity">Severity:</label>
+        <select name="severity" id="filter-severity">
+          <option value="">All</option>
+          <option value="low" {{ 'selected' if severity|lower == 'low' }}>Low</option>
+          <option value="medium" {{ 'selected' if severity|lower == 'medium' }}>Medium</option>
+          <option value="high" {{ 'selected' if severity|lower == 'high' }}>High</option>
+          <option value="critical" {{ 'selected' if severity|lower == 'critical' }}>Critical</option>
+        </select>
+
+        <button type="submit">Apply Filter</button>
+        <a href="/logs" class="button-secondary">Reset</a>
+        <a href="/export-logs?start={{ start }}&end={{ end }}&severity={{ severity }}" class="button-secondary">📤 Export Logs</a>
+      </form>
+    </section>
+
+    <!-- Logs Table -->
+    <section class="card">
+      <h2>📋 Captured Events</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Source IP</th>
+              <th>Destination IP</th>
+              <th>Protocol</th>
+              <th>Severity</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs %}
+              <tr>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.src_ip or log.src or '-' }}</td>
+                <td>{{ log.dst_ip or log.dst or '-' }}</td>
+                <td>{{ log.protocol or '-' }}</td>
+                <td>{{ log.severity or 'Low' }}</td>
+                <td>{{ log.description or 'Normal traffic' }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="6">No logs found for the selected criteria.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

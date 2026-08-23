@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Honeypot Logs – NIDPS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <nav style="margin-bottom: 20px; background-color: #121212; padding: 15px; border-radius: 8px; display: flex; justify-content: center; gap: 30px;">
+      <a href="/" style="color: #00e5ff; text-decoration: none; font-weight: bold;">📊 Dashboard</a>
+      <a href="/logs" style="color: #00e5ff; text-decoration: none; font-weight: bold;">📝 Logs</a>
+      <a href="/rules" style="color: #00e5ff; text-decoration: none; font-weight: bold;">⚙️ Rules</a>
+      <a href="/honeypot" style="color: #00e5ff; text-decoration: none; font-weight: bold;">🐝 Honeypot</a>
+    </nav>
+
+    <header>
+      <h1>🐝 Honeypot Logs</h1>
+      <p>Captured interaction attempts on fake services</p>
+    </header>
+
+    <section class="card">
+      <div style="margin-bottom: 15px;">
+        <button onclick="exportHoneypot('csv')">📁 Export CSV</button>
+        <button onclick="exportHoneypot('json')">🗂️ Export JSON</button>
+      </div>
+
+      <h2>Honeypot Events</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Attacker IP</th>
+            <th>Service</th>
+            <th>Request</th>
+          </tr>
+        </thead>
+        <tbody id="honeypot-table-body"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    async function loadHoneypotLogs() {
+      const res = await fetch("/api/honeypot");
+      const logs = await res.json();
+      const tbody = document.getElementById("honeypot-table-body");
+      tbody.innerHTML = "";
+
+      logs.reverse().forEach(log => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${log.timestamp}</td>
+          <td>${log.attacker_ip}</td>
+          <td>${log.service}</td>
+          <td><pre style="white-space:pre-wrap;">${log.request}</pre></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function exportHoneypot(format) {
+      window.open(`/export/honeypot.${format}`, '_blank');
+    }
+
+    loadHoneypotLogs();
+    setInterval(loadHoneypotLogs, 10000);
+  </script>
+</body>
+</html>
