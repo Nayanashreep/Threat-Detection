@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traffic – Financial Network Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic" class="active">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing">🛣️ Secure Routing</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+      </ul>
+    </nav>
+
+    <header>
+      <h1>📡 Live Network Traffic</h1>
+      <p>Monitor all active flows across the financial network in real-time.</p>
+    </header>
+
+    <section class="card">
+      <h2>📋 All Network Flows</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Source</th>
+              <th>Destination</th>
+              <th>Protocol</th>
+              <th>Port</th>
+              <th>Status</th>
+              <th>Threat Type</th>
+            </tr>
+          </thead>
+          <tbody id="all-traffic-body">
+            <tr><td colspan="7">Loading traffic...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    async function fetchAllTraffic() {
+      try {
+        const res = await fetch("/api/live-packets", { cache: "no-store" });
+        const packets = await res.json();
+        const tbody = document.getElementById("all-traffic-body");
+        tbody.innerHTML = "";
+        
+        if (packets.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7">No traffic recorded yet.</td></tr>';
+            return;
+        }
+
+        packets.slice().reverse().forEach(pkt => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${pkt.timestamp}</td>
+            <td>${pkt.src}</td>
+            <td>${pkt.dst}</td>
+            <td>${pkt.protocol}</td>
+            <td>${pkt.port}</td>
+            <td><span class="${pkt.status === 'SAFE' ? 'safe-tag' : 'alert-tag'}">${pkt.status}</span></td>
+            <td>${pkt.threat_type}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error("Failed to fetch traffic:", e);
+      }
+    }
+
+    fetchAllTraffic();
+    setInterval(fetchAllTraffic, 5000);
+  </script>
+</body>
+</html>

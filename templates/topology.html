@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Network Topology – Financial Network Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .topology-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre;
+        font-size: 16px;
+        line-height: 1.5;
+        border: 1px solid #e0e0e0;
+        overflow-x: auto;
+    }
+    .node {
+        font-weight: bold;
+        color: #1a73e8;
+    }
+    .threat-node {
+        font-weight: bold;
+        color: #d32f2f;
+    }
+    .honeypot-node {
+        font-weight: bold;
+        color: #f57c00;
+    }
+    .switch-node {
+        font-weight: bold;
+        color: #388e3c;
+    }
+    .controller-node {
+        font-weight: bold;
+        color: #7b1fa2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/topology" class="active">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing">🛣️ Secure Routing</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+      </ul>
+    </nav>
+
+    <header>
+      <h1>🌐 Simulated SDN Financial Network</h1>
+      <p>Visual representation of the Mininet topology and SDN components.</p>
+    </header>
+
+    <section class="card">
+      <h2>🖥️ Network Topology Overview</h2>
+      
+      <div class="topology-container">
+                                        <span class="controller-node">[ SDN Controller (POX/Ryu/Flask) ]</span>
+                                                  |
+                                                  |
+<span class="threat-node">[ Attacker ]</span>      <span class="node">[ Customer ]</span>              |
+        \           /                       |
+         \         /                        |
+          \       /                         |
+       <span class="switch-node">[ Switch 1 (Edge) ]</span>------------------+
+               |                            |
+               |                            |
+      +--------+--------+                   |
+      |                 |                   |
+<span class="switch-node">[ Switch 2 ]</span>      <span class="switch-node">[ Switch 3 ]</span>              |
+      |                 |                   |
+      |                 |                   |
+<span class="node">[ Bank Server ]</span>  <span class="node">[ Payment Gateway ]</span>        |
+                        |                   |
+                +-------+-------+           |
+                |               |           |
+          <span class="switch-node">[ Switch 4 ]</span>          |           |
+                |               |           |
+        <span class="honeypot-node">[ Honeypot ]</span>            +-----------+
+      </div>
+
+      <div style="margin-top: 20px;">
+          <h3>Component Details</h3>
+          <ul>
+              <li><strong>SDN Controller:</strong> Centralized brain that dictates routing paths and isolates threats.</li>
+              <li><strong>Customer / Payment Gateway / Bank Server:</strong> Legitimate simulated financial nodes.</li>
+              <li><strong>Attacker:</strong> Simulated hostile node launching malicious traffic.</li>
+              <li><strong>Honeypot:</strong> The primary threat detection mechanism designed to capture unauthorized access.</li>
+          </ul>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

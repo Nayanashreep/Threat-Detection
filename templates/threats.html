@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Threats – Financial Network Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats" class="active">🚨 Threats</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing">🛣️ Secure Routing</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+      </ul>
+    </nav>
+
+    <header>
+      <h1>🚨 Threat Alerts</h1>
+      <p>Monitor security alerts and actions taken by the SDN controller.</p>
+    </header>
+
+    <section class="card">
+      <h2>📋 Detected Threats</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Source IP</th>
+              <th>Destination</th>
+              <th>Protocol</th>
+              <th>Threat Type</th>
+              <th>Severity</th>
+              <th>Action</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for threat in threats|reverse %}
+              <tr>
+                <td>{{ threat.timestamp }}</td>
+                <td>{{ threat.source_ip }}</td>
+                <td>{{ threat.destination_ip }}</td>
+                <td>{{ threat.protocol }}</td>
+                <td>{{ threat.event_type }}</td>
+                <td>{{ threat.severity }}</td>
+                <td>{{ threat.action }}</td>
+                <td><span class="alert-tag">{{ threat.status }}</span></td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="8">No threats detected.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

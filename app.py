@@ -1,10 +1,14 @@
-# --- app.py (fixed & aligned) ---
+# --- app.py (SDN-Based Honeypot Threat Detection) ---
 
 from flask import Flask, render_template, request, jsonify, redirect, send_file
 import json, csv, io, os, sys, threading, subprocess
 from datetime import datetime
 from collections import defaultdict
 from scapy.all import sniff, IP
+
+# Import the new SDN Controller logic
+from controller.controller import controller_instance
+from controller.flow_manager import get_recent_flows, get_routing_events, log_flow
 
 app = Flask(__name__)
 
@@ -64,22 +68,21 @@ def ensure_logs_file():
 _PROTO_MAP = {"1": "ICMP", "6": "TCP", "17": "UDP", "2": "IGMP", "47": "GRE", "89": "OSPF"}
 
 def normalize_log(log):
-    """Normalize a single log dict – fix numeric protocol strings, ensure both src/src_ip exist."""
+    """Normalize a single log dict"""
     entry = dict(log)
     proto = str(entry.get("protocol", ""))
     if proto in _PROTO_MAP:
         entry["protocol"] = _PROTO_MAP[proto]
-    # ensure both src_ip / dst_ip aliases exist
-    entry.setdefault("src_ip", entry.get("src", "-"))
-    entry.setdefault("dst_ip", entry.get("dst", "-"))
-    entry.setdefault("src",    entry.get("src_ip", "-"))
-    entry.setdefault("dst",    entry.get("dst_ip", "-"))
-    entry.setdefault("severity",    "Low")
-    entry.setdefault("description", "Normal traffic")
+    entry.setdefault("source_ip", entry.get("src_ip", entry.get("src", "-")))
+    entry.setdefault("destination_ip", entry.get("dst_ip", entry.get("dst", "-")))
+    entry.setdefault("severity", "Low")
+    entry.setdefault("event_type", "Normal Traffic")
+    entry.setdefault("status", "SAFE")
+    entry.setdefault("action", "ALLOW")
     return entry
 
 def load_logs():
-    """Load persisted detection logs (not honeypot), normalizing each entry."""
+    """Load persisted detection logs, normalizing each entry."""
     try:
         if not os.path.exists(LOG_FILE) or os.stat(LOG_FILE).st_size == 0:
             raise json.JSONDecodeError("Empty file", "", 0)
@@ -99,26 +102,8 @@ def save_log(entry):
     with open(LOG_FILE, "w") as f:
         json.dump(logs[-1000:], f, indent=2)
 
-def load_blacklist():
-    if not os.path.exists(BLACKLIST_FILE):
-        return set()
-    try:
-        with open(BLACKLIST_FILE) as f:
-            return set(json.load(f))
-    except json.JSONDecodeError:
-        return set()
-
-def save_blacklist(blacklist):
-    with open(BLACKLIST_FILE, "w") as f:
-        json.dump(list(blacklist), f, indent=2)
-
-
-# === Detection Logic (ML + Rule-Based Together) ===
+# === Detection Logic (ML + Rule-Based) ===
 def detect(packet):
-    """
-    Called by scapy for each packet.
-    Evaluates BOTH rule-based static rules AND ML anomaly detection concurrently.
-    """
     global ML_ENABLED
     try:
         if IP in packet:
@@ -136,28 +121,11 @@ def detect(packet):
             # 1. Rule-Based Evaluation
             rules = load_rules()
             for rule in rules:
-                r_src = (rule.get("src") or rule.get("pattern") or "").strip()
-                r_dst = (rule.get("dst") or "").strip()
-                r_proto = str(rule.get("protocol") or "").strip().upper()
-
-                src_match = (not r_src) or (r_src in src_ip)
-                dst_match = (not r_dst) or (r_dst in dst_ip)
-
-                proto_match = True
-                if r_proto != "":
-                    if r_proto in ("1", "ICMP"):
-                        proto_match = (proto_num == 1)
-                    elif r_proto in ("6", "TCP"):
-                        proto_match = (proto_num == 6)
-                    elif r_proto in ("17", "UDP"):
-                        proto_match = (proto_num == 17)
-                    else:
-                        proto_match = (r_proto == str(proto_num))
-
-                if src_match and dst_match and proto_match:
+                pattern = (rule.get("pattern") or "").strip()
+                if pattern and pattern in src_ip:
                     rule_alert = True
                     rule_severity = rule.get("severity") or "High"
-                    rule_desc = rule.get("description") or f"Matched rule for {r_src or 'any'}"
+                    rule_desc = rule.get("description") or f"Matched rule pattern {pattern}"
                     break
 
             # 2. ML Anomaly Detection Evaluation
@@ -166,43 +134,42 @@ def detect(packet):
                 try:
                     ml_alert = is_malicious(packet)
                 except Exception as ml_err:
-                    print(f"[ML] Error evaluating packet: {ml_err}")
+                    print(f"[ML] Error: {ml_err}")
 
-            # 3. Determine Consolidated Type and Alert Status
-            if rule_alert and ml_alert:
-                entry_type = "both"
-                alert = True
-                severity = rule_severity
-                description = f"Rule: {rule_desc} | ML: Anomaly Detected"
-            elif rule_alert:
-                entry_type = "rule"
-                alert = True
-                severity = rule_severity
-                description = f"Rule: {rule_desc}"
-            elif ml_alert:
-                entry_type = "ml"
-                alert = True
-                severity = "High"
-                description = "ML Anomaly Detected"
+            if rule_alert or ml_alert:
+                entry_type = "Threat Detected"
+                severity = rule_severity if rule_alert else "High"
+                desc = f"Rule: {rule_desc}" if rule_alert else "ML Anomaly Detected"
+                
+                # Notify SDN Controller
+                controller_instance.handle_threat(desc, src_ip, dst_ip, proto_str, severity)
+                
+                entry = {
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "source_ip": src_ip,
+                    "destination_ip": dst_ip,
+                    "protocol": proto_str,
+                    "payload_len": length,
+                    "event_type": entry_type,
+                    "severity": severity,
+                    "description": desc,
+                    "action": "ISOLATED" if severity.lower() == "high" else "BLOCKED",
+                    "status": "THREAT DETECTED"
+                }
             else:
-                entry_type = "safe"
-                alert = False
-                severity = "Low"
-                description = "Normal traffic"
-
-            entry = {
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "src": src_ip,
-                "src_ip": src_ip,
-                "dst": dst_ip,
-                "dst_ip": dst_ip,
-                "protocol": proto_str,
-                "payload_len": length,
-                "type": entry_type,
-                "alert": alert,
-                "severity": severity,
-                "description": description
-            }
+                controller_instance.handle_new_flow(src_ip, dst_ip, proto_str, "N/A")
+                entry = {
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "source_ip": src_ip,
+                    "destination_ip": dst_ip,
+                    "protocol": proto_str,
+                    "payload_len": length,
+                    "event_type": "Normal Traffic",
+                    "severity": "Low",
+                    "description": "Normal traffic",
+                    "action": "ALLOW",
+                    "status": "SAFE"
+                }
 
             PACKET_LOG.append(entry)
             if len(PACKET_LOG) > 2000:
@@ -214,12 +181,10 @@ def detect(packet):
         print(f"[ERROR] detect(): {e}")
 
 
-# === Filter Helper ===
 def filter_logs_list(logs, start_date=None, end_date=None, severity=None):
     filtered = []
     for log in logs:
         ts_str = log.get("timestamp", "")
-        # Date filter
         if start_date or end_date:
             try:
                 log_dt = datetime.strptime(ts_str, "%Y-%m-%d %H:%M:%S").date()
@@ -234,7 +199,6 @@ def filter_logs_list(logs, start_date=None, end_date=None, severity=None):
             except Exception:
                 pass
 
-        # Severity filter
         if severity and severity.strip() != "":
             log_sev = (log.get("severity") or "").lower()
             if log_sev != severity.strip().lower():
@@ -248,6 +212,24 @@ def filter_logs_list(logs, start_date=None, end_date=None, severity=None):
 @app.route("/")
 def index():
     return render_template("index.html", ml_enabled=ML_ENABLED)
+
+@app.route("/traffic")
+def traffic_page():
+    return render_template("traffic.html")
+
+@app.route("/threats")
+def threats_page():
+    all_logs = load_logs()
+    threats = [log for log in all_logs if log.get("status") == "THREAT DETECTED" or log.get("severity", "").lower() in ["high", "critical", "medium"]]
+    return render_template("threats.html", threats=threats)
+
+@app.route("/topology")
+def topology_page():
+    return render_template("topology.html")
+
+@app.route("/routing")
+def routing_page():
+    return render_template("routing.html")
 
 @app.route("/logs")
 def logs_page():
@@ -270,9 +252,7 @@ def add_rule():
 
     new_rule = {
         "id": new_id,
-        "src": (request.form.get("src") or "").strip(),
-        "dst": (request.form.get("dst") or "").strip(),
-        "protocol": (request.form.get("protocol") or "").strip(),
+        "pattern": (request.form.get("pattern") or "").strip(),
         "severity": (request.form.get("severity") or "Medium").strip(),
         "description": (request.form.get("description") or "").strip()
     }
@@ -303,8 +283,8 @@ def honeypot_page():
         except json.JSONDecodeError:
             logs = []
     
-    status_str = f"Running on port {HONEYPOT_STATUS['port']}" if HONEYPOT_STATUS["running"] else "Stopped"
-    return render_template("fullhoneypot.html", logs=logs, honeypot_logs=logs, honeypot_status=status_str, honeypot_running=HONEYPOT_STATUS["running"])
+    status_str = f"RUNNING on port {HONEYPOT_STATUS['port']}" if HONEYPOT_STATUS["running"] else "STOPPED"
+    return render_template("fullhoneypot.html", logs=logs, honeypot_logs=logs, honeypot_status=status_str, honeypot_running=HONEYPOT_STATUS["running"], listening_ip="0.0.0.0", port=HONEYPOT_STATUS["port"])
 
 @app.route("/honeypot/control", methods=["POST"])
 def honeypot_control():
@@ -330,38 +310,12 @@ def honeypot_control():
 
     return redirect("/honeypot")
 
-@app.route("/toggle-ml", methods=["POST"])
-def toggle_ml():
-    global ML_ENABLED
-    ML_ENABLED = not ML_ENABLED
-    return jsonify({"ml_enabled": ML_ENABLED})
+@app.route("/honeypot/status")
+def honeypot_status():
+    return jsonify(HONEYPOT_STATUS)
 
-@app.route("/api/stats")
-def stats():
-    logs = load_logs()
-    total = len(logs)
-    rule = sum(1 for log in logs if log.get("type") in ("rule", "both"))
-    ml = sum(1 for log in logs if log.get("type") in ("ml", "both"))
-    safe = sum(1 for log in logs if log.get("type") == "safe")
-    return jsonify({"total": total, "rule": rule, "ml": ml, "safe": safe})
-
-@app.route("/api/alerts-per-hour")
-def alerts_per_hour():
-    logs = load_logs()
-    hourly = defaultdict(int)
-    for log in logs:
-        if log.get("alert"):
-            try:
-                ts = datetime.strptime(log["timestamp"], "%Y-%m-%d %H:%M:%S")
-                hour = ts.strftime("%Y-%m-%d %H:00")
-                hourly[hour] += 1
-            except Exception:
-                continue
-    sorted_keys = sorted(hourly.keys())
-    return jsonify({"labels": sorted_keys, "counts": [hourly[k] for k in sorted_keys]})
-
-@app.route("/api/honeypot-live")
-def honeypot_live():
+@app.route("/api/honeypot")
+def api_honeypot():
     if not os.path.exists(HONEYPOT_LOG):
         return jsonify([])
     try:
@@ -372,10 +326,6 @@ def honeypot_live():
             return jsonify(logs[-20:])
     except Exception:
         return jsonify([])
-
-@app.route("/api/honeypot")
-def api_honeypot():
-    return honeypot_live()
 
 @app.route("/honeypot/start", methods=["POST"])
 def honeypot_start():
@@ -403,9 +353,79 @@ def honeypot_stop():
         return jsonify({"status": "stopped"})
     return jsonify({"status": "not running"})
 
-@app.route("/honeypot/status")
-def honeypot_status():
-    return jsonify(HONEYPOT_STATUS)
+@app.route("/api/report-threat", methods=["POST"])
+def report_threat():
+    data = request.json or {}
+    src_ip = data.get("source_ip", "Unknown")
+    dst_ip = data.get("destination_ip", "Unknown")
+    port = data.get("port", "Unknown")
+    threat_type = data.get("threat_type", "Unknown Threat")
+    severity = data.get("severity", "High")
+    
+    # Send to controller logic
+    controller_instance.handle_threat(threat_type, src_ip, dst_ip, port, severity)
+    
+    # Also log to logs.json so /threats and /logs display the alert
+    action = "BLOCKED" if severity.lower() == "critical" else "ISOLATED"
+    entry = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "source_ip": src_ip,
+        "destination_ip": dst_ip,
+        "protocol": "TCP",
+        "payload_len": 64,
+        "event_type": threat_type,
+        "severity": severity,
+        "description": f"{threat_type} on port {port}",
+        "action": action,
+        "status": "THREAT DETECTED"
+    }
+    save_log(entry)
+    return jsonify({"status": "received"})
+
+
+@app.route("/toggle-ml", methods=["POST"])
+def toggle_ml():
+    global ML_ENABLED
+    ML_ENABLED = not ML_ENABLED
+    return jsonify({"ml_enabled": ML_ENABLED})
+
+@app.route("/api/stats")
+def stats():
+    flows = get_recent_flows()
+    routing_events = get_routing_events()
+    
+    total = len(flows)
+    threats = sum(1 for f in flows if f.get("status") == "THREAT DETECTED")
+    safe = total - threats
+    rerouted = len(routing_events)
+    
+    return jsonify({"total": total, "threats": threats, "safe": safe, "rerouted": rerouted})
+
+@app.route("/api/alerts-per-hour")
+def alerts_per_hour():
+    logs = load_logs()
+    hourly = defaultdict(int)
+    for log in logs:
+        if log.get("status") == "THREAT DETECTED":
+            try:
+                ts = datetime.strptime(log["timestamp"], "%Y-%m-%d %H:%M:%S")
+                hour = ts.strftime("%Y-%m-%d %H:00")
+                hourly[hour] += 1
+            except Exception:
+                continue
+    sorted_keys = sorted(hourly.keys())
+    return jsonify({"labels": sorted_keys, "counts": [hourly[k] for k in sorted_keys]})
+
+@app.route("/api/routing")
+def api_routing():
+    return jsonify(get_routing_events()[-50:])
+
+@app.route("/api/recent-packets")
+@app.route("/api/live-packets")
+def live_packets():
+    flows = get_recent_flows()
+    return jsonify(flows[-50:])
+
 
 # === Export Routes ===
 @app.route("/export-logs")
@@ -415,7 +435,7 @@ def export_logs_csv():
     end = request.args.get("end", "")
     severity = request.args.get("severity", "")
     logs = filter_logs_list(load_logs(), start, end, severity)
-    default_fields = ["timestamp", "src_ip", "dst_ip", "protocol", "severity", "description", "payload_len", "alert", "type"]
+    default_fields = ["timestamp", "source_ip", "destination_ip", "protocol", "severity", "description", "payload_len", "status"]
     fieldnames = list(logs[0].keys()) if logs else default_fields
     si = io.StringIO()
     cw = csv.DictWriter(si, fieldnames=fieldnames)
@@ -427,61 +447,6 @@ def export_logs_csv():
     output.seek(0)
     return send_file(output, mimetype="text/csv", as_attachment=True, download_name="logs.csv")
 
-@app.route("/export/logs.json")
-def export_logs_json():
-    start = request.args.get("start", "")
-    end = request.args.get("end", "")
-    severity = request.args.get("severity", "")
-    logs = filter_logs_list(load_logs(), start, end, severity)
-    output = io.BytesIO()
-    output.write(json.dumps(logs, indent=2).encode())
-    output.seek(0)
-    return send_file(output, mimetype="application/json", as_attachment=True, download_name="logs.json")
-
-@app.route("/export-honeypot")
-@app.route("/export/honeypot.csv")
-def export_honeypot_csv():
-    logs = []
-    if os.path.exists(HONEYPOT_LOG):
-        try:
-            with open(HONEYPOT_LOG) as f:
-                logs = json.load(f)
-        except json.JSONDecodeError:
-            logs = []
-    fields = list(logs[0].keys()) if logs else ["timestamp", "ip", "port", "request"]
-    si = io.StringIO()
-    cw = csv.DictWriter(si, fieldnames=fields)
-    cw.writeheader()
-    if logs:
-        cw.writerows(logs)
-    output = io.BytesIO()
-    output.write(si.getvalue().encode())
-    output.seek(0)
-    return send_file(output, mimetype="text/csv", as_attachment=True, download_name="honeypot_logs.csv")
-
-@app.route("/export/honeypot.json")
-def export_honeypot_json():
-    logs = []
-    if os.path.exists(HONEYPOT_LOG):
-        try:
-            with open(HONEYPOT_LOG) as f:
-                logs = json.load(f)
-        except json.JSONDecodeError:
-            logs = []
-    output = io.BytesIO()
-    output.write(json.dumps(logs, indent=2).encode())
-    output.seek(0)
-    return send_file(output, mimetype="application/json", as_attachment=True, download_name="honeypot_logs.json")
-
-@app.route("/api/recent-packets")
-@app.route("/api/live-packets")
-def live_packets():
-    # If the sniffer is running, serve from in-memory buffer
-    if PACKET_LOG:
-        return jsonify(PACKET_LOG[-50:])
-    # Fallback: serve last 50 entries from the persisted log file
-    logs = load_logs()
-    return jsonify(logs[-50:])
 
 # === Sniffer Thread ===
 def start_sniffer():

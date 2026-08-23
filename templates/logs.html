@@ -2,29 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Logs – NIDPS</title>
+  <title>Logs – Financial Network Security</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="container">
 
-    <!-- Navigation Bar -->
     <nav>
       <ul>
         <li><a href="/">📊 Dashboard</a></li>
-        <li><a href="/logs" class="active">📝 Logs</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
         <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing">🛣️ Secure Routing</a></li>
         <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs" class="active">📝 Logs</a></li>
       </ul>
     </nav>
 
-    <!-- Page Header -->
     <header>
       <h1>📝 View Captured Logs</h1>
-      <p>Analyze and export intrusion detection logs from the system.</p>
+      <p>Analyze and export detailed event logs from the system.</p>
     </header>
 
-    <!-- Filter Section -->
     <section class="card">
       <h2>🔍 Filter Logs</h2>
       <form method="get" action="/logs" class="form-row">
@@ -49,7 +50,6 @@
       </form>
     </section>
 
-    <!-- Logs Table -->
     <section class="card">
       <h2>📋 Captured Events</h2>
       <div class="table-container">
@@ -59,24 +59,26 @@
               <th>Timestamp</th>
               <th>Source IP</th>
               <th>Destination IP</th>
-              <th>Protocol</th>
+              <th>Event Type</th>
               <th>Severity</th>
-              <th>Description</th>
+              <th>Action Taken</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {% for log in logs %}
               <tr>
                 <td>{{ log.timestamp }}</td>
-                <td>{{ log.src_ip or log.src or '-' }}</td>
-                <td>{{ log.dst_ip or log.dst or '-' }}</td>
-                <td>{{ log.protocol or '-' }}</td>
+                <td>{{ log.source_ip or log.src or '-' }}</td>
+                <td>{{ log.destination_ip or log.dst or '-' }}</td>
+                <td>{{ log.event_type or 'Normal Traffic' }}</td>
                 <td>{{ log.severity or 'Low' }}</td>
-                <td>{{ log.description or 'Normal traffic' }}</td>
+                <td>{{ log.action or 'ALLOW' }}</td>
+                <td><span class="{{ 'safe-tag' if log.status == 'SAFE' else 'alert-tag' }}">{{ log.status or 'SAFE' }}</span></td>
               </tr>
             {% else %}
               <tr>
-                <td colspan="6">No logs found for the selected criteria.</td>
+                <td colspan="7">No logs found for the selected criteria.</td>
               </tr>
             {% endfor %}
           </tbody>

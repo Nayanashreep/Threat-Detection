@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Routing – Financial Network Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing" class="active">🛣️ Secure Routing</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+      </ul>
+    </nav>
+
+    <header>
+      <h1>🛣️ Secure Routing Events</h1>
+      <p>Monitor SDN controller routing decisions and dynamic path changes.</p>
+    </header>
+
+    <section class="card">
+      <h2>📋 Recent Routing Decisions</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Original Route</th>
+              <th>Threat Source</th>
+              <th>New Route</th>
+              <th>Action</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="routing-events-body">
+            <tr><td colspan="6">Loading routing events...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    async function fetchRoutingEvents() {
+      try {
+        const res = await fetch("/api/routing", { cache: "no-store" });
+        const events = await res.json();
+        const tbody = document.getElementById("routing-events-body");
+        tbody.innerHTML = "";
+        
+        if (events.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6">No routing events recorded yet.</td></tr>';
+            return;
+        }
+
+        events.slice().reverse().forEach(ev => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${ev.timestamp}</td>
+            <td><code>${ev.original_route}</code></td>
+            <td>${ev.threat_src}</td>
+            <td><code>${ev.new_route}</code></td>
+            <td>${ev.action}</td>
+            <td><span class="${ev.status === 'SAFE' ? 'safe-tag' : 'alert-tag'}">${ev.status}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error("Failed to fetch routing events:", e);
+      }
+    }
+
+    fetchRoutingEvents();
+    setInterval(fetchRoutingEvents, 5000);
+  </script>
+</body>
+</html>

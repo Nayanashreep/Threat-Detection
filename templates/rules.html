@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Rules – NIDPS</title>
+  <title>Rules – Financial Network Security</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -13,9 +13,13 @@
     <nav>
       <ul>
         <li><a href="/">📊 Dashboard</a></li>
-        <li><a href="/logs">📝 Logs</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
         <li><a href="/rules" class="active">⚙️ Rules</a></li>
+        <li><a href="/routing">🛣️ Secure Routing</a></li>
         <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
       </ul>
     </nav>
 
@@ -33,22 +37,10 @@
 
         <input
           type="text"
-          name="src"
-          placeholder="Source IP (optional)"
+          name="pattern"
+          placeholder="IP or Pattern (e.g., 10.0.0.5)"
+          required
         >
-
-        <input
-          type="text"
-          name="dst"
-          placeholder="Destination IP (optional)"
-        >
-
-        <select name="protocol">
-          <option value="">Any Protocol</option>
-          <option value="ICMP">ICMP</option>
-          <option value="TCP">TCP</option>
-          <option value="UDP">UDP</option>
-        </select>
 
         <select name="severity">
           <option value="Low">Low</option>
@@ -61,6 +53,7 @@
           type="text"
           name="description"
           placeholder="Description"
+          required
         >
 
         <button type="submit">Add Rule</button>
@@ -77,9 +70,7 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Source IP</th>
-              <th>Destination IP</th>
-              <th>Protocol</th>
+              <th>Pattern / Source IP</th>
               <th>Severity</th>
               <th>Description</th>
               <th>Actions</th>
@@ -90,11 +81,9 @@
             {% for rule in rules %}
             <tr>
               <td>{{ rule.id }}</td>
-              <td>{{ rule.src or rule.pattern or 'Any' }}</td>
-              <td>{{ rule.dst or 'Any' }}</td>
-              <td>{{ rule.protocol or 'Any' }}</td>
-              <td>{{ rule.severity or 'Medium' }}</td>
-              <td>{{ rule.description or '-' }}</td>
+              <td>{{ rule.pattern }}</td>
+              <td>{{ rule.severity }}</td>
+              <td>{{ rule.description }}</td>
 
               <td>
                 <form
@@ -110,7 +99,7 @@
 
             {% else %}
             <tr>
-              <td colspan="7">No rules defined yet.</td>
+              <td colspan="5">No rules defined yet.</td>
             </tr>
             {% endfor %}
           </tbody>

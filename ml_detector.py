@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.ensemble import IsolationForest
+from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import os
@@ -7,58 +7,78 @@ import joblib
 
 # File paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-dataset_path = os.path.join(BASE_DIR, "dataset", "KDDTrain+.csv")
+dataset_path = os.path.join(BASE_DIR, "dataset", "Financial_Network_Traffic.csv")
 model_path = os.path.join(BASE_DIR, "dataset", "model.joblib")
 
-# Static label encoder for protocol_type (used both in training and inference)
+# Static label encoder for protocol_type
 protocol_encoder = LabelEncoder()
 protocol_encoder.fit(["icmp", "tcp", "udp"])
 
-# Load or train model
-if os.path.exists(model_path):
-    model = joblib.load(model_path)
-else:
-    print("[ML] Training Isolation Forest using KDDTrain+.csv...")
-    df = pd.read_csv(dataset_path, header=None)
+# Load or train model specifically for Financial Network DDoS & Threat Detection
+def train_financial_model():
+    print("[ML] Training Anomaly Model on Financial Network Traffic Dataset...")
+    if not os.path.exists(dataset_path):
+        # Trigger generation if file not found
+        from dataset.generate_dataset import generate_data
+        generate_data()
 
-    # Sample for speed
-    df = df.sample(5000, random_state=42)
+    df = pd.read_csv(dataset_path)
 
-    # Select 5 relevant features
-    # Columns: [duration, protocol_type, src_bytes, dst_bytes, wrong_fragment]
-    X = df[[0, 1, 4, 5, 7]].copy()
-    X[1] = LabelEncoder().fit_transform(X[1])  # Encode protocol
+    # Features: [duration, protocol_type, service, src_bytes, dst_bytes]
+    X = df[["duration", "protocol_type", "service", "src_bytes", "dst_bytes"]].copy()
 
-    model = IsolationForest(contamination=0.05, random_state=42)
+    # Isolation Forest for Unsupervised Anomaly / DDoS Detection
+    model = IsolationForest(contamination=0.1, random_state=42)
     model.fit(X.values)
 
     joblib.dump(model, model_path)
-    print("[ML] Model trained and saved to dataset/model.joblib.")
+    print(f"[ML] Financial Threat Model successfully trained on {len(df)} financial network samples and saved.")
+    return model
 
-# Extract features from a Scapy packet
+if os.path.exists(model_path):
+    try:
+        model = joblib.load(model_path)
+    except Exception:
+        model = train_financial_model()
+else:
+    model = train_financial_model()
+
+# Extract features from a Scapy packet in real-time
 def extract_features(pkt):
     try:
-        duration = 0  # Not tracked in real-time
-        proto = pkt.proto if hasattr(pkt, "proto") else 0
+        duration = 0  # Real-time packet level
+        proto = pkt.proto if hasattr(pkt, "proto") else 6 # default TCP
 
         if proto == 6:
             proto_name = "tcp"
+            proto_val = 0
         elif proto == 17:
             proto_name = "udp"
+            proto_val = 1
         else:
             proto_name = "icmp"
+            proto_val = 2
 
-        protocol_encoded = protocol_encoder.transform([proto_name])[0]
-        src_bytes = len(pkt.payload)
-        dst_bytes = len(pkt.payload.payload) if hasattr(pkt.payload, 'payload') else 0
-        wrong_fragment = 1 if hasattr(pkt, 'frag') and pkt.frag > 0 else 0
+        # Infer service (0: bank_api, 1: payment_gateway, 2: atm_switch, 3: web_portal, 4: honeypot)
+        dst_port = pkt.dport if hasattr(pkt, "dport") else 80
+        if dst_port in [8000, 9999]:
+            service_val = 4 # honeypot
+        elif dst_port in [8443, 443]:
+            service_val = 1 # payment gateway
+        elif dst_port in [8855, 80]:
+            service_val = 0 # bank api
+        else:
+            service_val = 3 # web portal
 
-        features = np.array([[duration, protocol_encoded, src_bytes, dst_bytes, wrong_fragment]])
+        src_bytes = len(pkt.payload) if hasattr(pkt, "payload") else 64
+        dst_bytes = len(pkt.payload.payload) if hasattr(pkt.payload, 'payload') and hasattr(pkt.payload.payload, '__len__') else 0
+
+        features = np.array([[duration, proto_val, service_val, src_bytes, dst_bytes]])
         return features
-    except Exception:
-        return np.array([[0, 0, 0, 0, 0]])
+    except Exception as e:
+        return np.array([[0, 0, 0, 64, 0]])
 
-# Predict anomaly (returns True if malicious)
+# Predict anomaly (returns True if malicious DDoS / intrusion activity detected)
 def is_malicious(pkt):
     features = extract_features(pkt)
     prediction = model.predict(features)
