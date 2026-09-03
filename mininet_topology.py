@@ -21,11 +21,9 @@ import os
 
 class FinancialNetworkTopo(Topo):
     def build(self):
-        # Add switches
-        s1 = self.addSwitch('s1')
-        s2 = self.addSwitch('s2')
-        s3 = self.addSwitch('s3')
-        s4 = self.addSwitch('s4')
+        # Add exactly 2 switches as requested in the architecture
+        s1 = self.addSwitch('s1', protocols='OpenFlow13')
+        s2 = self.addSwitch('s2', protocols='OpenFlow13')
 
         # Add hosts
         customer = self.addHost('h1', ip='10.0.0.1')
@@ -34,18 +32,17 @@ class FinancialNetworkTopo(Topo):
         attacker = self.addHost('h4', ip='10.0.0.4')
         honeypot = self.addHost('h5', ip='10.0.0.5')
 
-        # Connect hosts to switches
-        self.addLink(customer, s1)
-        self.addLink(attacker, s1)
-        self.addLink(bank_server, s2)
-        self.addLink(payment_gw, s3)
-        self.addLink(honeypot, s4)
+        # Connect hosts to S1
+        self.addLink(customer, s1)     # h1 -> s1
+        self.addLink(attacker, s1)     # h4 -> s1
+        self.addLink(honeypot, s1)     # h5 -> s1
 
-        # Connect switches to form the core network
+        # Connect hosts to S2
+        self.addLink(bank_server, s2)  # h2 -> s2
+        self.addLink(payment_gw, s2)   # h3 -> s2
+
+        # Connect S1 and S2 together
         self.addLink(s1, s2)
-        self.addLink(s1, s3)
-        self.addLink(s2, s4)
-        self.addLink(s3, s4)
 
 def run():
     topo = FinancialNetworkTopo()

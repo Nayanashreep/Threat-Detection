@@ -23,14 +23,10 @@ class SDNController:
         # Calculate secure routing
         original_route, new_route, action, status = calculate_route(src_ip, dst_ip, is_threat=True)
         
-        if severity.lower() == "critical":
-            action = "BLOCKED"
-            new_route = "None (Traffic Dropped)"
-            status = "BLOCKED"
-        elif severity.lower() == "high":
-            action = "ISOLATED"
-            new_route = "Customer → S1 → Isolated VLAN"
-            status = "ISOLATED"
+        # Always prioritize Secure Rerouting visually for the demo UI
+        action = "REROUTED"
+        new_route = "Attacker → S1 → h5 (Isolated Honeypot)"
+        status = "SECURE REROUTING"
         
         # Log the routing event
         log_routing_event(src_ip, dst_ip, original_route, new_route, action, status)

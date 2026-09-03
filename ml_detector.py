@@ -43,11 +43,32 @@ if os.path.exists(model_path):
 else:
     model = train_financial_model()
 
+# Flow tracking for ML features
+flow_tracker = {}
+import time
+
 # Extract features from a Scapy packet in real-time
 def extract_features(pkt):
     try:
-        duration = 0  # Real-time packet level
-        proto = pkt.proto if hasattr(pkt, "proto") else 6 # default TCP
+        current_time = time.time()
+        src_ip = pkt.src if hasattr(pkt, 'src') else "0.0.0.0"
+        dst_ip = pkt.dst if hasattr(pkt, 'dst') else "0.0.0.0"
+        
+        # IP layer IPs
+        if pkt.haslayer("IP"):
+            src_ip = pkt["IP"].src
+            dst_ip = pkt["IP"].dst
+            
+        flow_key = (src_ip, dst_ip)
+        
+        if flow_key not in flow_tracker:
+            flow_tracker[flow_key] = {"last_time": current_time, "duration": 0.5} # Default normal duration
+            duration = 0.5
+        else:
+            duration = current_time - flow_tracker[flow_key]["last_time"]
+            flow_tracker[flow_key]["last_time"] = current_time
+            
+        proto = pkt.proto if hasattr(pkt, "proto") else (pkt["IP"].proto if pkt.haslayer("IP") else 6)
 
         if proto == 6:
             proto_name = "tcp"
@@ -60,7 +81,12 @@ def extract_features(pkt):
             proto_val = 2
 
         # Infer service (0: bank_api, 1: payment_gateway, 2: atm_switch, 3: web_portal, 4: honeypot)
-        dst_port = pkt.dport if hasattr(pkt, "dport") else 80
+        dst_port = 80
+        if pkt.haslayer("TCP"):
+            dst_port = pkt["TCP"].dport
+        elif pkt.haslayer("UDP"):
+            dst_port = pkt["UDP"].dport
+
         if dst_port in [8000, 9999]:
             service_val = 4 # honeypot
         elif dst_port in [8443, 443]:
@@ -70,7 +96,7 @@ def extract_features(pkt):
         else:
             service_val = 3 # web portal
 
-        src_bytes = len(pkt.payload) if hasattr(pkt, "payload") else 64
+        src_bytes = len(pkt)
         dst_bytes = len(pkt.payload.payload) if hasattr(pkt.payload, 'payload') and hasattr(pkt.payload.payload, '__len__') else 0
 
         features = np.array([[duration, proto_val, service_val, src_bytes, dst_bytes]])
@@ -83,3 +109,4 @@ def is_malicious(pkt):
     features = extract_features(pkt)
     prediction = model.predict(features)
     return prediction[0] == -1
+

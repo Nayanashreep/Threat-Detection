@@ -1,0 +1,389 @@
+[
+  {
+    "timestamp": "2026-08-24 06:33:43",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:33:46",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:34:18",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:34:21",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:34:54",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:34:57",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:35:29",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:35:32",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:36:04",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:36:08",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:36:40",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:36:43",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:37:15",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:37:19",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:37:51",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:37:54",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:38:26",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:38:30",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:39:02",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:39:05",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:39:37",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:39:40",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:40:13",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:40:16",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:40:48",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:40:51",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:40:55",
+    "src_ip": "172.22.192.1",
+    "dst_ip": "239.255.255.250",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.192.1"
+  },
+  {
+    "timestamp": "2026-08-24 06:40:57",
+    "src_ip": "172.22.192.1",
+    "dst_ip": "239.255.255.250",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.192.1"
+  },
+  {
+    "timestamp": "2026-08-24 06:41:00",
+    "src_ip": "172.22.192.1",
+    "dst_ip": "239.255.255.250",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.192.1"
+  },
+  {
+    "timestamp": "2026-08-24 06:41:24",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:41:27",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:41:59",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:42:02",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:42:35",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:42:38",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:43:10",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:43:13",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:43:45",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:43:49",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:44:21",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:44:24",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  },
+  {
+    "timestamp": "2026-08-24 06:44:56",
+    "src_ip": "172.22.196.202",
+    "dst_ip": "91.189.91.157",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 172.22.196.202"
+  },
+  {
+    "timestamp": "2026-08-24 06:45:00",
+    "src_ip": "91.189.91.157",
+    "dst_ip": "172.22.196.202",
+    "protocol": 17,
+    "dst_port": null,
+    "alert": true,
+    "reason": "ML Anomaly Detected from 91.189.91.157"
+  }
+]
