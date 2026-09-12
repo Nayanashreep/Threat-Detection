@@ -2,61 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Honeypot Logs – NIDPS</title>
+  <title>Honeypot Logs – Financial Network Security</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="container">
-    <nav style="margin-bottom: 20px; background-color: #121212; padding: 15px; border-radius: 8px; display: flex; justify-content: center; gap: 30px;">
-      <a href="/" style="color: #00e5ff; text-decoration: none; font-weight: bold;">📊 Dashboard</a>
-      <a href="/logs" style="color: #00e5ff; text-decoration: none; font-weight: bold;">📝 Logs</a>
-      <a href="/rules" style="color: #00e5ff; text-decoration: none; font-weight: bold;">⚙️ Rules</a>
-      <a href="/honeypot" style="color: #00e5ff; text-decoration: none; font-weight: bold;">🐝 Honeypot</a>
+
+    <!-- Standard Unified Navigation -->
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing">🛣️ Secure Routing</a></li>
+        <li><a href="/honeypot" class="active">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+      </ul>
     </nav>
 
     <header>
-      <h1>🐝 Honeypot Logs</h1>
-      <p>Captured interaction attempts on fake services</p>
+      <h1>🐝 Honeypot Trap Logs</h1>
+      <p>Captured attacker interactions and probes on isolated fake services (Port 8000 / 9999).</p>
     </header>
 
     <section class="card">
-      <div style="margin-bottom: 15px;">
-        <button onclick="exportHoneypot('csv')">📁 Export CSV</button>
-        <button onclick="exportHoneypot('json')">🗂️ Export JSON</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2>🍯 Honeypot Capture Events</h2>
+        <div>
+          <button onclick="exportHoneypot('csv')">📁 Export CSV</button>
+          <button onclick="exportHoneypot('json')">🗂️ Export JSON</button>
+        </div>
       </div>
 
-      <h2>Honeypot Events</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Attacker IP</th>
-            <th>Service</th>
-            <th>Request</th>
-          </tr>
-        </thead>
-        <tbody id="honeypot-table-body"></tbody>
-      </table>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Attacker IP</th>
+              <th>Decoy Service</th>
+              <th>Captured Payload / Request</th>
+            </tr>
+          </thead>
+          <tbody id="honeypot-table-body">
+            <tr><td colspan="4">Loading honeypot events...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
 
   <script>
     async function loadHoneypotLogs() {
-      const res = await fetch("/api/honeypot");
-      const logs = await res.json();
-      const tbody = document.getElementById("honeypot-table-body");
-      tbody.innerHTML = "";
+      try {
+        const res = await fetch("/api/honeypot", { cache: "no-store" });
+        const logs = await res.json();
+        const tbody = document.getElementById("honeypot-table-body");
+        tbody.innerHTML = "";
 
-      logs.reverse().forEach(log => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${log.timestamp}</td>
-          <td>${log.attacker_ip}</td>
-          <td>${log.service}</td>
-          <td><pre style="white-space:pre-wrap;">${log.request}</pre></td>
-        `;
-        tbody.appendChild(row);
-      });
+        if (!logs || logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4">No honeypot interactions captured yet.</td></tr>';
+          return;
+        }
+
+        logs.slice().reverse().forEach(log => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${log.timestamp || '-'}</td>
+            <td><strong style="color: var(--danger-color);">${log.attacker_ip || '-'}</strong></td>
+            <td><span class="alert-tag">${log.service || 'HTTP/FakeBank'}</span></td>
+            <td><pre style="white-space:pre-wrap; margin:0; font-family:monospace; font-size:0.85rem;">${log.request || '-'}</pre></td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error("Failed to load honeypot logs:", err);
+      }
     }
 
     function exportHoneypot(format) {

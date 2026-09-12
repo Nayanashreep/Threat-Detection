@@ -2,9 +2,14 @@
 
 from flask import Flask, render_template, request, jsonify, redirect, send_file
 import json, csv, io, os, sys, threading, subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import defaultdict
-from scapy.all import sniff, IP
+try:
+    from scapy.all import sniff, IP
+except Exception as _scapy_err:
+    sniff = None
+    IP = None
+
 
 # Import the new SDN Controller logic
 from controller.controller import controller_instance
@@ -27,6 +32,8 @@ PACKET_LOG = []                          # in-memory rolling buffer for quick UI
 ML_ENABLED = True                        # toggled via /toggle-ml
 HONEYPOT_PROCESS = None
 HONEYPOT_STATUS = {"running": False, "port": 8000}
+THREAT_EVENT_COUNTER = 0
+LATEST_THREAT_EVENT = {}
 
 # === Load ML Detector ===
 try:
@@ -106,7 +113,7 @@ def save_log(entry):
 def detect(packet):
     global ML_ENABLED
     try:
-        if IP in packet:
+        if IP is not None and IP in packet:
             src_ip = packet[IP].src
             dst_ip = packet[IP].dst
             proto_num = int(packet[IP].proto)
@@ -210,66 +217,31 @@ def filter_logs_list(logs, start_date=None, end_date=None, severity=None):
 
 # === Routes ===
 @app.route("/")
+@app.route("/dashboard")
 def index():
-    return render_template("index.html", ml_enabled=ML_ENABLED)
+    return render_template("index.html", active_tab="dashboard", ml_enabled=ML_ENABLED)
+
+@app.route("/routing")
+def routing_page():
+    return render_template("index.html", active_tab="routing", ml_enabled=ML_ENABLED)
+
+@app.route("/topology")
+def topology_page():
+    return render_template("index.html", active_tab="topology", ml_enabled=ML_ENABLED)
 
 @app.route("/traffic")
 def traffic_page():
-    return render_template("traffic.html")
+    return render_template("index.html", active_tab="traffic", ml_enabled=ML_ENABLED)
 
 @app.route("/threats")
 def threats_page():
     all_logs = load_logs()
     threats = [log for log in all_logs if log.get("status") == "THREAT DETECTED" or log.get("severity", "").lower() in ["high", "critical", "medium"]]
-    return render_template("threats.html", threats=threats)
-
-@app.route("/topology")
-def topology_page():
-    return render_template("topology.html")
-
-@app.route("/routing")
-def routing_page():
-    return render_template("routing.html")
-
-@app.route("/logs")
-def logs_page():
-    start = request.args.get("start", "")
-    end = request.args.get("end", "")
-    severity = request.args.get("severity", "")
-    logs = load_logs()
-    filtered = filter_logs_list(logs, start, end, severity)
-    return render_template("logs.html", logs=filtered, start=start, end=end, severity=severity)
+    return render_template("index.html", active_tab="threats", threats=threats, ml_enabled=ML_ENABLED)
 
 @app.route("/rules")
 def rules_page():
-    return render_template("rules.html", rules=load_rules())
-
-@app.route("/add-rule", methods=["POST"])
-def add_rule():
-    rules = load_rules()
-    existing_ids = [r.get("id", 0) for r in rules if isinstance(r.get("id"), int)]
-    new_id = max(existing_ids, default=0) + 1
-
-    new_rule = {
-        "id": new_id,
-        "pattern": (request.form.get("pattern") or "").strip(),
-        "severity": (request.form.get("severity") or "Medium").strip(),
-        "description": (request.form.get("description") or "").strip()
-    }
-
-    rules.append(new_rule)
-    with open(RULES_FILE, "w") as f:
-        json.dump(rules, f, indent=2)
-
-    return redirect("/rules")
-
-@app.route("/delete-rule/<int:rule_id>", methods=["POST"])
-def delete_rule(rule_id):
-    rules = load_rules()
-    rules = [r for r in rules if r.get("id") != rule_id]
-    with open(RULES_FILE, "w") as f:
-        json.dump(rules, f, indent=2)
-    return redirect("/rules")
+    return render_template("index.html", active_tab="rules", rules=load_rules(), ml_enabled=ML_ENABLED)
 
 @app.route("/honeypot")
 def honeypot_page():
@@ -282,9 +254,61 @@ def honeypot_page():
                     logs = []
         except json.JSONDecodeError:
             logs = []
-    
     status_str = f"RUNNING on port {HONEYPOT_STATUS['port']}" if HONEYPOT_STATUS["running"] else "STOPPED"
-    return render_template("fullhoneypot.html", logs=logs, honeypot_logs=logs, honeypot_status=status_str, honeypot_running=HONEYPOT_STATUS["running"], listening_ip="0.0.0.0", port=HONEYPOT_STATUS["port"])
+    return render_template("index.html", active_tab="honeypot", logs=logs, honeypot_logs=logs, honeypot_status=status_str, honeypot_running=HONEYPOT_STATUS["running"], listening_ip="0.0.0.0", port=HONEYPOT_STATUS["port"], ml_enabled=ML_ENABLED)
+
+@app.route("/logs")
+def logs_page():
+    start = request.args.get("start", "")
+    end = request.args.get("end", "")
+    severity = request.args.get("severity", "")
+    logs = load_logs()
+    filtered = filter_logs_list(logs, start, end, severity)
+    return render_template("index.html", active_tab="logs", logs=filtered, start=start, end=end, severity=severity, ml_enabled=ML_ENABLED)
+
+@app.route("/api/rules", methods=["GET", "POST"])
+def api_rules():
+    if request.method == "POST":
+        data = request.json or request.form
+        rules = load_rules()
+        existing_ids = [r.get("id", 0) for r in rules if isinstance(r.get("id"), int)]
+        new_id = max(existing_ids, default=0) + 1
+        new_rule = {
+            "id": new_id,
+            "pattern": (data.get("pattern") or "").strip(),
+            "severity": (data.get("severity") or "Medium").strip(),
+            "description": (data.get("description") or "").strip()
+        }
+        rules.append(new_rule)
+        with open(RULES_FILE, "w") as f:
+            json.dump(rules, f, indent=2)
+        return jsonify({"success": True, "rules": rules})
+    return jsonify(load_rules())
+
+@app.route("/api/delete-rule/<int:rule_id>", methods=["POST", "DELETE"])
+def api_delete_rule(rule_id):
+    rules = load_rules()
+    rules = [r for r in rules if r.get("id") != rule_id]
+    with open(RULES_FILE, "w") as f:
+        json.dump(rules, f, indent=2)
+    return jsonify({"success": True, "rules": rules})
+
+@app.route("/api/logs", methods=["GET"])
+def api_logs():
+    start = request.args.get("start", "")
+    end = request.args.get("end", "")
+    severity = request.args.get("severity", "")
+    logs = load_logs()
+    filtered = filter_logs_list(logs, start, end, severity)
+    return jsonify(filtered)
+
+@app.route("/api/threats", methods=["GET"])
+def api_threats():
+    all_logs = load_logs()
+    threats = [log for log in all_logs if log.get("status") == "THREAT DETECTED" or log.get("severity", "").lower() in ["high", "critical", "medium"]]
+    return jsonify(threats)
+
+
 
 @app.route("/honeypot/control", methods=["POST"])
 def honeypot_control():
@@ -355,12 +379,14 @@ def honeypot_stop():
 
 @app.route("/api/report-threat", methods=["POST"])
 def report_threat():
+    global THREAT_EVENT_COUNTER, LATEST_THREAT_EVENT
     data = request.json or {}
     src_ip = data.get("source_ip", "Unknown")
     dst_ip = data.get("destination_ip", "Unknown")
     port = data.get("port", "Unknown")
     threat_type = data.get("threat_type", "Unknown Threat")
     severity = data.get("severity", "High")
+    payload = data.get("payload", "DDoS signature pattern")
     
     # Send to controller logic
     controller_instance.handle_threat(threat_type, src_ip, dst_ip, port, severity)
@@ -380,8 +406,64 @@ def report_threat():
         "status": "THREAT DETECTED"
     }
     save_log(entry)
-    return jsonify({"status": "received"})
 
+    # Save to honeypot_log.json so Honeypot tab displays trapped payloads
+    try:
+        hp_logs = []
+        if os.path.exists(HONEYPOT_LOG):
+            with open(HONEYPOT_LOG, "r") as f:
+                hp_logs = json.load(f)
+                if not isinstance(hp_logs, list):
+                    hp_logs = []
+        hp_entry = {
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "attacker_ip": src_ip,
+            "service": f"SDN-Decoy-Port-{port}",
+            "request": f"{threat_type} trapped in Honeypot VLAN. Destination was {dst_ip}:{port} [Payload: {payload}]"
+        }
+        hp_logs.append(hp_entry)
+        with open(HONEYPOT_LOG, "w") as f:
+            json.dump(hp_logs[-200:], f, indent=2)
+    except Exception as hp_err:
+        print(f"[!] Error updating honeypot log: {hp_err}")
+
+    # Track latest event for real-time frontend detection
+    THREAT_EVENT_COUNTER += 1
+    LATEST_THREAT_EVENT = {
+        "counter": THREAT_EVENT_COUNTER,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "source_ip": src_ip,
+        "destination_ip": dst_ip,
+        "threat_type": threat_type,
+        "severity": severity,
+        "action": action
+    }
+    return jsonify({"status": "received", "counter": THREAT_EVENT_COUNTER})
+
+@app.route("/api/report-flow", methods=["POST"])
+def report_flow():
+    data = request.json or {}
+    src_ip = data.get("source_ip", "10.0.0.1")
+    dst_ip = data.get("destination_ip", "10.0.0.3")
+    port = data.get("port", 443)
+    proto = data.get("protocol", "TCP")
+    status = data.get("status", "SAFE")
+    
+    controller_instance.handle_new_flow(src_ip, dst_ip, proto, port)
+    entry = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "source_ip": src_ip,
+        "destination_ip": dst_ip,
+        "protocol": proto,
+        "payload_len": 128,
+        "event_type": "Legitimate Financial Transaction",
+        "severity": "Low",
+        "description": f"Customer payment transaction on port {port}",
+        "action": "ALLOW",
+        "status": "SAFE"
+    }
+    save_log(entry)
+    return jsonify({"status": "received"})
 
 @app.route("/toggle-ml", methods=["POST"])
 def toggle_ml():
@@ -390,31 +472,96 @@ def toggle_ml():
     return jsonify({"ml_enabled": ML_ENABLED})
 
 @app.route("/api/stats")
+@app.route("/api/live-status")
 def stats():
     flows = get_recent_flows()
     routing_events = get_routing_events()
+    logs = load_logs()
     
-    total = len(flows)
-    threats = sum(1 for f in flows if f.get("status") == "THREAT DETECTED")
-    safe = total - threats
+    threat_count = sum(1 for f in flows if f.get("status") == "THREAT DETECTED")
+    safe_count = sum(1 for f in flows if f.get("status") == "SAFE")
+    
+    if safe_count == 0 and len(logs) > 0:
+        safe_count = sum(1 for l in logs if l.get("status") == "SAFE")
+    if threat_count == 0 and len(logs) > 0:
+        threat_count = sum(1 for l in logs if l.get("status") == "THREAT DETECTED")
+        
+    total = len(flows) if len(flows) > 0 else (threat_count + safe_count)
+    if safe_count + threat_count > total:
+        total = safe_count + threat_count
+        
     rerouted = len(routing_events)
     
-    return jsonify({"total": total, "threats": threats, "safe": safe, "rerouted": rerouted})
+    return jsonify({
+        "total": max(1, total),
+        "threats": threat_count,
+        "safe": safe_count,
+        "rerouted": rerouted,
+        "threat_counter": THREAT_EVENT_COUNTER,
+        "latest_threat": LATEST_THREAT_EVENT,
+        "routing_events_count": len(routing_events)
+    })
 
 @app.route("/api/alerts-per-hour")
 def alerts_per_hour():
+    threat_timestamps = []
+    
+    # 1. From logs.json
     logs = load_logs()
-    hourly = defaultdict(int)
     for log in logs:
         if log.get("status") == "THREAT DETECTED":
-            try:
-                ts = datetime.strptime(log["timestamp"], "%Y-%m-%d %H:%M:%S")
-                hour = ts.strftime("%Y-%m-%d %H:00")
-                hourly[hour] += 1
-            except Exception:
-                continue
-    sorted_keys = sorted(hourly.keys())
-    return jsonify({"labels": sorted_keys, "counts": [hourly[k] for k in sorted_keys]})
+            ts_str = log.get("timestamp")
+            if ts_str:
+                for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+                    try:
+                        threat_timestamps.append(datetime.strptime(ts_str.split(".")[0], fmt))
+                        break
+                    except Exception:
+                        pass
+
+    # 2. From flows_log.json
+    flows = get_recent_flows()
+    for flow in flows:
+        if flow.get("status") == "THREAT DETECTED" or (flow.get("threat_type") and flow.get("threat_type") not in ("None", "")):
+            ts_str = flow.get("timestamp")
+            if ts_str:
+                for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+                    try:
+                        threat_timestamps.append(datetime.strptime(ts_str.split(".")[0], fmt))
+                        break
+                    except Exception:
+                        pass
+
+    # 3. From honeypot_log.json
+    if os.path.exists(HONEYPOT_LOG):
+        try:
+            with open(HONEYPOT_LOG, "r", encoding="utf-8") as f:
+                h_logs = json.load(f)
+                if isinstance(h_logs, list):
+                    for h in h_logs:
+                        if h.get("alert") or h.get("status") == "THREAT DETECTED":
+                            ts_str = h.get("timestamp")
+                            if ts_str:
+                                for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+                                    try:
+                                        threat_timestamps.append(datetime.strptime(ts_str.split(".")[0], fmt))
+                                        break
+                                    except Exception:
+                                        pass
+        except Exception:
+            pass
+
+    # Aggregate counts per hourly bucket (YYYY-MM-DD HH:00)
+    hourly = defaultdict(int)
+    for dt in threat_timestamps:
+        hourly[dt.strftime("%Y-%m-%d %H:00")] += 1
+
+    # Focus on active operational day (or current day) for a standard 24-hour telemetry matrix
+    active_date = max(threat_timestamps).date() if threat_timestamps else datetime.now().date()
+    labels = [f"{h:02d}:00" for h in range(24)]
+    counts = [hourly.get(f"{active_date} {h:02d}:00", 0) for h in range(24)]
+
+    return jsonify({"labels": labels, "counts": counts})
 
 @app.route("/api/routing")
 def api_routing():
@@ -435,17 +582,65 @@ def export_logs_csv():
     end = request.args.get("end", "")
     severity = request.args.get("severity", "")
     logs = filter_logs_list(load_logs(), start, end, severity)
-    default_fields = ["timestamp", "source_ip", "destination_ip", "protocol", "severity", "description", "payload_len", "status"]
-    fieldnames = list(logs[0].keys()) if logs else default_fields
+    fieldnames = ["timestamp", "source_ip", "destination_ip", "protocol", "severity", "description", "payload_len", "status", "action", "event_type"]
     si = io.StringIO()
-    cw = csv.DictWriter(si, fieldnames=fieldnames)
+    cw = csv.DictWriter(si, fieldnames=fieldnames, quoting=csv.QUOTE_ALL, escapechar='\\', extrasaction='ignore')
     cw.writeheader()
-    if logs:
-        cw.writerows(logs)
+    for row in logs:
+        if isinstance(row, dict):
+            cw.writerow({k: str(row.get(k, "-")).replace("\r", " ").replace("\n", " ") for k in fieldnames})
     output = io.BytesIO()
-    output.write(si.getvalue().encode())
+    output.write(si.getvalue().encode("utf-8"))
     output.seek(0)
-    return send_file(output, mimetype="text/csv", as_attachment=True, download_name="logs.csv")
+    return send_file(output, mimetype="text/csv", as_attachment=True, download_name="network_security_logs.csv")
+
+@app.route("/export/honeypot.csv")
+@app.route("/export-honeypot-csv")
+def export_honeypot_csv():
+    logs = []
+    if os.path.exists(HONEYPOT_LOG):
+        try:
+            with open(HONEYPOT_LOG, "r", encoding="utf-8") as f:
+                logs = json.load(f)
+                if not isinstance(logs, list):
+                    logs = []
+        except Exception:
+            logs = []
+    fieldnames = ["timestamp", "attacker_ip", "service", "request"]
+    si = io.StringIO()
+    cw = csv.DictWriter(si, fieldnames=fieldnames, quoting=csv.QUOTE_ALL, escapechar='\\', extrasaction='ignore')
+    cw.writeheader()
+    for entry in logs:
+        if isinstance(entry, dict):
+            cw.writerow({
+                "timestamp": str(entry.get("timestamp", "-")),
+                "attacker_ip": str(entry.get("attacker_ip", entry.get("src", entry.get("src_ip", "-")))),
+                "service": str(entry.get("service", "-")),
+                "request": str(entry.get("request", entry.get("payload", "-"))).replace("\r", " ").replace("\n", " ")
+            })
+    output = io.BytesIO()
+    output.write(si.getvalue().encode("utf-8"))
+    output.seek(0)
+    return send_file(output, mimetype="text/csv", as_attachment=True, download_name="honeypot_logs.csv")
+
+@app.route("/export/honeypot.json")
+@app.route("/export-honeypot-json")
+def export_honeypot_json():
+    logs = []
+    if os.path.exists(HONEYPOT_LOG):
+        try:
+            with open(HONEYPOT_LOG, "r", encoding="utf-8") as f:
+                logs = json.load(f)
+                if not isinstance(logs, list):
+                    logs = []
+        except Exception:
+            logs = []
+    output = io.BytesIO()
+    output.write(json.dumps(logs, indent=2).encode("utf-8"))
+    output.seek(0)
+    return send_file(output, mimetype="application/json", as_attachment=True, download_name="honeypot_logs.json")
+
+
 
 
 # === Sniffer Thread ===
@@ -458,7 +653,7 @@ def start_sniffer():
 
 if __name__ == "__main__":
     ensure_logs_file()
-    if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-        sniffer_thread = threading.Thread(target=start_sniffer, daemon=True)
-        sniffer_thread.start()
-    app.run(debug=True, port=8855)
+    sniffer_thread = threading.Thread(target=start_sniffer, daemon=True)
+    sniffer_thread.start()
+    app.run(host="0.0.0.0", port=8855, debug=False)
+

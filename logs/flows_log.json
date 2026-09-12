@@ -1,16 +1,97 @@
 [
   {
-    "timestamp": "2026-08-23 08:38:42",
-    "src": "192.168.100.108",
-    "dst": "10.0.0.5 (Honeypot)",
-    "protocol": "TCP/UDP",
-    "port": 8000,
-    "status": "THREAT DETECTED",
-    "threat_type": "Honeypot Trap Connection"
+    "timestamp": "2026-09-07 15:10:01",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
   },
   {
-    "timestamp": "2026-08-23 08:38:43",
-    "src": "192.168.100.111",
+    "timestamp": "2026-09-07 15:10:05",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:10:10",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "HTTP",
+    "port": 8855,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:10:15",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "HTTP",
+    "port": 8855,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:10:20",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:08",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:08",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:09",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:09",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:09",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:10",
+    "src": "192.168.100.101",
     "dst": "10.0.0.2 (Bank DNS)",
     "protocol": "TCP/UDP",
     "port": 53,
@@ -18,7 +99,97 @@
     "threat_type": "DDoS Volumetric UDP Flood"
   },
   {
-    "timestamp": "2026-08-23 08:38:43",
+    "timestamp": "2026-09-07 15:41:10",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:10",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:10",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:11",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:11",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:11",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:12",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:12",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:12",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:12",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:13",
     "src": "192.168.100.112",
     "dst": "10.0.0.2 (Bank Server)",
     "protocol": "TCP/UDP",
@@ -27,7 +198,349 @@
     "threat_type": "DDoS HTTP Flood (Bank API)"
   },
   {
-    "timestamp": "2026-08-23 08:38:43",
+    "timestamp": "2026-09-07 15:41:13",
+    "src": "192.168.100.113",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 15:41:13",
+    "src": "192.168.100.114",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:23",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:23",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:24",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:24",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:24",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:25",
+    "src": "192.168.100.101",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:25",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:25",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:26",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:26",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:26",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:26",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:27",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:27",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:27",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:27",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:28",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:28",
+    "src": "192.168.100.113",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 15:42:28",
+    "src": "192.168.100.114",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:21",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:21",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:22",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:22",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:22",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:23",
+    "src": "192.168.100.101",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:23",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:23",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:24",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:24",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:24",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:25",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:25",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:25",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:25",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:26",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:26",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-07 16:07:26",
     "src": "192.168.100.113",
     "dst": "10.0.0.2 (Bank Server)",
     "protocol": "TCP/UDP",
@@ -36,7 +549,178 @@
     "threat_type": "DDoS HTTP Flood (Bank API)"
   },
   {
-    "timestamp": "2026-08-23 08:38:44",
+    "timestamp": "2026-09-07 16:07:27",
+    "src": "192.168.100.114",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:52",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:53",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:53",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:53",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:54",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:54",
+    "src": "192.168.100.101",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:55",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:55",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:55",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:56",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:56",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:56",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:56",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:57",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:57",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:57",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:58",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:58",
+    "src": "192.168.100.113",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-08 02:46:58",
     "src": "192.168.100.114",
     "dst": "10.0.0.5 (Honeypot)",
     "protocol": "TCP/UDP",
@@ -45,201 +729,534 @@
     "threat_type": "Honeypot Trap Connection"
   },
   {
-    "timestamp": "2026-08-24 06:33:43",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
-    "protocol": "TCP/UDP",
-    "port": 80,
-    "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "timestamp": "2026-09-08 05:42:32",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
   },
   {
-    "timestamp": "2026-08-24 06:33:46",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
-    "protocol": "TCP/UDP",
-    "port": 80,
-    "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "timestamp": "2026-09-08 05:42:33",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
   },
   {
-    "timestamp": "2026-08-24 06:34:18",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
-    "protocol": "TCP/UDP",
-    "port": 80,
-    "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "timestamp": "2026-09-08 05:42:33",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
   },
   {
-    "timestamp": "2026-08-24 06:34:21",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
-    "protocol": "TCP/UDP",
-    "port": 80,
-    "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "timestamp": "2026-09-08 05:42:33",
+    "src": "10.0.0.15",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
   },
   {
-    "timestamp": "2026-08-24 06:34:54",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
-    "protocol": "TCP/UDP",
-    "port": 80,
-    "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "timestamp": "2026-09-08 05:42:34",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
   },
   {
-    "timestamp": "2026-08-24 06:34:57",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:34",
+    "src": "192.168.100.101",
+    "dst": "10.0.0.3 (Payment Gateway)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8443,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS SYN Flood (Payment GW)"
   },
   {
-    "timestamp": "2026-08-24 06:35:29",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:34",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.2 (Bank Server)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8855,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "DDoS HTTP Flood (Bank API)"
   },
   {
-    "timestamp": "2026-08-24 06:35:32",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:35",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.2 (Bank DNS)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 53,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS Volumetric UDP Flood"
   },
   {
-    "timestamp": "2026-08-24 06:36:04",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:35",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.2 (Bank Server)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8855,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "DDoS HTTP Flood (Bank API)"
   },
   {
-    "timestamp": "2026-08-24 06:36:08",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:35",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.2 (Bank Server)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8855,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS HTTP Flood (Bank API)"
   },
   {
-    "timestamp": "2026-08-24 06:36:40",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:36",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.3 (Payment Gateway)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8443,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "DDoS SYN Flood (Payment GW)"
   },
   {
-    "timestamp": "2026-08-24 06:36:43",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:36",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.2 (Bank DNS)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 53,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS Volumetric UDP Flood"
   },
   {
-    "timestamp": "2026-08-24 06:37:15",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:36",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.5 (Honeypot)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8000,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "Honeypot Trap Connection"
   },
   {
-    "timestamp": "2026-08-24 06:37:19",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:36",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.2 (Bank Server)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8855,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS HTTP Flood (Bank API)"
   },
   {
-    "timestamp": "2026-08-24 06:37:51",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:37",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.3 (Payment Gateway)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8443,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "DDoS SYN Flood (Payment GW)"
   },
   {
-    "timestamp": "2026-08-24 06:37:54",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:37",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.5 (Honeypot)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8000,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "Honeypot Trap Connection"
   },
   {
-    "timestamp": "2026-08-24 06:38:26",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:37",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.3 (Payment Gateway)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8443,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "DDoS SYN Flood (Payment GW)"
   },
   {
-    "timestamp": "2026-08-24 06:38:30",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:42:37",
+    "src": "192.168.100.113",
+    "dst": "10.0.0.2 (Bank DNS)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 53,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS Volumetric UDP Flood"
   },
   {
-    "timestamp": "2026-08-24 06:39:02",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:42:38",
+    "src": "192.168.100.114",
+    "dst": "10.0.0.5 (Honeypot)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8000,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "Honeypot Trap Connection"
   },
   {
-    "timestamp": "2026-08-24 06:39:05",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 05:44:26",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.2",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8855,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "Volumetric DDoS Syn-Flood"
   },
   {
-    "timestamp": "2026-08-24 06:39:37",
-    "src": "172.22.196.202",
-    "dst": "91.189.91.157",
+    "timestamp": "2026-09-08 05:44:46",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.2",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8855,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 172.22.196.202"
+    "threat_type": "Volumetric DDoS Syn-Flood"
   },
   {
-    "timestamp": "2026-08-24 06:39:40",
-    "src": "91.189.91.157",
-    "dst": "172.22.196.202",
+    "timestamp": "2026-09-08 08:51:23",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:23",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:24",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:24",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:24",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:25",
+    "src": "192.168.100.101",
+    "dst": "10.0.0.3 (Payment Gateway)",
     "protocol": "TCP/UDP",
-    "port": 80,
+    "port": 8443,
     "status": "THREAT DETECTED",
-    "threat_type": "ML Anomaly Detected from 91.189.91.157"
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:25",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:25",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:25",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:26",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:26",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:26",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:27",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:27",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:27",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:27",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:28",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:28",
+    "src": "192.168.100.113",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 08:51:28",
+    "src": "192.168.100.114",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:03",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:03",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:03",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:04",
+    "src": "10.0.0.12",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:04",
+    "src": "10.0.0.1",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/TLS",
+    "port": 443,
+    "status": "SAFE",
+    "threat_type": "None"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:04",
+    "src": "192.168.100.101",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:05",
+    "src": "192.168.100.102",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:05",
+    "src": "192.168.100.103",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:05",
+    "src": "192.168.100.104",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:05",
+    "src": "192.168.100.105",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:06",
+    "src": "192.168.100.106",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:06",
+    "src": "192.168.100.107",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:06",
+    "src": "192.168.100.108",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:07",
+    "src": "192.168.100.109",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:07",
+    "src": "192.168.100.110",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:07",
+    "src": "192.168.100.111",
+    "dst": "10.0.0.5 (Honeypot)",
+    "protocol": "TCP/UDP",
+    "port": 8000,
+    "status": "THREAT DETECTED",
+    "threat_type": "Honeypot Trap Connection"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:07",
+    "src": "192.168.100.112",
+    "dst": "10.0.0.2 (Bank DNS)",
+    "protocol": "TCP/UDP",
+    "port": 53,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS Volumetric UDP Flood"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:08",
+    "src": "192.168.100.113",
+    "dst": "10.0.0.3 (Payment Gateway)",
+    "protocol": "TCP/UDP",
+    "port": 8443,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS SYN Flood (Payment GW)"
+  },
+  {
+    "timestamp": "2026-09-08 08:52:08",
+    "src": "192.168.100.114",
+    "dst": "10.0.0.2 (Bank Server)",
+    "protocol": "TCP/UDP",
+    "port": 8855,
+    "status": "THREAT DETECTED",
+    "threat_type": "DDoS HTTP Flood (Bank API)"
   }
 ]

@@ -2,272 +2,394 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Live Secure Routing – Financial NIDPS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Secure Routing – Financial Network Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
-    :root {
-      --bg: #0f111a;
-      --card-bg: #1e1e2f;
-      --text: #e2e8f0;
-      --accent: #3498db;
-      --safe: #2ecc71;
-      --danger: #e74c3c;
-      --isolate: #9b59b6;
-      --border: rgba(255,255,255,0.05);
-    }
-    body {
-      margin: 0; padding: 20px; font-family: 'Inter', sans-serif;
-      background: var(--bg); color: var(--text);
-    }
-    nav ul {
-      list-style: none; padding: 0; display: flex; gap: 20px;
-      background: var(--card-bg); padding: 15px 20px; border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    nav a {
-      color: var(--text); text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 6px;
-    }
-    nav a.active { background: rgba(52, 152, 219, 0.2); color: var(--accent); }
-    nav a:hover { background: rgba(255,255,255,0.1); }
-    
-    header { text-align: center; margin-bottom: 30px; }
-    h1 { margin: 0 0 10px 0; font-size: 2rem; }
-    p { margin: 0; color: #94a3b8; }
-
-    .grid-container {
+    /* -------- Routing Simulation Specific Enhancements -------- */
+    .routing-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1.25rem;
     }
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    @media (max-width: 1024px) {
+      .routing-grid { grid-template-columns: 1fr; }
     }
-    h2 { font-size: 1.1rem; margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; color: #cbd5e1; }
 
-    /* NETWORK VISUALIZER */
-    .network-canvas {
-      position: relative; width: 100%; height: 350px;
-      background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .node {
-      position: absolute; padding: 8px 16px; border-radius: 6px;
-      font-weight: bold; font-size: 0.9rem; z-index: 2;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    .status-banner {
       text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 0.9rem 1.5rem;
+      border-radius: 14px;
+      margin-bottom: 0.5rem;
+      box-shadow: var(--shadow-outset);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
     }
-    /* Node Positions */
-    .n-cust { top: 150px; left: 20px; background: #34495e; }
-    .n-att { top: 250px; left: 20px; background: #34495e; border: 1px solid var(--danger); }
-    .n-s1 { top: 150px; left: 160px; background: var(--accent); }
-    .n-s2 { top: 50px; left: 320px; background: var(--accent); }
-    .n-s3 { top: 250px; left: 320px; background: var(--accent); }
-    .n-s4 { top: 150px; left: 480px; background: var(--accent); }
-    .n-bank { top: 150px; right: 20px; background: var(--safe); }
-    .n-honey { top: 300px; right: 20px; background: var(--isolate); }
+    .st-normal {
+      background: rgba(22, 163, 74, 0.12);
+      color: #15803d;
+      border: 2px solid rgba(22, 163, 74, 0.3);
+    }
+    .st-detect {
+      background: rgba(220, 38, 38, 0.12);
+      color: #b91c1c;
+      border: 2px solid rgba(220, 38, 38, 0.3);
+      animation: pulseAlert 1.5s infinite;
+    }
+    .st-secure {
+      background: rgba(74, 119, 226, 0.15);
+      color: #1d4ed8;
+      border: 2px solid rgba(74, 119, 226, 0.4);
+    }
 
-    /* Paths */
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.01); box-shadow: 0 0 15px rgba(220, 38, 38, 0.3); }
+    }
+
+    /* Simulation Canvas */
+    .network-canvas {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: linear-gradient(135deg, #d8dee8 0%, #edf2f7 100%);
+      box-shadow: var(--shadow-inset);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 0.5rem 0 1rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .node {
+      position: absolute;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      z-index: 5;
+      box-shadow: 3px 3px 8px rgba(0,0,0,0.15), -2px -2px 6px rgba(255,255,255,0.8);
+      text-align: center;
+      transition: all 0.3s ease;
+      color: #ffffff;
+      user-select: none;
+    }
+    .node:hover {
+      transform: scale(1.05);
+    }
+
+    /* Node Placements */
+    .n-cust { top: 150px; left: 24px; background: #334155; }
+    .n-att  { top: 270px; left: 24px; background: #dc2626; border: 2px solid #fee2e2; }
+    .n-s1   { top: 150px; left: 165px; background: #2563eb; }
+    .n-s2   { top: 45px;  left: 325px; background: #2563eb; }
+    .n-s3   { top: 255px; left: 325px; background: #2563eb; }
+    .n-s4   { top: 150px; left: 485px; background: #2563eb; }
+    .n-bank { top: 150px; right: 24px; background: #16a34a; }
+    .n-honey{ top: 300px; right: 24px; background: #7c3aed; }
+
+    /* Connecting Paths */
     .path {
-      position: absolute; height: 3px; background: rgba(255,255,255,0.1); z-index: 1;
+      position: absolute;
+      height: 4px;
+      background: #cbd5e1;
+      z-index: 2;
       transform-origin: left center;
+      border-radius: 2px;
+      transition: background 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease;
     }
-    /* Calculate path lengths and angles roughly */
-    .p-cust-s1 { top: 167px; left: 110px; width: 50px; }
-    .p-att-s1 { top: 267px; left: 95px; width: 85px; transform: rotate(-55deg); }
-    
-    .p-s1-s2 { top: 167px; left: 210px; width: 145px; transform: rotate(-35deg); }
-    .p-s1-s3 { top: 167px; left: 210px; width: 145px; transform: rotate(35deg); }
-    
-    .p-s2-s4 { top: 67px; left: 360px; width: 145px; transform: rotate(35deg); }
-    .p-s3-s4 { top: 267px; left: 360px; width: 145px; transform: rotate(-35deg); }
-    
-    .p-s4-bank { top: 167px; left: 520px; width: 70px; }
-    .p-s1-honey { top: 167px; left: 210px; width: 340px; transform: rotate(20deg); opacity: 0; transition: opacity 0.3s; }
+    .p-cust-s1 { top: 168px; left: 110px; width: 60px; }
+    .p-att-s1  { top: 288px; left: 95px; width: 100px; transform: rotate(-55deg); }
+    .p-s1-s2   { top: 168px; left: 210px; width: 150px; transform: rotate(-35deg); }
+    .p-s1-s3   { top: 168px; left: 210px; width: 150px; transform: rotate(35deg); }
+    .p-s2-s4   { top: 63px;  left: 365px; width: 150px; transform: rotate(35deg); }
+    .p-s3-s4   { top: 273px; left: 365px; width: 150px; transform: rotate(-35deg); }
+    .p-s4-bank { top: 168px; left: 525px; width: 70px; }
+    .p-s1-honey{ top: 168px; left: 210px; width: 350px; transform: rotate(20deg); opacity: 0; }
 
-    .path.active-safe { background: var(--safe); box-shadow: 0 0 10px var(--safe); }
-    .path.active-danger { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
-    .path.broken { background: var(--danger); opacity: 0.3; border-top: 2px dashed var(--danger); }
+    .path.active-safe {
+      background: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    }
+    .path.active-danger {
+      background: #ef4444;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
+    }
+    .path.active-reroute {
+      background: #8b5cf6;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+    }
+    .path.broken {
+      background: #ef4444;
+      opacity: 0.6;
+      border-top: 2px dashed #b91c1c;
+    }
 
-    /* Packets */
-    .packet-stream { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+    /* Moving Packets */
+    .packet-stream {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 4;
+      pointer-events: none;
+    }
     .packet {
-      position: absolute; width: 10px; height: 10px; border-radius: 50%;
-      box-shadow: 0 0 10px currentColor; opacity: 0;
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+      opacity: 0;
     }
 
-    /* Controller Panel */
-    .controller-status { font-family: monospace; font-size: 0.9rem; line-height: 1.5; color: #a3e635; }
-    .controller-status span.alert { color: var(--danger); }
-    .controller-status span.highlight { color: #facc15; }
-
-    /* Events Timeline */
-    .timeline { padding-left: 15px; border-left: 2px solid var(--border); font-size: 0.85rem; max-height: 250px; overflow-y: auto; }
-    .tl-event { position: relative; margin-bottom: 12px; }
-    .tl-event::before { content: ''; position: absolute; left: -21px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--safe); }
-    .tl-event.warn::before { background: #facc15; }
-    .tl-event.crit::before { background: var(--danger); }
-    .tl-event.info::before { background: var(--accent); }
-    
-    .tl-time { color: #64748b; margin-right: 10px; font-weight: bold; }
-
-    /* Keyframes for Normal Path (C -> S1 -> S2 -> S4 -> Bank) */
+    /* Keyframe Animations */
     @keyframes moveNormal {
-      0%   { transform: translate(110px, 162px); opacity: 1; color: var(--safe); background: var(--safe); }
-      15%  { transform: translate(160px, 162px); }
-      35%  { transform: translate(320px, 62px); }
-      55%  { transform: translate(480px, 162px); }
-      75%  { transform: translate(580px, 162px); opacity: 1; }
-      80%  { opacity: 0; transform: translate(580px, 162px); }
+      0%   { transform: translate(110px, 162px); opacity: 1; color: #10b981; background: #10b981; }
+      15%  { transform: translate(165px, 162px); }
+      35%  { transform: translate(325px, 57px); }
+      55%  { transform: translate(485px, 162px); }
+      75%  { transform: translate(590px, 162px); opacity: 1; }
+      80%  { opacity: 0; transform: translate(590px, 162px); }
       100% { opacity: 0; }
     }
 
-    /* Keyframes for Secure Path (C -> S1 -> S3 -> S4 -> Bank) */
     @keyframes moveSecure {
-      0%   { transform: translate(110px, 162px); opacity: 1; color: var(--safe); background: var(--safe); }
-      15%  { transform: translate(160px, 162px); }
-      35%  { transform: translate(320px, 262px); }
-      55%  { transform: translate(480px, 162px); }
-      75%  { transform: translate(580px, 162px); opacity: 1; }
-      80%  { opacity: 0; transform: translate(580px, 162px); }
+      0%   { transform: translate(110px, 162px); opacity: 1; color: #10b981; background: #10b981; }
+      15%  { transform: translate(165px, 162px); }
+      35%  { transform: translate(325px, 267px); }
+      55%  { transform: translate(485px, 162px); }
+      75%  { transform: translate(590px, 162px); opacity: 1; }
+      80%  { opacity: 0; transform: translate(590px, 162px); }
       100% { opacity: 0; }
     }
 
-    /* Keyframes for Attack Path (A -> S1 -> S2 -> DROP) */
     @keyframes moveAttackDetect {
-      0%   { transform: translate(95px, 262px); opacity: 1; color: var(--danger); background: var(--danger); }
-      20%  { transform: translate(160px, 162px); }
-      40%  { transform: translate(320px, 62px); opacity: 1;}
-      45%  { opacity: 0; transform: translate(320px, 62px); }
+      0%   { transform: translate(95px, 282px); opacity: 1; color: #ef4444; background: #ef4444; }
+      20%  { transform: translate(165px, 162px); }
+      40%  { transform: translate(325px, 57px); opacity: 1; }
+      45%  { opacity: 0; transform: translate(325px, 57px); }
       100% { opacity: 0; }
     }
 
-    /* Keyframes for Rerouted Attack (A -> S1 -> Honeypot) */
     @keyframes moveAttackHoneypot {
-      0%   { transform: translate(95px, 262px); opacity: 1; color: var(--danger); background: var(--danger); }
-      20%  { transform: translate(160px, 162px); color: var(--danger); background: var(--danger); }
-      21%  { color: var(--isolate); background: var(--isolate); }
-      60%  { transform: translate(550px, 312px); opacity: 1;}
-      65%  { opacity: 0; transform: translate(550px, 312px); }
+      0%   { transform: translate(95px, 282px); opacity: 1; color: #ef4444; background: #ef4444; }
+      20%  { transform: translate(165px, 162px); color: #ef4444; background: #ef4444; }
+      21%  { color: #8b5cf6; background: #8b5cf6; }
+      60%  { transform: translate(560px, 312px); opacity: 1; }
+      65%  { opacity: 0; transform: translate(560px, 312px); }
       100% { opacity: 0; }
     }
 
-    .status-banner { text-align: center; font-size: 1.2rem; font-weight: bold; padding: 15px; border-radius: 8px; margin-bottom: 20px; transition: 0.3s; }
-    .st-normal { background: rgba(46, 204, 113, 0.1); color: var(--safe); border: 1px solid var(--safe); }
-    .st-detect { background: rgba(241, 196, 15, 0.1); color: #facc15; border: 1px solid #facc15; }
-    .st-secure { background: rgba(52, 152, 219, 0.1); color: var(--accent); border: 1px solid var(--accent); }
+    /* Sub cards */
+    .info-subgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 0.75rem;
+    }
+    .inner-panel {
+      background: var(--bg-color);
+      box-shadow: var(--shadow-inset);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+    }
+    .inner-panel h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+    .telemetry-text {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
 
-    .bottom-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;}
+    /* Timeline & Status */
+    .timeline {
+      padding-left: 1rem;
+      border-left: 3px solid #cbd5e1;
+      font-size: 0.84rem;
+      max-height: 280px;
+      overflow-y: auto;
+      margin-top: 0.5rem;
+    }
+    .tl-event {
+      position: relative;
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+      line-height: 1.4;
+    }
+    .tl-event::before {
+      content: '';
+      position: absolute;
+      left: -1.45rem;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px currentColor;
+    }
+    .tl-event.warn::before { background: #f59e0b; color: #f59e0b; }
+    .tl-event.crit::before { background: #ef4444; color: #ef4444; }
+    .tl-event.info::before { background: #3b82f6; color: #3b82f6; }
+    .tl-event.safe::before { background: #10b981; color: #10b981; }
+
+    .tl-time {
+      color: var(--text-color-light);
+      margin-right: 6px;
+      font-weight: 600;
+    }
+
+    /* Controls Bar */
+    .control-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+    .control-actions button {
+      padding: 0.5rem 0.9rem;
+      font-size: 0.82rem;
+    }
   </style>
 </head>
 <body>
+  <div class="container">
 
-  <nav>
-    <ul>
-      <li><a href="/">📊 Dashboard</a></li>
-      <li><a href="/topology">🌐 Topology</a></li>
-      <li><a href="/routing" class="active">🛣️ Live Secure Routing</a></li>
-      <li><a href="/logs">📝 Logs</a></li>
-    </ul>
-  </nav>
+    <!-- Standard Unified Navigation -->
+    <nav>
+      <ul>
+        <li><a href="/">📊 Dashboard</a></li>
+        <li><a href="/topology">🌐 Topology</a></li>
+        <li><a href="/traffic">📡 Traffic</a></li>
+        <li><a href="/threats">🚨 Threats</a></li>
+        <li><a href="/rules">⚙️ Rules</a></li>
+        <li><a href="/routing" class="active">🛣️ Secure Routing</a></li>
+        <li><a href="/honeypot">🐝 Honeypot</a></li>
+        <li><a href="/logs">📝 Logs</a></li>
+      </ul>
+    </nav>
 
-  <header>
-    <h1>🛣️ Live Secure Routing Simulation</h1>
-    <p>Watch the SDN Controller dynamically recalculate paths and isolate threats in real-time.</p>
-  </header>
+    <!-- Header -->
+    <header>
+      <h1>🛣️ Dynamic Secure Routing Simulation</h1>
+      <p>Real-time SDN Controller path recalculation, threat isolation, and Honeypot VLAN rerouting.</p>
+    </header>
 
-  <div id="main-banner" class="status-banner st-normal">
-    🟢 STATE 1: NORMAL ROUTING (S1 → S2 → S4)
-  </div>
+    <!-- State Status Banner -->
+    <div id="main-banner" class="status-banner st-normal">
+      <span>🟢</span> <span>STATE 1: NORMAL ROUTING (S1 → S2 → S4 → Bank Server)</span>
+    </div>
 
-  <div class="grid-container">
-    <!-- LEFT: NETWORK -->
-    <div class="card">
-      <h2>🌐 Network Traffic Flow</h2>
-      <div class="network-canvas" id="network-canvas">
-        <div class="node n-cust">Customer</div>
-        <div class="node n-att">Attacker</div>
-        <div class="node n-s1">S1</div>
-        <div class="node n-s2" id="node-s2">S2</div>
-        <div class="node n-s3">S3</div>
-        <div class="node n-s4">S4</div>
-        <div class="node n-bank">Bank</div>
-        <div class="node n-honey">Honeypot</div>
-
-        <!-- Links -->
-        <div class="path p-cust-s1 active-safe"></div>
-        <div class="path p-att-s1"></div>
-        <div class="path p-s1-s2 active-safe" id="link-s1-s2"></div>
-        <div class="path p-s1-s3" id="link-s1-s3"></div>
-        <div class="path p-s2-s4 active-safe" id="link-s2-s4"></div>
-        <div class="path p-s3-s4" id="link-s3-s4"></div>
-        <div class="path p-s4-bank active-safe" id="link-s4-bank"></div>
-        <div class="path p-s1-honey" id="link-honey"></div>
-
-        <div class="packet-stream" id="packet-stream"></div>
-      </div>
-
-      <div class="bottom-cards">
-        <div class="card" style="box-shadow:none; border-color: rgba(255,255,255,0.1)">
-          <h2 style="font-size:0.95rem; border:none; margin:0 0 10px 0;">Routing Decision</h2>
-          <div style="font-family:monospace; font-size:0.85rem; color:#94a3b8; line-height: 1.6;">
-            <div style="margin-bottom:8px;">
-              <span style="color:var(--text);">Original Route:</span><br>
-              Customer → S1 → S2 → S4 → Bank
-            </div>
-            <div>
-              <span style="color:var(--text);">Current Route:</span><br>
-              <span id="rd-current" style="color:var(--safe); font-weight:bold;">Customer → S1 → S2 → S4 → Bank</span>
-            </div>
-            <div id="rd-status" style="margin-top:10px; color:var(--safe);">✓ Traffic Flowing Safely</div>
+    <!-- Main Two-Column View -->
+    <div class="routing-grid">
+      
+      <!-- LEFT: VISUAL TOPOLOGY & FLOWS -->
+      <section class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h2>🌐 Live Network Flow Visualization</h2>
+          <div class="control-actions">
+            <button onclick="manualSimulateNormal()">🟢 Normal Flow</button>
+            <button onclick="manualSimulateAttack()">🚨 Simulate DDoS</button>
+            <button onclick="manualSimulateSecure()">🔄 Trigger Reroute</button>
           </div>
         </div>
 
-        <div class="card" style="box-shadow:none; border-color: rgba(255,255,255,0.1)">
-          <h2 style="font-size:0.95rem; border:none; margin:0 0 10px 0;">Path Health</h2>
-          <div style="font-family:monospace; font-size:0.85rem; line-height: 1.8;">
-            <div>S1 ── S2 : <span id="ph-s2" style="color:var(--safe)">🟢 12 ms (SAFE)</span></div>
-            <div>S1 ── S3 : <span style="color:var(--safe)">🟢 10 ms (SAFE)</span></div>
-            <div>S2 ── S4 : <span id="ph-s4" style="color:var(--safe)">🟢 11 ms (SAFE)</span></div>
-            <div>S3 ── S4 : <span style="color:var(--safe)">🟢 09 ms (SAFE)</span></div>
+        <div class="network-canvas" id="network-canvas">
+          <!-- Nodes -->
+          <div class="node n-cust">👤 Customer</div>
+          <div class="node n-att">💀 Attacker</div>
+          <div class="node n-s1">S1 (Edge)</div>
+          <div class="node n-s2" id="node-s2">S2 (Core)</div>
+          <div class="node n-s3" id="node-s3">S3 (Backup)</div>
+          <div class="node n-s4">S4 (Dist)</div>
+          <div class="node n-bank">🏦 Bank Server</div>
+          <div class="node n-honey">🍯 Honeypot</div>
+
+          <!-- Connecting Paths -->
+          <div class="path p-cust-s1 active-safe"></div>
+          <div class="path p-att-s1"></div>
+          <div class="path p-s1-s2 active-safe" id="link-s1-s2"></div>
+          <div class="path p-s1-s3" id="link-s1-s3"></div>
+          <div class="path p-s2-s4 active-safe" id="link-s2-s4"></div>
+          <div class="path p-s3-s4" id="link-s3-s4"></div>
+          <div class="path p-s4-bank active-safe" id="link-s4-bank"></div>
+          <div class="path p-s1-honey" id="link-honey"></div>
+
+          <!-- Dynamic Packet Stream -->
+          <div class="packet-stream" id="packet-stream"></div>
+        </div>
+
+        <!-- Telemetry Bottom Info Panels -->
+        <div class="info-subgrid">
+          <div class="inner-panel">
+            <h3>🧭 Active Routing Decision</h3>
+            <div class="telemetry-text">
+              <div style="margin-bottom: 4px;">
+                <span class="muted">Default Path:</span><br>
+                Customer → S1 → S2 → S4 → Bank
+              </div>
+              <div style="margin-bottom: 4px;">
+                <span class="muted">Active Path:</span><br>
+                <span id="rd-current" style="color: var(--success-color); font-weight: 700;">Customer → S1 → S2 → S4 → Bank</span>
+              </div>
+              <div id="rd-status" style="color: var(--success-color); font-weight: 600;">✓ Normal Traffic Flowing Safely</div>
+            </div>
+          </div>
+
+          <div class="inner-panel">
+            <h3>📡 Link Latency & Health</h3>
+            <div class="telemetry-text">
+              <div>S1 ── S2: <span id="ph-s2" style="color: var(--success-color); font-weight: 600;">🟢 12 ms (OPTIMAL)</span></div>
+              <div>S1 ── S3: <span id="ph-s3" style="color: var(--success-color); font-weight: 600;">🟢 10 ms (STANDBY)</span></div>
+              <div>S2 ── S4: <span id="ph-s4" style="color: var(--success-color); font-weight: 600;">🟢 11 ms (OPTIMAL)</span></div>
+              <div>S3 ── S4: <span id="ph-s3s4" style="color: var(--success-color); font-weight: 600;">🟢 09 ms (STANDBY)</span></div>
+            </div>
           </div>
         </div>
+      </section>
+
+      <!-- RIGHT: SDN CONTROLLER TELEMETRY & EVENT LOG -->
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        
+        <!-- Controller Status Card -->
+        <section class="card">
+          <h2>🧠 SDN Controller State</h2>
+          <div class="inner-panel">
+            <div class="telemetry-text" id="sdn-status">
+              <strong style="color: var(--success-color);">STATUS: ACTIVE ✓</strong><br><br>
+              <strong>Engine:</strong> OpenFlow / ML Anomaly Monitor<br>
+              <strong>Protection:</strong> Bank Server API (Port 8855)<br>
+              <strong>Current Policy:</strong> Default Shortest Path (S1 → S2 → S4)<br>
+              <strong>Threat Status:</strong> No active anomalies detected.
+            </div>
+          </div>
+        </section>
+
+        <!-- Live Events Timeline Card -->
+        <section class="card" style="flex: 1;">
+          <h2>⏱️ Live Controller Event Feed</h2>
+          <div class="timeline" id="event-timeline"></div>
+        </section>
+
       </div>
+
     </div>
 
-    <!-- RIGHT: CONTROLLER & TIMELINE -->
-    <div>
-      <div class="card" style="margin-bottom:20px;">
-        <h2>🧠 Ryu Controller (SDN)</h2>
-        <div class="controller-status" id="sdn-status">
-          Status: ACTIVE ✓<br><br>
-          No threats detected.<br>
-          Monitoring OpenFlow switches...<br>
-          Default Path: S1 → S2 → S4<br>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>⏱️ Live Security Events</h2>
-        <div class="timeline" id="event-timeline">
-          <!-- Timeline events injected here -->
-        </div>
-      </div>
-    </div>
   </div>
 
+  <!-- Simulation & Polling Script -->
   <script>
     const packetStream = document.getElementById('packet-stream');
     const sdnStatus = document.getElementById('sdn-status');
     const timeline = document.getElementById('event-timeline');
     const banner = document.getElementById('main-banner');
     
-    // UI Elements for routing updates
     const linkS1S2 = document.getElementById('link-s1-s2');
     const linkS2S4 = document.getElementById('link-s2-s4');
     const linkS1S3 = document.getElementById('link-s1-s3');
@@ -276,14 +398,13 @@
     
     const phS2 = document.getElementById('ph-s2');
     const phS4 = document.getElementById('ph-s4');
+    const phS3 = document.getElementById('ph-s3');
+    const phS3S4 = document.getElementById('ph-s3s4');
     const rdCurrent = document.getElementById('rd-current');
     const rdStatus = document.getElementById('rd-status');
 
-    let currentState = "NORMAL"; // NORMAL, ATTACK, SECURE
+    let currentState = "NORMAL";
     let stateTimeout = null;
-    
-    // Clear old timeline instances if any
-    timeline.innerHTML = "";
 
     function addTimelineEvent(msg, type='info') {
       const d = new Date();
@@ -295,9 +416,12 @@
       el.className = `tl-event ${type}`;
       el.innerHTML = `<span class="tl-time">${timeStr}</span> ${msg}`;
       timeline.prepend(el);
+      
+      // Limit to 20 events
+      if (timeline.children.length > 20) {
+        timeline.removeChild(timeline.lastChild);
+      }
     }
-
-    addTimelineEvent("Controller initialized. Normal traffic detected.", "safe");
 
     function renderPackets() {
       packetStream.innerHTML = "";
@@ -311,88 +435,94 @@
         }
       } 
       else if (currentState === "ATTACK") {
-        // Normal traffic trying to get through but failing
         for(let i=0; i<2; i++) {
           let p = document.createElement("div");
           p.className = "packet";
           p.style.animation = `moveNormal 2.5s infinite linear ${i * 1.2}s`;
           packetStream.appendChild(p);
         }
-        // Attack flood
         for(let i=0; i<8; i++) {
           let p = document.createElement("div");
           p.className = "packet";
-          p.style.animation = `moveAttackDetect 1.5s infinite linear ${i * 0.18}s`;
+          p.style.animation = `moveAttackDetect 1.4s infinite linear ${i * 0.16}s`;
           packetStream.appendChild(p);
         }
       }
       else if (currentState === "SECURE") {
-        // Secure customer traffic
         for(let i=0; i<3; i++) {
           let p = document.createElement("div");
           p.className = "packet";
           p.style.animation = `moveSecure 2.5s infinite linear ${i * 0.8}s`;
           packetStream.appendChild(p);
         }
-        // Rerouted attack
         for(let i=0; i<6; i++) {
           let p = document.createElement("div");
           p.className = "packet";
-          p.style.animation = `moveAttackHoneypot 1.5s infinite linear ${i * 0.25}s`;
+          p.style.animation = `moveAttackHoneypot 1.5s infinite linear ${i * 0.22}s`;
           packetStream.appendChild(p);
         }
       }
     }
 
-    function triggerAttackState(threatSrc) {
-      if (currentState === "NORMAL") {
-        currentState = "ATTACK";
-        banner.className = "status-banner st-detect";
-        banner.innerHTML = "⚠ STATE 2: ATTACK DETECTED ON S2 PATH";
-        
-        addTimelineEvent(`High traffic rate from ${threatSrc}`, "warn");
-        addTimelineEvent("ML Anomaly Detected. Threat: CRITICAL", "crit");
-        
-        sdnStatus.innerHTML = `Status: <span class="alert">THREAT DETECTED</span><br><br>Source: ${threatSrc}<br>Type: DDoS Flood<br>Severity: CRITICAL<br><br><span class="highlight">Isolating Path S1 → S2 → S4...</span>`;
-        
-        linkS1S2.className = "path p-s1-s2 broken";
-        linkS2S4.className = "path p-s2-s4 broken";
-        phS2.innerHTML = "<span style='color:var(--danger)'>🔴 COMPROMISED</span>";
-        phS4.innerHTML = "<span style='color:var(--danger)'>🔴 THREAT DETECTED</span>";
-        
-        rdCurrent.innerHTML = "S1 → S2 (BLOCKED)";
-        rdCurrent.style.color = "var(--danger)";
-        rdStatus.innerHTML = "⚠ Traffic Interrupted";
-        rdStatus.style.color = "var(--danger)";
+    function triggerAttackState(threatSrc = "192.168.100.112") {
+      currentState = "ATTACK";
+      banner.className = "status-banner st-detect";
+      banner.innerHTML = "<span>🚨</span> <span>STATE 2: THREAT DETECTED ON S2 PATH (DDoS / Anomaly Detected)</span>";
+      
+      addTimelineEvent(`High volumetric packet flood detected from ${threatSrc}`, "warn");
+      addTimelineEvent("ML Anomaly Score: 0.98 (CRITICAL THREAT)", "crit");
+      
+      sdnStatus.innerHTML = `
+        <strong style="color: var(--danger-color);">STATUS: THREAT DETECTED ⚠️</strong><br><br>
+        <strong>Offender IP:</strong> ${threatSrc}<br>
+        <strong>Threat:</strong> Financial API DDoS Flood<br>
+        <strong>Compromised Node:</strong> Switch S2<br>
+        <strong style="color: var(--warning-color);">Action:</strong> Isolating corrupted path S1 → S2...
+      `;
+      
+      linkS1S2.className = "path p-s1-s2 broken";
+      linkS2S4.className = "path p-s2-s4 broken";
+      phS2.innerHTML = "<span style='color:var(--danger-color); font-weight:700;'>🔴 182 ms (CONGESTED / ATTACK)</span>";
+      phS4.innerHTML = "<span style='color:var(--danger-color); font-weight:700;'>🔴 CORRUPTED LINK</span>";
+      
+      rdCurrent.innerHTML = "S1 → S2 [PATH COMPROMISED]";
+      rdCurrent.style.color = "var(--danger-color)";
+      rdStatus.innerHTML = "⚠️ Primary Route Degraded - Isolating...";
+      rdStatus.style.color = "var(--danger-color)";
 
-        renderPackets();
-
-        // 3 seconds later, move to SECURE state
-        stateTimeout = setTimeout(() => triggerSecureState(threatSrc), 3000);
-      }
+      renderPackets();
     }
 
-    function triggerSecureState(threatSrc) {
+    function triggerSecureState(threatSrc = "192.168.100.112") {
       currentState = "SECURE";
       banner.className = "status-banner st-secure";
-      banner.innerHTML = "🔄 STATE 3: SECURE REROUTING ESTABLISHED";
+      banner.innerHTML = "<span>🔄</span> <span>STATE 3: SECURE REROUTING ACTIVE (Legitimate Traffic → S3, Attacker → Honeypot)</span>";
       
-      addTimelineEvent("Controller calculating secure path (S1 → S3 → S4)", "info");
-      addTimelineEvent("OpenFlow rules updated across switches", "safe");
-      addTimelineEvent("Attacker rerouted to Honeypot VLAN", "crit");
-      addTimelineEvent("Bank Service PROTECTED", "safe");
+      addTimelineEvent("SDN Controller recalculating shortest safe route (S1 → S3 → S4)", "info");
+      addTimelineEvent("OpenFlow flow-mod pushed: Rerouting legitimate traffic via S3", "safe");
+      addTimelineEvent(`Hostile IP ${threatSrc} isolated into Honeypot VLAN (10.0.0.5)`, "crit");
+      addTimelineEvent("Bank Server Service 100% Protected ✓", "safe");
       
-      sdnStatus.innerHTML = `Status: <span style="color:var(--accent)">REROUTING ACTIVE</span><br><br>Old Path: S1 → S2 → S4<br>New Path: S1 → S3 → S4<br><br>Honeypot: Isolating ${threatSrc}<br>OpenFlow Rules: UPDATED ✓`;
+      sdnStatus.innerHTML = `
+        <strong style="color: var(--primary-color);">STATUS: SECURE REROUTING ACTIVE 🛡️</strong><br><br>
+        <strong>New Safe Path:</strong> Customer → S1 → S3 → S4 → Bank<br>
+        <strong>Isolated Host:</strong> ${threatSrc} → Honeypot (Port 8000)<br>
+        <strong>Flow-Mod Rules:</strong> Pushed & Verified ✓<br>
+        <strong>Bank Availability:</strong> 100% OPERATIONAL
+      `;
       
       linkS1S3.className = "path p-s1-s3 active-safe";
       linkS3S4.className = "path p-s3-s4 active-safe";
       linkHoney.style.opacity = "1";
-      linkHoney.className = "path p-s1-honey active-danger";
+      linkHoney.className = "path p-s1-honey active-reroute";
       
-      rdCurrent.innerHTML = "Customer → S1 → S3 → S4 → Bank";
-      rdCurrent.style.color = "var(--accent)";
-      rdStatus.innerHTML = "✓ Traffic successfully rerouted";
-      rdStatus.style.color = "var(--accent)";
+      phS3.innerHTML = "<span style='color:var(--success-color); font-weight:700;'>🟢 10 ms (ACTIVE SECURE)</span>";
+      phS3S4.innerHTML = "<span style='color:var(--success-color); font-weight:700;'>🟢 09 ms (ACTIVE SECURE)</span>";
+      
+      rdCurrent.innerHTML = "Customer → S1 → S3 → S4 → Bank Server";
+      rdCurrent.style.color = "var(--primary-color)";
+      rdStatus.innerHTML = "✓ Clean Traffic Securely Rerouted Around S2";
+      rdStatus.style.color = "var(--primary-color)";
 
       renderPackets();
     }
@@ -400,9 +530,15 @@
     function resetToNormal() {
       currentState = "NORMAL";
       banner.className = "status-banner st-normal";
-      banner.innerHTML = "🟢 STATE 1: NORMAL ROUTING (S1 → S2 → S4)";
+      banner.innerHTML = "<span>🟢</span> <span>STATE 1: NORMAL ROUTING (S1 → S2 → S4 → Bank Server)</span>";
       
-      sdnStatus.innerHTML = `Status: ACTIVE ✓<br><br>No threats detected.<br>Monitoring OpenFlow switches...<br>Default Path: S1 → S2 → S4<br>`;
+      sdnStatus.innerHTML = `
+        <strong style="color: var(--success-color);">STATUS: ACTIVE ✓</strong><br><br>
+        <strong>Engine:</strong> OpenFlow / ML Anomaly Monitor<br>
+        <strong>Protection:</strong> Bank Server API (Port 8855)<br>
+        <strong>Current Policy:</strong> Default Shortest Path (S1 → S2 → S4)<br>
+        <strong>Threat Status:</strong> No active anomalies detected.
+      `;
       
       linkS1S2.className = "path p-s1-s2 active-safe";
       linkS2S4.className = "path p-s2-s4 active-safe";
@@ -410,50 +546,70 @@
       linkS3S4.className = "path p-s3-s4";
       linkHoney.style.opacity = "0";
       
-      phS2.innerHTML = "<span style='color:var(--safe)'>🟢 12 ms (SAFE)</span>";
-      phS4.innerHTML = "<span style='color:var(--safe)'>🟢 11 ms (SAFE)</span>";
+      phS2.innerHTML = "<span style='color:var(--success-color); font-weight:600;'>🟢 12 ms (OPTIMAL)</span>";
+      phS4.innerHTML = "<span style='color:var(--success-color); font-weight:600;'>🟢 11 ms (OPTIMAL)</span>";
+      phS3.innerHTML = "<span style='color:var(--success-color); font-weight:600;'>🟢 10 ms (STANDBY)</span>";
+      phS3S4.innerHTML = "<span style='color:var(--success-color); font-weight:600;'>🟢 09 ms (STANDBY)</span>";
       
       rdCurrent.innerHTML = "Customer → S1 → S2 → S4 → Bank";
-      rdCurrent.style.color = "var(--safe)";
-      rdStatus.innerHTML = "✓ Traffic Flowing Safely";
-      rdStatus.style.color = "var(--safe)";
-      
-      addTimelineEvent("Threat cleared. Restoring default path.", "safe");
+      rdCurrent.style.color = "var(--success-color)";
+      rdStatus.innerHTML = "✓ Normal Traffic Flowing Safely";
+      rdStatus.style.color = "var(--success-color)";
       
       renderPackets();
     }
 
-    renderPackets();
+    // Manual Simulation Triggers
+    function manualSimulateNormal() {
+      clearTimeout(stateTimeout);
+      resetToNormal();
+      addTimelineEvent("Manual Override: Restored Normal Routing.", "safe");
+    }
 
-    // Data fetching logic to trigger the simulation
+    function manualSimulateAttack() {
+      clearTimeout(stateTimeout);
+      triggerAttackState("192.168.100.112");
+      stateTimeout = setTimeout(() => {
+        triggerSecureState("192.168.100.112");
+      }, 3500);
+    }
+
+    function manualSimulateSecure() {
+      clearTimeout(stateTimeout);
+      triggerSecureState("192.168.100.112");
+    }
+
+    // Initialize
+    addTimelineEvent("SDN Controller initialized. Topology mapped.", "safe");
+    addTimelineEvent("Monitoring OpenFlow flows across S1, S2, S3, S4.", "info");
+    resetToNormal();
+
+    // Live Backend Polling
     async function fetchRoutingEvents() {
       try {
         const res = await fetch("/api/routing", { cache: "no-store" });
         const events = await res.json();
-        
-        if (events.length === 0) return;
+        if (!events || events.length === 0) return;
 
         const latestEvent = events[events.length - 1];
         const eventTime = new Date(latestEvent.timestamp.replace(" ", "T")).getTime();
         const now = new Date().getTime();
         const ageInSeconds = (now - eventTime) / 1000;
         
-        // Extended threat visibility for the new 3-stage presentation
-        const isRecentThreat = (latestEvent.action === 'REROUTED' || latestEvent.action === 'BLOCKED' || latestEvent.status.includes('SECURE')) && (ageInSeconds < 25);
+        const isRecentThreat = (latestEvent.action === 'REROUTED' || latestEvent.action === 'BLOCKED' || (latestEvent.status && latestEvent.status.includes('SECURE'))) && (ageInSeconds < 30);
         
         if (isRecentThreat && currentState === "NORMAL") {
-           triggerAttackState(latestEvent.threat_src);
-        } else if (!isRecentThreat && currentState !== "NORMAL") {
-           clearTimeout(stateTimeout);
-           resetToNormal();
+          triggerAttackState(latestEvent.threat_src || "192.168.100.112");
+          stateTimeout = setTimeout(() => triggerSecureState(latestEvent.threat_src || "192.168.100.112"), 3000);
+        } else if (!isRecentThreat && currentState !== "NORMAL" && !stateTimeout) {
+          resetToNormal();
         }
       } catch (e) {
-        console.error("Failed to fetch routing events:", e);
+        console.error("Routing poll error:", e);
       }
     }
 
-    setInterval(fetchRoutingEvents, 2000);
-
+    setInterval(fetchRoutingEvents, 3000);
   </script>
 </body>
 </html>

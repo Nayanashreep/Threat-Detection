@@ -53,6 +53,13 @@ def run_demo():
     for i in range(5):
         cust = random.choice(legit_customers)
         print(f"    ✓ [NORMAL] Customer ({cust}) -> Payment Gateway (10.0.0.3) | Port: 443 | Status: SAFE")
+        post_json(f"{API_URL}/api/report-flow", {
+            "source_ip": cust,
+            "destination_ip": "10.0.0.3 (Payment Gateway)",
+            "port": 443,
+            "protocol": "TCP/TLS",
+            "status": "SAFE"
+        })
         time.sleep(0.3)
 
     # Step 3: Launch DDoS Attack

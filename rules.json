@@ -6,5 +6,11 @@
     "protocol": "",
     "severity": "Low",
     "description": "Monitored host IP"
+  },
+  {
+    "id": 2,
+    "pattern": "10.0.0.99",
+    "severity": "High",
+    "description": "Quarantine test bot"
   }
 ]

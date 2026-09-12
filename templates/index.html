@@ -2,149 +2,1440 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Financial Network Security & Threat Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SDN SECURITY OPERATIONS</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* -------- SPA Tab Transitions -------- */
+    .tab-content {
+      display: none;
+      animation: tabFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Radar Pulse Animation */
+    .radar-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .radar-pulse {
+      position: relative;
+      width: 10px;
+      height: 10px;
+    }
+    .radar-pulse::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #10b981;
+      animation: radarWave 1.8s infinite cubic-bezier(0, 0.2, 0.8, 1);
+    }
+    .radar-pulse::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      top: 1px;
+      left: 1px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+    @keyframes radarWave {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(3.2); opacity: 0; }
+    }
+
+    /* ML Switch Button */
+    .toggle-switch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+    .toggle-switch-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+    .toggle-switch-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Main Workspace Container -->
   <div class="container">
     
-    <!-- Navigation -->
-    <nav>
+    <!-- ==================== HERO HEADER ==================== -->
+    <header class="hero-header">
+      <div class="hero-title-group">
+        <div class="hero-logo-icon">🛡️</div>
+        <div class="hero-titles">
+          <h1 id="header-main-title">
+            SDN SECURITY OPERATIONS
+          </h1>
+        </div>
+      </div>
+
+      <div class="hero-controls">
+        <button class="button-primary" onclick="triggerQuickDemoAttack()">
+          <span>⚡</span>
+          <span>Simulate Attack & Reroute</span>
+        </button>
+        <button class="button-secondary" onclick="exportLogs()">
+          <span>📄</span>
+          <span>Export Audit Log</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== UNIFIED SPA NAVIGATION ==================== -->
+    <nav class="app-nav">
       <ul>
-        <li><a href="/" class="active">📊 Dashboard</a></li>
-        <li><a href="/topology">🌐 Topology</a></li>
-        <li><a href="/traffic">📡 Traffic</a></li>
-        <li><a href="/threats">🚨 Threats</a></li>
-        <li><a href="/rules">⚙️ Rules</a></li>
-        <li><a href="/routing">🛣️ Secure Routing</a></li>
-        <li><a href="/honeypot">🐝 Honeypot</a></li>
-        <li><a href="/logs">📝 Logs</a></li>
+        <li><a onclick="switchTab('dashboard')" id="nav-dashboard" class="active">📊 Dashboard</a></li>
+        <li><a onclick="switchTab('routing')" id="nav-routing">🛣️ Secure Routing</a></li>
+        <li><a onclick="switchTab('topology')" id="nav-topology">🌐 Topology</a></li>
+        <li><a onclick="switchTab('traffic')" id="nav-traffic">📡 Flow Matrix</a></li>
+        <li><a onclick="switchTab('threats')" id="nav-threats">🚨 Threat Intel</a></li>
+        <li><a onclick="switchTab('rules')" id="nav-rules">⚙️ Firewall Rules</a></li>
+        <li><a onclick="switchTab('honeypot')" id="nav-honeypot">🐝 Honeypot Trap</a></li>
+        <li><a onclick="switchTab('logs')" id="nav-logs">📝 Audit Logs</a></li>
       </ul>
     </nav>
 
-    <!-- Header -->
-    <header>
-      <h1>🛡️ Financial Network Security & Threat Detection</h1>
-      <p>SDN-Based Honeypot Monitoring and Secure Traffic Routing</p>
-    </header>
+    <!-- Floating Toast Container -->
+    <div id="toast-container"></div>
 
-    <!-- Stats: 4-up responsive grid -->
-    <section class="card-grid grid-auto">
-      <div class="card stat-card">
-        <h2>📡 Total Network Flows</h2>
-        <p id="packet-count">0</p>
-      </div>
-      <div class="card stat-card">
-        <h2>🚨 Threats Detected</h2>
-        <p id="threat-count">0</p>
-      </div>
-      <div class="card stat-card">
-        <h2>✅ Safe Traffic</h2>
-        <p id="safe-count">0</p>
-      </div>
-      <div class="card stat-card">
-        <h2>🚧 Rerouted/Blocked</h2>
-        <p id="rerouted-count">0</p>
-      </div>
-    </section>
+    <!-- ==================== TAB 1: DASHBOARD ==================== -->
+    <div id="tab-dashboard" class="tab-content active">
+      <section class="grid-auto">
+        <div class="card stat-card stat-flows">
+          <div class="stat-top">
+            <h2>Total Network Flows</h2>
+            <div class="stat-icon" style="color:#38bdf8;">📡</div>
+          </div>
+          <p class="stat-value" id="packet-count">0</p>
+          <div class="stat-sub">
+            <span class="radar-container"><span class="radar-pulse"></span></span>
+            <span>Real-time OpenFlow telemetry active</span>
+          </div>
+        </div>
 
-    <!-- Row: Alerts trend (left) + Live packets (right) -->
-    <section class="grid-2">
-      <div class="card chart-container">
-        <h2>📈 Threats Trend (Hourly)</h2>
-        <canvas id="alertTrendChart"></canvas>
+        <div class="card stat-card stat-threat">
+          <div class="stat-top">
+            <h2>Threats Intercepted</h2>
+            <div class="stat-icon" style="color:#fb7185;">🚨</div>
+          </div>
+          <p class="stat-value" id="threat-count">0</p>
+          <div class="stat-sub">
+            <span style="color:#fb7185; font-weight:700;">100%</span>
+            <span>Isolated from Bank Core</span>
+          </div>
+        </div>
+
+        <div class="card stat-card stat-safe">
+          <div class="stat-top">
+            <h2>Safe Financial Flows</h2>
+            <div class="stat-icon" style="color:#34d399;">✅</div>
+          </div>
+          <p class="stat-value" id="safe-count">0</p>
+          <div class="stat-sub">
+            <span style="color:#34d399; font-weight:700;">99.99%</span>
+            <span>Payment Gateway uptime</span>
+          </div>
+        </div>
+
+        <div class="card stat-card stat-route">
+          <div class="stat-top">
+            <h2>Autonomous Reroutes</h2>
+            <div class="stat-icon" style="color:#c084fc;">🔄</div>
+          </div>
+          <p class="stat-value" id="rerouted-count">0</p>
+          <div class="stat-sub">
+            <span style="color:#c084fc; font-weight:700;">Zero</span>
+            <span>Customer packet loss</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-2" style="margin-top: 1rem;">
+        <div class="card chart-container" style="display:flex; flex-direction:column; height: 380px; max-height: 380px;">
+          <div class="card-header-clean">
+            <h2>📈 Hourly Threat Matrix</h2>
+            <span class="card-tag">REAL-TIME TELEMETRY</span>
+          </div>
+          <div class="chart-wrapper" style="position: relative; width: 100%; height: 280px; max-height: 280px; overflow: hidden;">
+            <canvas id="alertTrendChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card" style="display:flex; flex-direction:column; height: 380px; max-height: 380px;">
+          <div class="card-header-clean">
+            <h2>
+              <span class="radar-container"><span class="radar-pulse"></span></span>
+              <span>Live Packet Interceptor Stream</span>
+            </h2>
+            <button class="button-secondary" onclick="switchTab('traffic')" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">View Flow Matrix →</button>
+          </div>
+          <div id="packet-stream-dashboard" class="live-packets" style="flex: 1; overflow-y: auto;"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 2: SECURE ROUTING SIMULATION (CENTERPIECE) ==================== -->
+    <div id="tab-routing" class="tab-content">
+      <div id="main-banner" class="status-banner st-normal">
+        <span>🟢</span>
+        <span>STATE 1: NORMAL ROUTING (Legitimate Customer ➔ SDN OpenFlow Switches ➔ Bank Server Gateway)</span>
       </div>
 
-      <div class="card">
-        <h2>📡 Live Network Traffic</h2>
-        <div id="packet-stream" class="live-packets"></div>
-        <div style="text-align: right; margin-top: 10px;">
-          <a href="/traffic" class="button-secondary">View All Traffic</a>
+      <div class="routing-grid">
+        <!-- LEFT: 4-Tier Architecture Visual Flow Canvas -->
+        <section class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap:wrap; gap:0.5rem;">
+            <div class="card-header-clean" style="border:none; margin:0; padding:0;">
+              <h2>🌐 4-Tier SDN Visual Flow Controller</h2>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="button-success" onclick="manualSimulateNormal()">🟢 Normal Flow</button>
+              <button class="button-danger" onclick="manualSimulateAttack()">🚨 Simulate DDoS Flood</button>
+              <button class="button-purple" onclick="manualSimulateSecure()">🔄 Trigger Honeypot Reroute</button>
+              <button class="button-secondary" onclick="manualSimulateNormal()">⚡ Reset</button>
+            </div>
+          </div>
+
+          <!-- Architecture SVG & Glowing Node Matrix -->
+          <div class="arch-canvas-container" id="arch-canvas">
+            
+            <!-- Tier 1: Hosts & Endpoints -->
+            <div class="arch-node node-host-cust">
+              <span class="tier-tag">TIER 1 • PERIMETER CLIENT</span>
+              <span>👤 Customer Host</span>
+              <span class="sub-label">10.0.0.1 (Client)</span>
+            </div>
+            <div class="arch-node node-host-att" id="node-att">
+              <span class="tier-tag">TIER 1 • ADVERSARY</span>
+              <span>💀 Attacker Host</span>
+              <span class="sub-label">192.168.100.112</span>
+            </div>
+            <div class="arch-node node-host-bank">
+              <span class="tier-tag">TIER 1 • PRODUCTION CORE</span>
+              <span>🏦 Bank Server / API</span>
+              <span class="sub-label">10.0.0.2 (Port 8855)</span>
+            </div>
+            <div class="arch-node node-host-honey" id="node-honey">
+              <span class="tier-tag">TIER 1 • DECOY TRAP</span>
+              <span>🍯 Honeypot (TCP)</span>
+              <span class="sub-label">10.0.0.5 (Port 8000)</span>
+            </div>
+
+            <!-- Tier 2: SDN Switches Data Plane -->
+            <div class="arch-node node-sdn-switches">
+              <span class="tier-tag">TIER 2 • OPENFLOW DATA PLANE</span>
+              <span>🌐 SDN OpenFlow Switches (Mininet Fabric)</span>
+              <span class="sub-label">Edge Switch S1 ── Core S2 / S3 ── Distribution S4</span>
+            </div>
+
+            <!-- Tier 3: SDN Controller Control Plane -->
+            <div class="arch-node node-sdn-controller">
+              <span class="tier-tag">TIER 3 • CENTRALIZED CONTROL PLANE</span>
+              <span>🧠 Ryu SDN Controller Engine</span>
+              <span class="sub-label"><code>flow_manager.py</code> / <code>routing.py</code> (Dynamic Flow-Mod Dispatcher)</span>
+            </div>
+
+            <!-- Tier 4: Anomaly Intelligence & Dashboard -->
+            <div class="arch-node node-ml-detector" id="node-ml">
+              <span class="tier-tag">TIER 4 • AI ANOMALY ENGINE</span>
+              <span>🤖 ML Isolation Forest Detector</span>
+              <span class="sub-label">Real-time Score Evaluator (<code>ml_detector.py</code>)</span>
+            </div>
+            <div class="arch-node node-flask-dash">
+              <span class="tier-tag">TIER 4 • MANAGEMENT INTERFACE</span>
+              <span>📊 SDN Security Operations Dashboard</span>
+              <span class="sub-label">REST API & Flow Visualizer (<code>app.py</code> :8855)</span>
+            </div>
+
+            <!-- Vector Connecting Lines & Glowing Beams -->
+            <svg class="arch-svg" viewBox="0 0 1000 520" preserveAspectRatio="none">
+              <defs>
+                <marker id="arrow-default" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                  <path d="M 1 1 L 7 4 L 1 7 Z" fill="#64748b" />
+                </marker>
+                <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                  <path d="M 1 1 L 7 4 L 1 7 Z" fill="#10b981" />
+                </marker>
+                <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                  <path d="M 1 1 L 7 4 L 1 7 Z" fill="#f43f5e" />
+                </marker>
+                <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                  <path d="M 1 1 L 7 4 L 1 7 Z" fill="#a855f7" />
+                </marker>
+              </defs>
+
+              <!-- Top Lines: Hosts to OpenFlow Switches -->
+              <path id="line-cust-sw" class="arch-line active-green" d="M 135 85 L 250 160" marker-end="url(#arrow-green)" />
+              <path id="line-att-sw" class="arch-line" d="M 375 85 L 410 160" marker-end="url(#arrow-default)" />
+              <path id="line-sw-bank" class="arch-line active-green" d="M 590 160 L 630 85" marker-end="url(#arrow-green)" />
+              <path id="line-sw-honey" class="arch-line" d="M 750 160 L 870 85" marker-end="url(#arrow-default)" />
+
+              <!-- Middle Link: Switches <-> Controller (flows / alerts) -->
+              <path id="line-sw-ctrl" class="arch-line active-green" d="M 500 220 L 500 280" marker-end="url(#arrow-green)" marker-start="url(#arrow-green)" />
+              <text x="515" y="253" class="arch-badge-text" id="label-flows-alerts">OpenFlow 1.3 Control Channel (Active)</text>
+
+              <!-- Bottom Links -->
+              <path id="line-ml-ctrl" class="arch-line" d="M 290 410 L 290 345" marker-end="url(#arrow-default)" />
+              <text x="245" y="380" class="arch-badge-text" id="label-score" style="text-anchor: end;">Anomaly Scoring Engine</text>
+
+              <path id="line-ctrl-dash" class="arch-line active-green" d="M 710 345 L 710 410" marker-end="url(#arrow-green)" />
+              <text x="725" y="380" class="arch-badge-text" id="label-state-logs">State Sync & Event Telemetry</text>
+
+              <!-- Animated Stream Particles Group -->
+              <g id="svg-particles-group"></g>
+            </svg>
+
+          </div>
+
+          <div class="info-subgrid">
+            <div class="inner-panel">
+              <h3>🧭 Active Routing Decision Matrix</h3>
+              <div class="telemetry-text">
+                <div style="margin-bottom: 6px;">
+                  <span style="color:var(--text-muted);">Standard Policy:</span><br>
+                  <span style="color:#94a3b8;">Customer (10.0.0.1) ➔ OpenFlow S1 ➔ S2 ➔ Bank API (10.0.0.2:8855)</span>
+                </div>
+                <div style="margin-bottom: 6px;">
+                  <span style="color:var(--text-muted);">Current Active Route:</span><br>
+                  <span id="rd-current" style="color: var(--success-color); font-weight: 700;">Customer ➔ Switches ➔ Bank Server (10.0.0.2)</span>
+                </div>
+                <div id="rd-status" style="color: var(--success-color); font-weight: 700;">✓ Legitimate Financial Transaction Protected</div>
+              </div>
+            </div>
+
+            <div class="inner-panel">
+              <h3>🧠 SDN Controller & AI State</h3>
+              <div class="telemetry-text">
+                <div>ML Detector: <span id="ml-status-badge" style="color: var(--success-color); font-weight: 700;">Isolation Forest (Score: Normal 0.02)</span></div>
+                <div>SDN Switches: <span id="sw-status-badge" style="color: var(--success-color); font-weight: 700;">OpenFlow Rules Synchronized ✓</span></div>
+                <div>Bank API Status: <span id="bank-health-badge" style="color: var(--success-color); font-weight: 700;">100% OPERATIONAL (Port 8855)</span></div>
+                <div>Decoy Trap VLAN: <span id="honey-status-badge" style="color: var(--purple-color); font-weight: 700;">ACTIVE (0.0.0.0:8000)</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT: Controller Telemetry & Real-Time Event Log -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <section class="card">
+            <div class="card-header-clean">
+              <h2>🧠 SDN Controller Telemetry</h2>
+              <span class="card-tag">RYU ENGINE</span>
+            </div>
+            <div class="inner-panel">
+              <div class="telemetry-text" id="sdn-status">
+                <strong style="color: var(--success-color);">STATUS: ACTIVE ✓</strong><br><br>
+                <strong>Architecture:</strong> 4-Tier SDN Honeypot System<br>
+                <strong>Data Plane:</strong> Mininet OpenFlow 1.3 Switches<br>
+                <strong>Control Plane:</strong> Ryu Controller (<code>routing.py</code>)<br>
+                <strong>Anomaly Engine:</strong> Isolation Forest (<code>ml_detector.py</code>)<br>
+                <strong>Active Route:</strong> Customer ➔ Switches ➔ Bank Server<br>
+                <strong>Threat Isolation:</strong> Ready on standby.
+              </div>
+            </div>
+          </section>
+
+          <section class="card" style="flex: 1;">
+            <div class="card-header-clean">
+              <h2>⏱️ Controller Event Chronology</h2>
+              <span class="card-tag">AUDIT FEED</span>
+            </div>
+            <div class="timeline" id="event-timeline"></div>
+          </section>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- ==================== TAB 3: TOPOLOGY ==================== -->
+    <div id="tab-topology" class="tab-content">
+      <section class="card">
+        <div class="card-header-clean">
+          <h2>🌐 4-Tier SDN Financial Architecture Blueprint</h2>
+          <span class="card-tag">SYSTEM TOPOLOGY</span>
+        </div>
+        
+        <div class="arch-canvas-container" style="height: 480px;">
+          <div class="arch-node node-host-cust"><span class="tier-tag">TIER 1</span><span>👤 Customer Host</span><span class="sub-label">10.0.0.1</span></div>
+          <div class="arch-node node-host-att"><span class="tier-tag">TIER 1</span><span>💀 Attacker Host</span><span class="sub-label">192.168.100.112</span></div>
+          <div class="arch-node node-host-bank"><span class="tier-tag">TIER 1</span><span>🏦 Bank Server</span><span class="sub-label">10.0.0.2:8855</span></div>
+          <div class="arch-node node-host-honey"><span class="tier-tag">TIER 1</span><span>🍯 Honeypot Decoy</span><span class="sub-label">10.0.0.5:8000</span></div>
+          <div class="arch-node node-sdn-switches"><span class="tier-tag">TIER 2</span><span>🌐 OpenFlow Switch Fabric</span><span class="sub-label">Edge S1 ── Core S2/S3 ── Dist S4</span></div>
+          <div class="arch-node node-sdn-controller"><span class="tier-tag">TIER 3</span><span>🧠 Ryu SDN Controller Engine</span><span class="sub-label"><code>flow_manager.py</code> / <code>routing.py</code></span></div>
+          <div class="arch-node node-ml-detector"><span class="tier-tag">TIER 4</span><span>🤖 ML Isolation Forest Anomaly Engine</span><span class="sub-label"><code>ml_detector.py</code></span></div>
+          <div class="arch-node node-flask-dash"><span class="tier-tag">TIER 4</span><span>📊 SDN Security Dashboard</span><span class="sub-label"><code>app.py</code> (:8855)</span></div>
+
+          <svg class="arch-svg" viewBox="0 0 1000 480" preserveAspectRatio="none">
+            <defs>
+              <marker id="topo-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M 1 1 L 7 4 L 1 7 Z" fill="#64748b" />
+              </marker>
+            </defs>
+            <path class="arch-line" d="M 135 85 L 250 160" marker-end="url(#topo-arrow)" />
+            <path class="arch-line" d="M 375 85 L 410 160" marker-end="url(#topo-arrow)" />
+            <path class="arch-line" d="M 590 160 L 630 85" marker-end="url(#topo-arrow)" />
+            <path class="arch-line" d="M 750 160 L 870 85" marker-end="url(#topo-arrow)" />
+            <path class="arch-line" d="M 500 220 L 500 280" marker-end="url(#topo-arrow)" marker-start="url(#topo-arrow)" />
+            <text x="515" y="253" class="arch-badge-text">OpenFlow 1.3 Control Channel</text>
+            <path class="arch-line" d="M 290 410 L 290 345" marker-end="url(#topo-arrow)" />
+            <text x="245" y="380" class="arch-badge-text" style="text-anchor: end;">Anomaly Classification</text>
+            <path class="arch-line" d="M 710 345 L 710 410" marker-end="url(#topo-arrow)" />
+            <text x="725" y="380" class="arch-badge-text">REST Telemetry Feed</text>
+          </svg>
+        </div>
+
+        <div style="margin-top: 1.5rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1rem;">
+          <div class="inner-panel">
+            <h3 style="color:#38bdf8;">⚡ Layer 1: Data Plane</h3>
+            <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.6;">Mininet OpenFlow virtual switches executing hardware flow matching, rate limiting, and instant port redirection instructed by OpenFlow <code>OFPFC_ADD</code> / <code>OFPFC_MODIFY</code> directives.</p>
+          </div>
+          <div class="inner-panel">
+            <h3 style="color:#34d399;">🧠 Layer 2: Control Plane</h3>
+            <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.6;">Ryu SDN Framework maintaining global topological awareness, shortest-path calculation (Dijkstra), and dynamic mitigation policy pushes to isolate malicious adversary sockets.</p>
+          </div>
+          <div class="inner-panel">
+            <h3 style="color:#fde047;">🤖 Layer 3: AI Anomaly Engine</h3>
+            <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.6;">Scikit-learn Isolation Forest model continuously analyzing packet rates, byte distributions, SYN flood flags, and port variance to score anomalies in sub-millisecond windows.</p>
+          </div>
+          <div class="inner-panel">
+            <h3 style="color:#c084fc;">🍯 Layer 4: Decoy VLAN</h3>
+            <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.6;">High-interaction Honeypot simulating bank services (Port 8000/9999). Traps and logs attacking IPs, requests, and payload signatures without exposing the core payment infrastructure.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 4: TRAFFIC FLOW MATRIX ==================== -->
+    <div id="tab-traffic" class="tab-content">
+      <section class="card">
+        <div class="card-header-clean">
+          <h2>📋 Active Flow Matrix</h2>
+          <span class="card-tag">NETWORK FLOW STREAM</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Source Address</th>
+                <th>Destination Endpoint</th>
+                <th>Protocol</th>
+                <th>Target Port</th>
+                <th>Flow Status</th>
+                <th>Classification</th>
+              </tr>
+            </thead>
+            <tbody id="all-traffic-body">
+              <tr><td colspan="7">Loading network flow telemetry...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 5: THREAT INTELLIGENCE ==================== -->
+    <div id="tab-threats" class="tab-content">
+      <section class="card">
+        <div class="card-header-clean">
+          <h2>🚨 Intercepted Threat Intelligence</h2>
+          <span class="card-tag">SECURITY ALERTS</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Adversary IP</th>
+                <th>Target System</th>
+                <th>Protocol</th>
+                <th>Threat Signature</th>
+                <th>Severity</th>
+                <th>Mitigation Action</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="threats-table-body">
+              <tr><td colspan="8">No active security threats in buffer.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 6: RULES MANAGEMENT ==================== -->
+    <div id="tab-rules" class="tab-content">
+      <section class="card" style="margin-bottom: 1.25rem;">
+        <div class="card-header-clean">
+          <h2>➕ Add Security & Flow Policy Rule</h2>
+          <span class="card-tag">OPENFLOW POLICIES</span>
+        </div>
+        <form id="add-rule-form" onsubmit="handleRuleSubmit(event)" class="form-row">
+          <input type="text" id="rule-pattern" name="pattern" placeholder="IP / CIDR Pattern (e.g. 192.168.100.112)" style="flex:1; min-width:200px;" required>
+          <select id="rule-severity" name="severity" style="min-width:140px;">
+            <option value="Low">Low Severity</option>
+            <option value="Medium" selected>Medium Severity</option>
+            <option value="High">High Severity</option>
+            <option value="Critical">Critical Severity</option>
+          </select>
+          <input type="text" id="rule-description" name="description" placeholder="Description (e.g. Block known Botnet subnet)" style="flex:2; min-width:240px;" required>
+          <button type="submit" class="button-primary">➕ Deploy Rule</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-header-clean">
+          <h2>📋 Active SDN Security Rules</h2>
+          <span class="card-tag">RULESET</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Rule ID</th>
+                <th>Pattern / IP Range</th>
+                <th>Severity Level</th>
+                <th>Policy Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rules-table-body">
+              <tr><td colspan="5">Loading security rules...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 7: HONEYPOT TRAP ==================== -->
+    <div id="tab-honeypot" class="tab-content">
+      <section class="card">
+        <div class="card-header-clean">
+          <h2>🍯 Honeypot Forensics & Captured Payloads</h2>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="button-secondary" onclick="window.open('/export/honeypot.csv', '_blank')">📁 Export CSV</button>
+            <button class="button-secondary" onclick="window.open('/export/honeypot.json', '_blank')">🗂️ Export JSON</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Capture Timestamp</th>
+                <th>Attacker IP</th>
+                <th>Decoy Service Trapped</th>
+                <th>Captured Exploit / Request Payload</th>
+              </tr>
+            </thead>
+            <tbody id="honeypot-table-body">
+              <tr><td colspan="4">Loading honeypot capture events...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 8: AUDIT LOGS ==================== -->
+    <div id="tab-logs" class="tab-content">
+      <section class="card" style="margin-bottom: 1.25rem;">
+        <div class="card-header-clean">
+          <h2>🔍 Forensic Audit Filter</h2>
+          <span class="card-tag">SEARCH LOGS</span>
+        </div>
+        <form id="filter-logs-form" onsubmit="handleFilterLogs(event)" class="form-row">
+          <label style="color:var(--text-secondary); font-size:0.82rem;">From:</label>
+          <input type="date" id="filter-start" name="start">
+          <label style="color:var(--text-secondary); font-size:0.82rem;">To:</label>
+          <input type="date" id="filter-end" name="end">
+          <label style="color:var(--text-secondary); font-size:0.82rem;">Severity:</label>
+          <select name="severity" id="filter-severity">
+            <option value="">All Severities</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+          <button type="submit" class="button-primary">Apply Filter</button>
+          <button type="button" class="button-secondary" onclick="resetLogFilter()">Reset</button>
+          <button type="button" class="button-secondary" onclick="exportLogs()">📤 Export Logs</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-header-clean">
+          <h2>📋 Historical Event Records</h2>
+          <span class="card-tag">SYSTEM AUDIT</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Source Address</th>
+                <th>Destination</th>
+                <th>Event Type</th>
+                <th>Severity</th>
+                <th>SDN Action</th>
+                <th>State</th>
+              </tr>
+            </thead>
+            <tbody id="logs-table-body">
+              <tr><td colspan="7">Loading audit records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
   </div>
 
-  <!-- JavaScript -->
+  <!-- Master JavaScript Engine -->
   <script>
+    const TAB_HEADERS = {
+      dashboard: { title: "SDN SECURITY OPERATIONS", subtitle: "SDN Control Plane Orchestration • ML Isolation Forest Anomaly Detection • Dynamic Decoy Rerouting" },
+      routing:   { title: "Dynamic Secure Routing Simulation", subtitle: "Real-time SDN Controller path recalculation, threat isolation, and Honeypot VLAN rerouting" },
+      topology:  { title: "4-Tier SDN Architecture & Topology", subtitle: "Visual representation of the Hosts, OpenFlow Switches, Ryu Controller, ML Detector & Dashboard" },
+      traffic:   { title: "Active Network Flow Matrix", subtitle: "Monitor all active flows across the financial network in real-time" },
+      threats:   { title: "Threat Intelligence & Anomaly Alerts", subtitle: "Monitor security alerts and automated mitigation actions taken by the SDN controller" },
+      rules:     { title: "SDN Firewall & Policy Management", subtitle: "Create, deploy, or delete SDN OpenFlow policy rules for suspicious activities" },
+      honeypot:  { title: "Honeypot Forensics & Captured Payloads", subtitle: "Captured attacker interactions and probes on isolated fake services (Port 8000 / 9999)" },
+      logs:      { title: "Forensic Audit & Event Logs", subtitle: "Analyze and export detailed event logs from the SDN defense fabric" }
+    };
+
+    let activeTabName = "{{ active_tab or 'dashboard' }}";
+
+    function updateClock() {
+      const now = new Date();
+      const clockEl = document.getElementById("live-clock");
+      if (clockEl) {
+        clockEl.textContent = now.toTimeString().split(" ")[0];
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function showToast(title, message, type = "threat") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = "toast-alert";
+      
+      const icon = type === "threat" ? "🚨" : (type === "safe" ? "✅" : "🔄");
+      const borderColor = type === "threat" ? "#f43f5e" : (type === "safe" ? "#10b981" : "#38bdf8");
+      toast.style.borderColor = borderColor;
+
+      toast.innerHTML = `
+        <span style="font-size:1.4rem;">${icon}</span>
+        <div style="flex:1;">
+          <div style="font-weight:700; font-size:0.86rem; color:#fff; margin-bottom:2px;">${title}</div>
+          <div style="font-size:0.78rem; color:#94a3b8; line-height:1.4;">${message}</div>
+        </div>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(100%)";
+        toast.style.transition = "all 0.4s ease";
+        setTimeout(() => toast.remove(), 400);
+      }, 5000);
+    }
+
+    function switchTab(tabName) {
+      if (!TAB_HEADERS[tabName]) tabName = "dashboard";
+      activeTabName = tabName;
+
+      document.querySelectorAll("nav.app-nav ul li a").forEach(el => el.classList.remove("active"));
+      const navBtn = document.getElementById(`nav-${tabName}`);
+      if (navBtn) navBtn.classList.add("active");
+
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      const targetTab = document.getElementById(`tab-${tabName}`);
+      if (targetTab) targetTab.classList.add("active");
+
+      const newUrl = tabName === "dashboard" ? "/" : `/${tabName}`;
+      window.history.pushState({ tab: tabName }, "", newUrl);
+
+      refreshTabContent(tabName);
+    }
+
+    function refreshTabContent(tabName) {
+      if (tabName === "dashboard") {
+        fetchStats();
+        renderAlertTrendChart();
+        fetchLivePackets();
+      } else if (tabName === "routing") {
+        updateArchVisuals();
+      } else if (tabName === "traffic") {
+        fetchAllTraffic();
+      } else if (tabName === "threats") {
+        fetchThreats();
+      } else if (tabName === "rules") {
+        fetchRules();
+      } else if (tabName === "honeypot") {
+        fetchHoneypotLogs();
+      } else if (tabName === "logs") {
+        fetchLogs();
+      }
+    }
+
+    window.addEventListener("popstate", () => {
+      const path = window.location.pathname.replace("/", "") || "dashboard";
+      switchTab(path);
+    });
+
+    async function toggleMLEngine() {
+      try {
+        const res = await fetch("/toggle-ml", { method: "POST" });
+        const data = await res.json();
+        const btn = document.getElementById("btn-toggle-ml");
+        const statusSpan = document.getElementById("ml-toggle-status");
+        const topState = document.getElementById("top-ml-state");
+
+        if (data.ml_enabled) {
+          btn.classList.add("active");
+          statusSpan.textContent = "ENABLED";
+          statusSpan.style.color = "#34d399";
+          if (topState) topState.textContent = "(99.4% ACC)";
+          showToast("AI ML Engine Enabled", "Isolation Forest anomaly classification active.", "safe");
+        } else {
+          btn.classList.remove("active");
+          statusSpan.textContent = "DISABLED";
+          statusSpan.style.color = "#f43f5e";
+          if (topState) topState.textContent = "(OFFLINE)";
+          showToast("AI ML Engine Disabled", "Anomaly scoring paused.", "threat");
+        }
+      } catch (e) {
+        console.error("Failed to toggle ML:", e);
+      }
+    }
+
+    // ==================== DASHBOARD LOGIC ====================
     async function fetchStats() {
-      const res = await fetch("/api/stats", { cache: "no-store" });
-      const stats = await res.json();
-      document.getElementById("packet-count").textContent = stats.total;
-      document.getElementById("threat-count").textContent = stats.threats;
-      document.getElementById("safe-count").textContent = stats.safe;
-      document.getElementById("rerouted-count").textContent = stats.rerouted;
+      try {
+        const res = await fetch("/api/stats", { cache: "no-store" });
+        const stats = await res.json();
+        const pCount = document.getElementById("packet-count");
+        const tCount = document.getElementById("threat-count");
+        const sCount = document.getElementById("safe-count");
+        const rCount = document.getElementById("rerouted-count");
+
+        if (pCount) pCount.textContent = (stats.total || 0).toLocaleString();
+        if (tCount) tCount.textContent = (stats.threats || 0).toLocaleString();
+        if (sCount) sCount.textContent = (stats.safe || 0).toLocaleString();
+        if (rCount) rCount.textContent = (stats.rerouted || 0).toLocaleString();
+      } catch (e) {}
     }
 
     async function renderAlertTrendChart() {
-      const res = await fetch("/api/alerts-per-hour", { cache: "no-store" });
-      const data = await res.json();
-      const ctx = document.getElementById("alertTrendChart").getContext("2d");
-      
-      // Destroy existing chart if it exists
-      if (window.trendChart) {
-          window.trendChart.destroy();
-      }
-      
-      window.trendChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: data.labels,
-          datasets: [{
-            label: "Threats per Hour",
-            data: data.counts,
-            fill: true,
-            borderColor: "#00e5ff",
-            backgroundColor: "rgba(0,229,255,0.2)",
-            tension: 0.4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: "#333" } } },
-          scales: {
-            x: { ticks: { color: "#666" } },
-            y: { ticks: { color: "#666" }, beginAtZero: true }
+      try {
+        const res = await fetch("/api/alerts-per-hour", { cache: "no-store" });
+        const data = await res.json();
+        const canvas = document.getElementById("alertTrendChart");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        
+        const labels = (data.labels && data.labels.length) ? data.labels : ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00"];
+        const counts = (data.counts && data.counts.length) ? data.counts : [0, 0, 0, 0, 0, 0];
+        const maxVal = Math.max(5, ...(counts || [5]));
+
+        if (window.trendChart) {
+          window.trendChart.data.labels = labels;
+          window.trendChart.data.datasets[0].data = counts;
+          if (window.trendChart.options.scales && window.trendChart.options.scales.y) {
+            window.trendChart.options.scales.y.suggestedMax = Math.max(10, maxVal + 4);
           }
+          window.trendChart.update();
+          return;
         }
-      });
+
+        const chartHeight = canvas.clientHeight || 280;
+        const gradient = ctx.createLinearGradient(0, 0, 0, chartHeight);
+        gradient.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+        gradient.addColorStop(1, 'rgba(56, 189, 248, 0.01)');
+        
+        window.trendChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Threat Vectors",
+              data: counts,
+              fill: true,
+              borderColor: "#38bdf8",
+              backgroundColor: gradient,
+              tension: 0.35,
+              borderWidth: 2.5,
+              pointBackgroundColor: "#0284c7",
+              pointBorderColor: "#38bdf8",
+              pointBorderWidth: 2,
+              pointRadius: function(context) {
+                return (context.raw && context.raw > 0) ? 5 : 0;
+              },
+              pointHoverRadius: 7
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+              padding: { top: 15, bottom: 5, left: 5, right: 10 }
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: "#0f172a",
+                titleColor: "#f8fafc",
+                bodyColor: "#38bdf8",
+                borderColor: "rgba(56, 189, 248, 0.3)",
+                borderWidth: 1,
+                padding: 10,
+                boxPadding: 4,
+                usePointStyle: true
+              }
+            },
+            scales: {
+              x: {
+                ticks: { 
+                  color: "#64748b", 
+                  font: { family: "JetBrains Mono", size: 10 },
+                  maxRotation: 0,
+                  minRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 8
+                },
+                grid: { color: "rgba(255, 255, 255, 0.04)" }
+              },
+              y: {
+                ticks: { 
+                  color: "#64748b", 
+                  font: { family: "JetBrains Mono", size: 11 },
+                  precision: 0,
+                  maxTicksLimit: 6
+                },
+                beginAtZero: true,
+                suggestedMax: Math.max(10, maxVal + 4),
+                grid: { color: "rgba(255, 255, 255, 0.04)" }
+              }
+            }
+          }
+        });
+      } catch (e) {
+        console.error("Failed to render alert trend chart:", e);
+      }
     }
 
     async function fetchLivePackets() {
       try {
         const res = await fetch("/api/live-packets", { cache: "no-store" });
         const packets = await res.json();
-        const container = document.getElementById("packet-stream");
+        const container = document.getElementById("packet-stream-dashboard");
+        if (!container) return;
         container.innerHTML = "";
-        packets.slice(-50).reverse().forEach(pkt => {
+        
+        if (!packets || packets.length === 0) {
+          container.innerHTML = `<div style="color:var(--text-muted); text-align:center; padding:2rem;">Awaiting incoming network telemetry...</div>`;
+          return;
+        }
+
+        packets.slice(-20).reverse().forEach(pkt => {
           const div = document.createElement("div");
-          div.classList.add("packet-entry");
+          div.className = "packet-entry";
+          const isSafe = (pkt.status === 'SAFE');
           div.innerHTML = `
-            <strong>Time:</strong> ${pkt.timestamp}<br>
-            <strong>Source:</strong> ${pkt.src}<br>
-            <strong>Destination:</strong> ${pkt.dst}<br>
-            <strong>Protocol:</strong> ${pkt.protocol}<br>
-            <strong>Port:</strong> ${pkt.port}<br>
-            <strong>Status:</strong> <span class="${pkt.status === 'SAFE' ? 'safe-tag' : 'alert-tag'}">${pkt.status}</span><br>
-            ${pkt.threat_type !== 'None' ? `<strong>Threat Type:</strong> ${pkt.threat_type}` : ''}
-            <hr>
+            <div class="packet-meta">
+              <span class="packet-time">${pkt.timestamp || '--:--:--'}</span>
+              <span class="packet-route"><code>${pkt.src}</code> ➔ <code>${pkt.dst}</code></span>
+              <span style="color:#64748b; font-size:0.75rem;">(${pkt.protocol || 'TCP'})</span>
+            </div>
+            <span class="badge ${isSafe ? 'badge-safe' : 'badge-threat'}">${pkt.status}</span>
           `;
           container.appendChild(div);
         });
-      } catch (e) {
-        console.error("Failed to fetch flows:", e);
+      } catch (e) {}
+    }
+
+    // ==================== ARCHITECTURE V2 ROUTING SIMULATION LOGIC ====================
+    let currentRoutingState = "NORMAL"; // NORMAL, ATTACK, SECURE
+    let routingTimeout = null;
+    let autoNormalTimer = null;
+    let particleAnimationInterval = null;
+
+    function addTimelineEvent(msg, type='info') {
+      const timeline = document.getElementById('event-timeline');
+      if (!timeline) return;
+      const d = new Date();
+      const timeStr = d.getHours().toString().padStart(2, '0') + ":" + 
+                      d.getMinutes().toString().padStart(2, '0') + ":" + 
+                      d.getSeconds().toString().padStart(2, '0');
+      
+      const el = document.createElement('div');
+      el.className = `tl-event ${type}`;
+      el.innerHTML = `<span class="tl-time">[${timeStr}]</span> ${msg}`;
+      timeline.prepend(el);
+      if (timeline.children.length > 25) timeline.removeChild(timeline.lastChild);
+    }
+
+    function animateParticle(x1, y1, x2, y2, type='green', duration=1200) {
+      const svgParticlesGroup = document.getElementById('svg-particles-group');
+      if (!svgParticlesGroup) return;
+
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('class', `flow-particle fp-${type}`);
+      svgParticlesGroup.appendChild(circle);
+
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const curX = x1 + (x2 - x1) * progress;
+        const curY = y1 + (y2 - y1) * progress;
+
+        circle.setAttribute('cx', curX);
+        circle.setAttribute('cy', curY);
+        circle.style.opacity = progress < 0.15 ? progress * 6.6 : (progress > 0.85 ? (1 - progress) / 0.15 : 1);
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          if (circle.parentNode) circle.parentNode.removeChild(circle);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    function startParticleEngine() {
+      if (particleAnimationInterval) clearInterval(particleAnimationInterval);
+      
+      particleAnimationInterval = setInterval(() => {
+        if (currentRoutingState === "NORMAL") {
+          // Customer (135, 85) -> Switches (250, 160)
+          animateParticle(135, 85, 250, 160, 'green', 1100);
+          // Switches (590, 160) -> Bank (630, 85)
+          setTimeout(() => animateParticle(590, 160, 630, 85, 'green', 1100), 550);
+          // Switches (500, 220) <-> Controller (500, 280)
+          animateParticle(500, 220, 500, 280, 'green', 900);
+          // Controller (710, 345) -> Dashboard (710, 410)
+          animateParticle(710, 345, 710, 410, 'green', 900);
+        } 
+        else if (currentRoutingState === "ATTACK") {
+          // Attacker (375, 85) -> Switches (410, 160)
+          animateParticle(375, 85, 410, 160, 'red', 700);
+          setTimeout(() => animateParticle(375, 85, 410, 160, 'red', 700), 350);
+          // Switches -> Controller
+          animateParticle(500, 220, 500, 280, 'red', 800);
+          // ML -> Controller
+          animateParticle(290, 410, 290, 345, 'red', 800);
+        } 
+        else if (currentRoutingState === "SECURE") {
+          // Clean Customer Traffic
+          animateParticle(135, 85, 250, 160, 'green', 1100);
+          setTimeout(() => animateParticle(590, 160, 630, 85, 'green', 1100), 550);
+          // Rerouted Attacker Traffic into Honeypot (750, 160) -> (870, 85)
+          animateParticle(375, 85, 410, 160, 'red', 900);
+          setTimeout(() => animateParticle(750, 160, 870, 85, 'purple', 900), 450);
+          // Controller -> Dashboard
+          animateParticle(710, 345, 710, 410, 'green', 900);
+        }
+      }, 1000);
+    }
+
+    function setLineState(lineId, state, markerEnd, markerStart=null) {
+      const line = document.getElementById(lineId);
+      if (!line) return;
+      line.setAttribute("class", `arch-line ${state}`);
+      line.setAttribute("marker-end", `url(#${markerEnd})`);
+      if (markerStart) {
+        line.setAttribute("marker-start", `url(#${markerStart})`);
+      } else {
+        line.removeAttribute("marker-start");
       }
     }
 
-    // Initial load + refresh timers
-    fetchStats();
-    renderAlertTrendChart();
-    fetchLivePackets();
-    setInterval(fetchStats, 10000);
-    setInterval(fetchLivePackets, 5000);
+    function updateArchVisuals() {
+      const banner = document.getElementById('main-banner');
+      const labelScore = document.getElementById('label-score');
+      const labelFlowsAlerts = document.getElementById('label-flows-alerts');
+      const rdCurrent = document.getElementById('rd-current');
+      const rdStatus = document.getElementById('rd-status');
+      const mlStatusBadge = document.getElementById('ml-status-badge');
+      const swStatusBadge = document.getElementById('sw-status-badge');
+      const bankHealthBadge = document.getElementById('bank-health-badge');
+      const honeyStatusBadge = document.getElementById('honey-status-badge');
+      const sdnStatus = document.getElementById('sdn-status');
+
+      if (currentRoutingState === "NORMAL") {
+        if (banner) {
+          banner.className = "status-banner st-normal";
+          banner.innerHTML = "<span>🟢</span> <span>STATE 1: NORMAL ROUTING (Customer ➔ SDN Switches ➔ Bank Server Core)</span>";
+        }
+
+        setLineState('line-cust-sw', 'active-green', 'arrow-green');
+        setLineState('line-att-sw', '', 'arrow-default');
+        setLineState('line-sw-bank', 'active-green', 'arrow-green');
+        setLineState('line-sw-honey', '', 'arrow-default');
+        setLineState('line-sw-ctrl', 'active-green', 'arrow-green', 'arrow-green');
+        setLineState('line-ml-ctrl', '', 'arrow-default');
+        setLineState('line-ctrl-dash', 'active-green', 'arrow-green');
+
+        if (labelScore) { labelScore.textContent = "score (Normal: 0.02)"; labelScore.style.fill = "#10b981"; }
+        if (labelFlowsAlerts) { labelFlowsAlerts.textContent = "OpenFlow Control Channel (HEALTHY)"; labelFlowsAlerts.style.fill = "#10b981"; }
+
+        if (rdCurrent) { rdCurrent.innerHTML = "Customer (10.0.0.1) ➔ Switches ➔ Bank Server (10.0.0.2:8855)"; rdCurrent.style.color = "var(--success-color)"; }
+        if (rdStatus) { rdStatus.innerHTML = "✓ Clean Financial Traffic Flowing Directly"; rdStatus.style.color = "var(--success-color)"; }
+
+        if (mlStatusBadge) mlStatusBadge.innerHTML = "<span style='color:var(--success-color);'>Isolation Forest (Anomaly Score: Safe 0.02)</span>";
+        if (swStatusBadge) swStatusBadge.innerHTML = "<span style='color:var(--success-color);'>OpenFlow Path: S1 ➔ S2 ➔ S4</span>";
+        if (bankHealthBadge) bankHealthBadge.innerHTML = "<span style='color:var(--success-color);'>100% OPERATIONAL (Port 8855)</span>";
+        if (honeyStatusBadge) honeyStatusBadge.innerHTML = "<span style='color:var(--purple-color);'>STANDBY (0.0.0.0:8000)</span>";
+
+        if (sdnStatus) {
+          sdnStatus.innerHTML = `
+            <strong style="color: var(--success-color);">STATUS: ACTIVE ✓</strong><br><br>
+            <strong>Data Plane:</strong> OpenFlow 1.3 Switches (Mininet Fabric)<br>
+            <strong>Control Plane:</strong> Ryu Controller (<code>flow_manager.py</code>)<br>
+            <strong>Anomaly Engine:</strong> Isolation Forest (<code>ml_detector.py</code>)<br>
+            <strong>Current Route:</strong> Customer ➔ Switches ➔ Bank Server<br>
+            <strong>Active Threats:</strong> None detected.
+          `;
+        }
+      }
+      else if (currentRoutingState === "ATTACK") {
+        if (banner) {
+          banner.className = "status-banner st-detect";
+          banner.innerHTML = "<span>🚨</span> <span>STATE 2: ATTACK DETECTED (Attacker ➔ SDN Switches ➔ ML Anomaly Triggered)</span>";
+        }
+
+        setLineState('line-cust-sw', '', 'arrow-default');
+        setLineState('line-att-sw', 'active-red', 'arrow-red');
+        setLineState('line-sw-bank', '', 'arrow-default');
+        setLineState('line-sw-honey', '', 'arrow-default');
+        setLineState('line-sw-ctrl', 'active-red', 'arrow-red', 'arrow-red');
+        setLineState('line-ml-ctrl', 'active-red', 'arrow-red');
+        setLineState('line-ctrl-dash', 'active-red', 'arrow-red');
+
+        if (labelScore) { labelScore.textContent = "score: CRITICAL (-1 / 0.98)"; labelScore.style.fill = "#f43f5e"; }
+        if (labelFlowsAlerts) { labelFlowsAlerts.textContent = "flows / alerts: VOLUMETRIC FLOOD"; labelFlowsAlerts.style.fill = "#f43f5e"; }
+
+        if (rdCurrent) { rdCurrent.innerHTML = "Attacker (192.168.100.112) ➔ Target: Bank Server [CORRUPTED]"; rdCurrent.style.color = "var(--danger-color)"; }
+        if (rdStatus) { rdStatus.innerHTML = "⚠️ Malicious Flood Detected - SDN Isolating Socket..."; rdStatus.style.color = "var(--danger-color)"; }
+
+        if (mlStatusBadge) mlStatusBadge.innerHTML = "<span style='color:var(--danger-color); font-weight:700;'>CRITICAL ANOMALY (Isolation Forest Score: -1)</span>";
+        if (swStatusBadge) swStatusBadge.innerHTML = "<span style='color:var(--danger-color);'>Switch S2 Congested with DDoS</span>";
+        if (bankHealthBadge) bankHealthBadge.innerHTML = "<span style='color:var(--warning-color);'>UNDER ATTACK (Isolating...)</span>";
+        if (honeyStatusBadge) honeyStatusBadge.innerHTML = "<span style='color:var(--purple-color);'>PREPARING DECOY VLAN</span>";
+
+        if (sdnStatus) {
+          sdnStatus.innerHTML = `
+            <strong style="color: var(--danger-color);">STATUS: THREAT DETECTED ⚠️</strong><br><br>
+            <strong>Offender Host:</strong> 192.168.100.112<br>
+            <strong>Threat:</strong> Volumetric UDP/HTTP Flood<br>
+            <strong>Detection:</strong> Isolation Forest Anomaly Triggered<br>
+            <strong>Action:</strong> Calculating dynamic reroute to Honeypot...
+          `;
+        }
+      }
+      else if (currentRoutingState === "SECURE") {
+        if (banner) {
+          banner.className = "status-banner st-secure";
+          banner.innerHTML = "<span>🔄</span> <span>STATE 3: SECURE REROUTING ACTIVE (Customer ➔ Bank, Attacker ➔ Honeypot Trap)</span>";
+        }
+
+        setLineState('line-cust-sw', 'active-green', 'arrow-green');
+        setLineState('line-att-sw', 'active-red', 'arrow-red');
+        setLineState('line-sw-bank', 'active-green', 'arrow-green');
+        setLineState('line-sw-honey', 'active-purple', 'arrow-purple');
+        setLineState('line-sw-ctrl', 'active-green', 'arrow-green', 'arrow-green');
+        setLineState('line-ml-ctrl', '', 'arrow-default');
+        setLineState('line-ctrl-dash', 'active-green', 'arrow-green');
+
+        if (labelScore) { labelScore.textContent = "score (Trained ML Active)"; labelScore.style.fill = "#10b981"; }
+        if (labelFlowsAlerts) { labelFlowsAlerts.textContent = "flows / alerts (Flow-Mod Pushed)"; labelFlowsAlerts.style.fill = "#38bdf8"; }
+
+        if (rdCurrent) { rdCurrent.innerHTML = "Customer ➔ S3 ➔ Bank Server | Attacker ➔ Honeypot (10.0.0.5)"; rdCurrent.style.color = "#38bdf8"; }
+        if (rdStatus) { rdStatus.innerHTML = "✓ Attacker Trapped in Honeypot | Bank Core 100% Protected"; rdStatus.style.color = "#38bdf8"; }
+
+        if (mlStatusBadge) mlStatusBadge.innerHTML = "<span style='color:var(--success-color);'>Trained Isolation Forest (Protected)</span>";
+        if (swStatusBadge) swStatusBadge.innerHTML = "<span style='color:#38bdf8; font-weight:700;'>Flow-Mod Pushed: OpenFlow Reroute Active</span>";
+        if (bankHealthBadge) bankHealthBadge.innerHTML = "<span style='color:var(--success-color); font-weight:700;'>100% SECURED & OPERATIONAL</span>";
+        if (honeyStatusBadge) honeyStatusBadge.innerHTML = "<span style='color:var(--purple-color); font-weight:700;'>CAPTURING ATTACK (Port 8000)</span>";
+
+        if (sdnStatus) {
+          sdnStatus.innerHTML = `
+            <strong style="color: #38bdf8;">STATUS: SECURE REROUTING ACTIVE 🛡️</strong><br><br>
+            <strong>Safe Customer Path:</strong> Customer ➔ Switches ➔ Bank Server<br>
+            <strong>Attacker Isolation:</strong> 192.168.100.112 ➔ Honeypot (10.0.0.5)<br>
+            <strong>SDN Flow-Mod:</strong> Rules Enforced across OpenFlow Switches<br>
+            <strong>Bank API Availability:</strong> 100% PROTECTED ✓
+          `;
+        }
+      }
+    }
+
+    function triggerAttackState(threatSrc = "192.168.100.112") {
+      currentRoutingState = "ATTACK";
+      addTimelineEvent(`High volumetric packet flood detected from ${threatSrc}`, "warn");
+      addTimelineEvent("ML Isolation Forest Anomaly Triggered. Score: -1 (CRITICAL)", "crit");
+      addTimelineEvent("SDN Controller isolating Bank Server link...", "warn");
+      showToast("DDoS Attack Detected!", `Malicious packet flood from ${threatSrc}. ML Isolation Forest triggered.`, "threat");
+      updateArchVisuals();
+    }
+
+    function triggerSecureState(threatSrc = "192.168.100.112") {
+      currentRoutingState = "SECURE";
+      addTimelineEvent("SDN Controller calculating dynamic reroute (routing.py)", "info");
+      addTimelineEvent("OpenFlow flow-mod pushed: Legitimate traffic routed safely", "safe");
+      addTimelineEvent(`Attacker ${threatSrc} diverted & trapped into Honeypot (TCP)`, "crit");
+      addTimelineEvent("Bank Server / Payment Gateway 100% Protected ✓", "safe");
+      showToast("SDN Reroute Executed!", `Attacker ${threatSrc} diverted into Honeypot VLAN. Bank Server 100% secured.`, "safe");
+      updateArchVisuals();
+    }
+
+    function resetToNormal() {
+      currentRoutingState = "NORMAL";
+      updateArchVisuals();
+    }
+
+    function manualSimulateNormal() {
+      clearTimeout(routingTimeout);
+      clearTimeout(autoNormalTimer);
+      resetToNormal();
+      addTimelineEvent("Manual Override: Restored Normal Architectural Flow.", "safe");
+    }
+
+    function manualSimulateAttack() {
+      clearTimeout(routingTimeout);
+      clearTimeout(autoNormalTimer);
+      triggerAttackState("192.168.100.112");
+      routingTimeout = setTimeout(() => {
+        triggerSecureState("192.168.100.112");
+      }, 3500);
+    }
+
+    function manualSimulateSecure() {
+      clearTimeout(routingTimeout);
+      clearTimeout(autoNormalTimer);
+      triggerSecureState("192.168.100.112");
+    }
+
+    async function triggerQuickDemoAttack() {
+      try {
+        switchTab('routing');
+        manualSimulateAttack();
+        // Also send backend test report to stimulate APIs
+        await fetch("/api/report-threat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source_ip: "192.168.100.112",
+            destination_ip: "10.0.0.2",
+            port: 8855,
+            threat_type: "Volumetric DDoS Syn-Flood",
+            severity: "Critical",
+            payload: "SYN-FLOOD-EXPLOIT-SIGNATURE-0xDEADBEEF"
+          })
+        });
+      } catch (e) {}
+    }
+
+    // ==================== TRAFFIC TAB LOGIC ====================
+    async function fetchAllTraffic() {
+      try {
+        const res = await fetch("/api/live-packets", { cache: "no-store" });
+        const packets = await res.json();
+        const tbody = document.getElementById("all-traffic-body");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (!packets || packets.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">No active network flows recorded.</td></tr>';
+          return;
+        }
+        packets.slice().reverse().forEach(pkt => {
+          const tr = document.createElement("tr");
+          const isSafe = (pkt.status === 'SAFE');
+          tr.innerHTML = `
+            <td class="mono-font">${pkt.timestamp || '-'}</td>
+            <td><code>${pkt.src}</code></td>
+            <td><code>${pkt.dst}</code></td>
+            <td><span class="badge" style="background:rgba(255,255,255,0.06); color:#cbd5e1;">${pkt.protocol || 'TCP'}</span></td>
+            <td class="mono-font">${pkt.port || '443'}</td>
+            <td><span class="badge ${isSafe ? 'badge-safe' : 'badge-threat'}">${pkt.status}</span></td>
+            <td>${pkt.threat_type || 'Legitimate Traffic'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {}
+    }
+
+    // ==================== THREATS TAB LOGIC ====================
+    async function fetchThreats() {
+      try {
+        const res = await fetch("/api/threats", { cache: "no-store" });
+        const threats = await res.json();
+        const tbody = document.getElementById("threats-table-body");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (!threats || threats.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem; color:var(--text-muted);">No active security threats in buffer.</td></tr>';
+          return;
+        }
+        threats.slice().reverse().forEach(t => {
+          const tr = document.createElement("tr");
+          const sev = (t.severity || 'High').toLowerCase();
+          const sevBadge = sev === 'critical' || sev === 'high' ? 'badge-threat' : 'badge-warn';
+          tr.innerHTML = `
+            <td class="mono-font">${t.timestamp}</td>
+            <td><code style="color:#fb7185;">${t.source_ip || t.src || '-'}</code></td>
+            <td><code>${t.destination_ip || t.dst || '-'}</code></td>
+            <td>${t.protocol}</td>
+            <td style="font-weight:600; color:var(--text-main);">${t.event_type || 'Malicious Flood'}</td>
+            <td><span class="badge ${sevBadge}">${t.severity || 'High'}</span></td>
+            <td><span class="badge badge-reroute">${t.action || 'ISOLATED'}</span></td>
+            <td><span class="badge badge-threat">${t.status || 'THREAT DETECTED'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {}
+    }
+
+    // ==================== RULES TAB LOGIC ====================
+    async function fetchRules() {
+      try {
+        const res = await fetch("/api/rules", { cache: "no-store" });
+        const rules = await res.json();
+        const tbody = document.getElementById("rules-table-body");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (!rules || rules.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No firewall rules defined yet.</td></tr>';
+          return;
+        }
+        rules.forEach(r => {
+          const tr = document.createElement("tr");
+          const sev = (r.severity || 'Medium').toLowerCase();
+          const sevBadge = sev === 'critical' || sev === 'high' ? 'badge-threat' : (sev === 'low' ? 'badge-safe' : 'badge-warn');
+          tr.innerHTML = `
+            <td class="mono-font">#${r.id}</td>
+            <td><code>${r.pattern}</code></td>
+            <td><span class="badge ${sevBadge}">${r.severity}</span></td>
+            <td>${r.description}</td>
+            <td><button class="button-danger" onclick="deleteRule(${r.id})" style="padding: 0.3rem 0.65rem; font-size: 0.75rem;">🗑️ Delete</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {}
+    }
+
+    async function handleRuleSubmit(e) {
+      e.preventDefault();
+      const pattern = document.getElementById("rule-pattern").value;
+      const severity = document.getElementById("rule-severity").value;
+      const description = document.getElementById("rule-description").value;
+      
+      try {
+        await fetch("/api/rules", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pattern, severity, description })
+        });
+        document.getElementById("add-rule-form").reset();
+        showToast("Rule Deployed", `New OpenFlow policy for ${pattern} synchronized.`, "safe");
+        fetchRules();
+      } catch (err) {
+        console.error("Rule add error:", err);
+      }
+    }
+
+    async function deleteRule(id) {
+      try {
+        await fetch(`/api/delete-rule/${id}`, { method: "POST" });
+        showToast("Rule Deleted", `OpenFlow rule #${id} purged.`, "threat");
+        fetchRules();
+      } catch (err) {
+        console.error("Rule delete error:", err);
+      }
+    }
+
+    // ==================== HONEYPOT TAB LOGIC ====================
+    async function fetchHoneypotLogs() {
+      try {
+        const res = await fetch("/api/honeypot", { cache: "no-store" });
+        const logs = await res.json();
+        const tbody = document.getElementById("honeypot-table-body");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (!logs || logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:2rem; color:var(--text-muted);">No honeypot interactions captured yet.</td></tr>';
+          return;
+        }
+        logs.slice().reverse().forEach(log => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="mono-font">${log.timestamp || '-'}</td>
+            <td><code style="color:#fb7185;">${log.attacker_ip || '-'}</code></td>
+            <td><span class="badge badge-reroute">${log.service || 'HTTP/FakeBank'}</span></td>
+            <td><pre style="white-space:pre-wrap; margin:0; font-family:'JetBrains Mono',monospace; font-size:0.78rem; background:rgba(0,0,0,0.4); padding:0.5rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06); color:#cbd5e1;">${log.request || '-'}</pre></td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (e) {}
+    }
+
+    // ==================== LOGS TAB LOGIC ====================
+    async function fetchLogs(start = "", end = "", severity = "") {
+      try {
+        const url = `/api/logs?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&severity=${encodeURIComponent(severity)}`;
+        const res = await fetch(url, { cache: "no-store" });
+        const logs = await res.json();
+        const tbody = document.getElementById("logs-table-body");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (!logs || logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">No audit records found matching your criteria.</td></tr>';
+          return;
+        }
+        logs.slice().reverse().forEach(log => {
+          const tr = document.createElement("tr");
+          const isSafe = (log.status === 'SAFE');
+          const sev = (log.severity || 'Low').toLowerCase();
+          const sevBadge = sev === 'critical' || sev === 'high' ? 'badge-threat' : (sev === 'low' ? 'badge-safe' : 'badge-warn');
+
+          tr.innerHTML = `
+            <td class="mono-font">${log.timestamp}</td>
+            <td><code>${log.source_ip || log.src || '-'}</code></td>
+            <td><code>${log.destination_ip || log.dst || '-'}</code></td>
+            <td>${log.event_type || 'Normal Traffic'}</td>
+            <td><span class="badge ${sevBadge}">${log.severity || 'Low'}</span></td>
+            <td><span class="badge ${log.action === 'ALLOW' ? 'badge-safe' : 'badge-reroute'}">${log.action || 'ALLOW'}</span></td>
+            <td><span class="badge ${isSafe ? 'badge-safe' : 'badge-threat'}">${log.status || 'SAFE'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {}
+    }
+
+    function handleFilterLogs(e) {
+      e.preventDefault();
+      const start = document.getElementById("filter-start").value;
+      const end = document.getElementById("filter-end").value;
+      const severity = document.getElementById("filter-severity").value;
+      fetchLogs(start, end, severity);
+    }
+
+    function resetLogFilter() {
+      document.getElementById("filter-logs-form").reset();
+      fetchLogs();
+    }
+
+    function exportLogs() {
+      const start = document.getElementById("filter-start") ? document.getElementById("filter-start").value : "";
+      const end = document.getElementById("filter-end") ? document.getElementById("filter-end").value : "";
+      const severity = document.getElementById("filter-severity") ? document.getElementById("filter-severity").value : "";
+      window.open(`/export-logs?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&severity=${encodeURIComponent(severity)}`, '_blank');
+    }
+
+    // ==================== REAL-TIME THREAT & REROUTE DETECTOR ====================
+    let lastThreatCounter = -1;
+    let lastRoutingCount = -1;
+
+    async function pollLiveThreatActivity() {
+      try {
+        const res = await fetch("/api/stats", { cache: "no-store" });
+        const stats = await res.json();
+        const currentCounter = stats.threat_counter !== undefined ? stats.threat_counter : (stats.threats || 0);
+        const currentRerouted = stats.routing_events_count !== undefined ? stats.routing_events_count : (stats.rerouted || 0);
+        const latestThreat = stats.latest_threat || {};
+        const threatSrc = latestThreat.source_ip || "192.168.100.112";
+
+        if (lastThreatCounter === -1) {
+          lastThreatCounter = currentCounter;
+          lastRoutingCount = currentRerouted;
+        } else if (currentCounter > lastThreatCounter || currentRerouted > lastRoutingCount) {
+          // Attack or Reroute event detected in real-time!
+          lastThreatCounter = currentCounter;
+          lastRoutingCount = currentRerouted;
+
+          clearTimeout(routingTimeout);
+          clearTimeout(autoNormalTimer);
+
+          // 1. Immediately trigger Attack State
+          triggerAttackState(threatSrc);
+          fetchStats();
+          renderAlertTrendChart();
+          fetchThreats();
+          fetchHoneypotLogs();
+          fetchLivePackets();
+          fetchAllTraffic();
+
+          // 2. Transition to Secure Reroute State after 1.8s
+          routingTimeout = setTimeout(() => {
+            triggerSecureState(threatSrc);
+            fetchStats();
+            renderAlertTrendChart();
+            fetchThreats();
+            fetchHoneypotLogs();
+            fetchLivePackets();
+            fetchAllTraffic();
+
+            // 3. Keep Secure Reroute active for 25 seconds
+            autoNormalTimer = setTimeout(() => {
+              if (currentRoutingState === "SECURE") {
+                resetToNormal();
+                addTimelineEvent("Traffic normalized. SDN Default OpenFlow forwarding restored.", "safe");
+              }
+            }, 25000);
+          }, 1800);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // ==================== INITIALIZATION ====================
+    addTimelineEvent("SDN 4-Tier Security Orchestration online.", "safe");
+    addTimelineEvent("OpenFlow Switches, Ryu Controller & ML Engine synchronized.", "info");
+    resetToNormal();
+    startParticleEngine();
+
+    // Set initial tab
+    switchTab(activeTabName);
+
+    // Global background sync timers
+    setInterval(fetchStats, 3000);
+    setInterval(renderAlertTrendChart, 5000);
+    setInterval(fetchLivePackets, 2500);
+    setInterval(pollLiveThreatActivity, 1000);
   </script>
 </body>
 </html>
