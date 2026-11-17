@@ -257,6 +257,10 @@ def honeypot_page():
     status_str = f"RUNNING on port {HONEYPOT_STATUS['port']}" if HONEYPOT_STATUS["running"] else "STOPPED"
     return render_template("index.html", active_tab="honeypot", logs=logs, honeypot_logs=logs, honeypot_status=status_str, honeypot_running=HONEYPOT_STATUS["running"], listening_ip="0.0.0.0", port=HONEYPOT_STATUS["port"], ml_enabled=ML_ENABLED)
 
+@app.route("/ns2")
+def ns2_page():
+    return render_template("index.html", active_tab="ns2", ml_enabled=ML_ENABLED)
+
 @app.route("/logs")
 def logs_page():
     start = request.args.get("start", "")
@@ -640,10 +644,42 @@ def export_honeypot_json():
     output.seek(0)
     return send_file(output, mimetype="application/json", as_attachment=True, download_name="honeypot_logs.json")
 
+# === NS-2 Simulation Endpoints ===
+from ns2_simulation import run_discrete_ns2_simulation, TRACE_FILE, NAM_FILE, TCL_FILE, AWK_FILE
 
+@app.route("/api/ns2/simulate", methods=["GET", "POST"])
+def api_ns2_simulate():
+    data = request.get_json(silent=True) or {}
+    duration = float(data.get("duration", 8.0))
+    attack_start = float(data.get("attack_start", 2.0))
+    reroute_start = float(data.get("reroute_start", 4.5))
+    res = run_discrete_ns2_simulation(duration, attack_start, reroute_start)
+    return jsonify(res)
 
+@app.route("/download/ns2-script")
+def download_ns2_script():
+    if os.path.exists(TCL_FILE):
+        return send_file(TCL_FILE, mimetype="text/plain", as_attachment=True, download_name="secure_reroute_ns2.tcl")
+    return jsonify({"error": "Script not found"}), 404
 
-# === Sniffer Thread ===
+@app.route("/download/ns2-trace")
+def download_ns2_trace():
+    if not os.path.exists(TRACE_FILE):
+        run_discrete_ns2_simulation()
+    return send_file(TRACE_FILE, mimetype="text/plain", as_attachment=True, download_name="simulation.tr")
+
+@app.route("/download/ns2-nam")
+def download_ns2_nam():
+    if not os.path.exists(NAM_FILE):
+        run_discrete_ns2_simulation()
+    return send_file(NAM_FILE, mimetype="text/plain", as_attachment=True, download_name="simulation.nam")
+
+@app.route("/download/ns2-awk")
+def download_ns2_awk():
+    if os.path.exists(AWK_FILE):
+        return send_file(AWK_FILE, mimetype="text/plain", as_attachment=True, download_name="pdr_and_drops.awk")
+    return jsonify({"error": "AWK script not found"}), 404
+
 def start_sniffer():
     print("[*] Starting packet sniffer...")
     try:

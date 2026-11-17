@@ -80,6 +80,225 @@
       border-color: rgba(16, 185, 129, 0.4);
       color: #34d399;
     }
+
+    /* ==================== AUTHENTIC NAM (NETWORK ANIMATOR) RETRO GUI STYLES ==================== */
+    .nam-window {
+      background: #d4d0c8;
+      border: 2px solid #808080;
+      border-radius: 4px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 1px 1px 0 #ffffff;
+      font-family: Tahoma, 'MS Sans Serif', Arial, sans-serif;
+      color: #000000;
+      overflow: hidden;
+      margin: 0 auto 1.5rem auto;
+      max-width: 960px;
+    }
+    .nam-titlebar {
+      background: linear-gradient(to right, #707070, #a0a0a0);
+      color: #ffffff;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      user-select: none;
+    }
+    .nam-win-controls {
+      display: flex;
+      gap: 3px;
+    }
+    .nam-win-btn {
+      width: 18px;
+      height: 16px;
+      background: #d4d0c8;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-bottom: 1px solid #404040;
+      border-right: 1px solid #404040;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #000000;
+      cursor: pointer;
+      line-height: 1;
+      font-weight: bold;
+    }
+    .nam-menubar {
+      background: #d4d0c8;
+      border-bottom: 1px solid #808080;
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 12px;
+      box-shadow: inset 0 1px 0 #ffffff;
+    }
+    .nam-menu-item {
+      color: #000000;
+      cursor: pointer;
+      padding: 1px 4px;
+    }
+    .nam-menu-item:hover {
+      background: #0a246a;
+      color: #ffffff;
+    }
+    .nam-file-input {
+      margin-left: auto;
+      background: #ffffff;
+      border: 2px inset #ffffff;
+      box-shadow: inset 1px 1px 2px #404040;
+      padding: 2px 10px;
+      font-size: 12px;
+      width: 180px;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #000;
+    }
+    .nam-toolbar {
+      background: #d4d0c8;
+      border-bottom: 1px solid #808080;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
+    .nam-tool-btn {
+      background: #d4d0c8;
+      border-top: 1.5px solid #ffffff;
+      border-left: 1.5px solid #ffffff;
+      border-bottom: 1.5px solid #404040;
+      border-right: 1.5px solid #404040;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      color: #000000;
+      min-width: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .nam-tool-btn:active, .nam-tool-btn.active {
+      border-top: 1.5px solid #404040;
+      border-left: 1.5px solid #404040;
+      border-bottom: 1.5px solid #ffffff;
+      border-right: 1.5px solid #ffffff;
+      background: #c0c0c0;
+    }
+    .nam-tool-btn.btn-stop-active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 2px;
+      right: 2px;
+      height: 3px;
+      background: #10b981;
+    }
+    .nam-time-box {
+      background: #ffffff;
+      border: 1.5px inset #404040;
+      padding: 2px 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      font-weight: bold;
+      min-width: 85px;
+      text-align: right;
+      color: #000000;
+    }
+    .nam-viewport-wrap {
+      display: flex;
+      background: #d4d0c8;
+      border-bottom: 1px solid #808080;
+    }
+    .nam-sidebar {
+      width: 44px;
+      background: #d4d0c8;
+      border-right: 1px solid #808080;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      box-shadow: inset 1px 0 0 #ffffff;
+    }
+    .nam-side-btn {
+      width: 32px;
+      height: 28px;
+      background: #d4d0c8;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-bottom: 1px solid #404040;
+      border-right: 1px solid #404040;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: #000000;
+    }
+    .nam-canvas-area {
+      flex: 1;
+      background: #ffffff;
+      position: relative;
+      border: 2px inset #404040;
+      box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.25);
+      min-height: 420px;
+      overflow: hidden;
+    }
+    .nam-timeruler {
+      background: #d4d0c8;
+      border-top: 1px solid #ffffff;
+      border-bottom: 1px solid #808080;
+      padding: 6px 12px;
+      position: relative;
+      height: 32px;
+      display: flex;
+      align-items: center;
+    }
+    .nam-ruler-ticks {
+      position: absolute;
+      inset: 6px 16px;
+      border: 1px solid #808080;
+      background: #ffffff;
+      background-image: repeating-linear-gradient(to right, #0000ff 0, #0000ff 1px, transparent 1px, transparent 20px);
+    }
+    .nam-ruler-thumb {
+      position: absolute;
+      top: 2px;
+      transform: translateX(-50%);
+      background: #d4d0c8;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-bottom: 1.5px solid #404040;
+      border-right: 1.5px solid #404040;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10;
+    }
+    .nam-bottom-log {
+      background: #ffffff;
+      border: 2px inset #404040;
+      margin: 6px 8px 8px 8px;
+      height: 65px;
+      overflow-y: auto;
+      padding: 4px 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #000000;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
@@ -120,6 +339,7 @@
         <li><a onclick="switchTab('threats')" id="nav-threats">🚨 Threat Intel</a></li>
         <li><a onclick="switchTab('rules')" id="nav-rules">⚙️ Firewall Rules</a></li>
         <li><a onclick="switchTab('honeypot')" id="nav-honeypot">🐝 Honeypot Trap</a></li>
+        <li><a onclick="switchTab('ns2')" id="nav-ns2">🧪 NS-2 Simulation</a></li>
         <li><a onclick="switchTab('logs')" id="nav-logs">📝 Audit Logs</a></li>
       </ul>
     </nav>
@@ -217,11 +437,12 @@
             <div class="card-header-clean" style="border:none; margin:0; padding:0;">
               <h2>🌐 4-Tier SDN Visual Flow Controller</h2>
             </div>
-            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
               <button class="button-success" onclick="manualSimulateNormal()">🟢 Normal Flow</button>
               <button class="button-danger" onclick="manualSimulateAttack()">🚨 Simulate DDoS Flood</button>
               <button class="button-purple" onclick="manualSimulateSecure()">🔄 Trigger Honeypot Reroute</button>
               <button class="button-secondary" onclick="manualSimulateNormal()">⚡ Reset</button>
+              <button class="button-primary" onclick="switchTab('ns2')" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border-color:#818cf8; font-weight:700;">🧪 NS-2 Packet Drop Mode →</button>
             </div>
           </div>
 
@@ -229,7 +450,7 @@
           <div class="arch-canvas-container" id="arch-canvas">
             
             <!-- Tier 1: Hosts & Endpoints -->
-            <div class="arch-node node-host-cust">
+            <div class="arch-node node-host-cust" id="node-cust">
               <span class="tier-tag">TIER 1 • PERIMETER CLIENT</span>
               <span>👤 Customer Host</span>
               <span class="sub-label">10.0.0.1 (Client)</span>
@@ -239,7 +460,7 @@
               <span>💀 Attacker Host</span>
               <span class="sub-label">192.168.100.112</span>
             </div>
-            <div class="arch-node node-host-bank">
+            <div class="arch-node node-host-bank" id="node-bank">
               <span class="tier-tag">TIER 1 • PRODUCTION CORE</span>
               <span>🏦 Bank Server / API</span>
               <span class="sub-label">10.0.0.2 (Port 8855)</span>
@@ -615,6 +836,261 @@
       </section>
     </div>
 
+    <!-- ==================== TAB 9: AUTHENTIC NAM (NETWORK ANIMATOR) NS-2 SIMULATION ==================== -->
+    <div id="tab-ns2" class="tab-content">
+      
+      <!-- Top Dynamic Scenario & Mode Selector -->
+      <div class="card" style="margin-bottom: 1rem; padding: 0.85rem 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.05rem;">
+              <span>🖥️</span>
+              <span>Network Animator (NAM: <code>out.nam</code>) Discrete Event Simulator</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0 0 0;">
+              Pixel-perfect simulation of NS-2 Network Animator showing DropTail queue packet drops and dynamic Honeypot rerouting.
+            </p>
+          </div>
+
+          <!-- Scenario Buttons -->
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
+            <button class="button-success" id="nam-btn-p1" onclick="ns2SetPhase('NORMAL')" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; font-weight: bold;">
+              🟢 State 1: Normal (No Attack)
+            </button>
+            <button class="button-danger" id="nam-btn-p2" onclick="ns2SetPhase('ATTACK')" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; font-weight: bold;">
+              🚨 State 2: DDoS Attack Occurred
+            </button>
+            <button class="button-purple" id="nam-btn-p3" onclick="ns2SetPhase('REROUTE')" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; font-weight: bold;">
+              🛡️ State 3: Secure Rerouting Active
+            </button>
+            <button class="button-primary" id="nam-btn-autodemo" onclick="ns2ToggleAutoDemo()" style="font-size: 0.8rem; padding: 0.4rem 0.85rem; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); font-weight: bold;">
+              ▶ Play Full Demo (1➔2➔3)
+            </button>
+            <button class="button-secondary" onclick="ns2Reset()" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+              ⚡ Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Real-time Status Badges Row -->
+        <div style="display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.6rem;">
+          <div style="font-size: 0.8rem; color: #cbd5e1;">
+            <strong style="color: #94a3b8;">Simulation Phase:</strong> 
+            <span id="nam-phase-badge" class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700;">NORMAL (Node 0 ➔ Node 3)</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #cbd5e1;">
+            <strong style="color: #94a3b8;">Bottleneck Drops [d]:</strong> 
+            <span id="nam-drop-badge" class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700;">0 DROPS</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #cbd5e1;">
+            <strong style="color: #94a3b8;">Bank Delivery (Node 3):</strong> 
+            <span id="nam-pdr-badge" class="badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-weight: 700;">100.0% PDR</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #cbd5e1;">
+            <strong style="color: #94a3b8;">Honeypot Decoy (Node 4):</strong> 
+            <span id="nam-honey-badge" class="badge" style="background: rgba(100,116,139,0.15); color: #94a3b8; font-weight: 700;">OFFLINE (STANDBY)</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Live Scenario Explainer Box -->
+        <div id="nam-scenario-box" style="margin-top: 0.75rem; padding: 0.65rem 1rem; border-radius: 6px; font-size: 0.82rem; line-height: 1.45; background: rgba(16,185,129,0.1); border-left: 4px solid #10b981; color: #e2e8f0;">
+          <strong id="nam-scenario-title" style="color: #34d399;">✅ State 1: Normal Flow (No Attack)</strong> — 
+          <span id="nam-scenario-desc">Attacker (Node 1) is silent/idle. Honeypot (Node 4) is offline. Only legitimate customer packets flow safely across 0➔2➔3 to Bank Server. 0 packet drops, 100% PDR.</span>
+        </div>
+      </div>
+
+      <!-- ==================== THE AUTHENTIC NAM WINDOW ==================== -->
+      <div class="nam-window" id="nam-main-window">
+        
+        <!-- Window Title Bar -->
+        <div class="nam-titlebar">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 11px;">🖧</span>
+            <span>nam: out.nam</span>
+          </span>
+          <div class="nam-win-controls">
+            <div class="nam-win-btn" title="Minimize">_</div>
+            <div class="nam-win-btn" title="Maximize">□</div>
+            <div class="nam-win-btn" title="Close">✕</div>
+          </div>
+        </div>
+
+        <!-- Classic Menu Bar -->
+        <div class="nam-menubar">
+          <span class="nam-menu-item"><u>F</u>ile</span>
+          <span class="nam-menu-item"><u>V</u>iews</span>
+          <span class="nam-menu-item"><u>A</u>nalysis</span>
+          <input type="text" class="nam-file-input" value="out.nam" readonly />
+        </div>
+
+        <!-- Playback & Speed Controls Bar -->
+        <div class="nam-toolbar">
+          <button class="nam-tool-btn" onclick="ns2Rewind()" title="Rewind">◀◀</button>
+          <button class="nam-tool-btn" onclick="ns2StepBack()" title="Step Backward">◀</button>
+          <button class="nam-tool-btn btn-stop-active" id="nam-btn-stop" onclick="ns2Stop()" title="Stop / Pause">■</button>
+          <button class="nam-tool-btn active" id="nam-btn-play" onclick="ns2Play()" title="Play Forward">▶</button>
+          <button class="nam-tool-btn" onclick="ns2FastForward()" title="Fast Forward">▶▶</button>
+
+          <!-- Microsecond Digital Clock -->
+          <div class="nam-time-box" id="nam-digital-clock">0.000000</div>
+
+          <!-- Step Size Control -->
+          <div style="margin-left: 10px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: bold;">
+            <span id="nam-step-label">Step: 251.2us</span>
+            <input type="range" min="1" max="5" value="2" style="width: 70px; height: 12px; cursor: pointer;" oninput="ns2OnStepChange(this.value)" />
+          </div>
+
+          <!-- Speed Tags -->
+          <div style="margin-left: auto; display: flex; gap: 4px;">
+            <button class="nam-tool-btn" id="nam-spd-1" onclick="ns2SetSpeed(1)" style="font-size: 10px; padding: 1px 6px;">1x</button>
+            <button class="nam-tool-btn" id="nam-spd-2" onclick="ns2SetSpeed(2)" style="font-size: 10px; padding: 1px 6px;">2x</button>
+            <button class="nam-tool-btn" id="nam-spd-5" onclick="ns2SetSpeed(5)" style="font-size: 10px; padding: 1px 6px;">5x</button>
+          </div>
+        </div>
+
+        <!-- Main Viewport: Sidebar + Canvas Area -->
+        <div class="nam-viewport-wrap">
+          
+          <!-- Left Tool Palette -->
+          <div class="nam-sidebar">
+            <div class="nam-side-btn" title="Pan Up" onclick="ns2Pan('up')">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#000" d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
+            </div>
+            <div class="nam-side-btn" title="Pan Down" onclick="ns2Pan('down')">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#000" d="M12 20l8-8h-5v-8h-6v8h-5z"/></svg>
+            </div>
+            <div class="nam-side-btn" style="height: 38px; writing-mode: vertical-rl; text-orientation: upright; font-size: 8px; font-family: sans-serif; letter-spacing: 1px;">
+              EDIT
+            </div>
+            <div class="nam-side-btn" title="Radio Select 1" style="border-radius: 50%; width: 18px; height: 18px; min-width: 18px; padding: 0;">
+              <div style="width: 6px; height: 6px; background: #000; border-radius: 50%;"></div>
+            </div>
+            <div class="nam-side-btn" title="Radio Select 2" style="border-radius: 50%; width: 18px; height: 18px; min-width: 18px; padding: 0;">
+              <div style="width: 6px; height: 6px; background: transparent; border-radius: 50%;"></div>
+            </div>
+          </div>
+
+          <!-- Exact NAM Simulation Canvas -->
+          <div class="nam-canvas-area" id="nam-canvas-container">
+            <svg id="nam-svg" viewBox="0 0 680 460" style="width: 100%; height: 100%; display: block;">
+              
+              <!-- Duplex Links (Thick Black Solid Lines like in screenshot) -->
+              <!-- Link (0, 2): Node 0 (Customer) to Node 2 (Switch) -->
+              <line id="nam-link-0-2" x1="155" y1="130" x2="310" y2="230" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+              
+              <!-- Link (1, 2): Node 1 (Attacker) to Node 2 (Switch) -->
+              <line id="nam-link-1-2" x1="155" y1="330" x2="310" y2="230" stroke="#000000" stroke-width="4.5" stroke-linecap="round" opacity="0.3"/>
+
+              <!-- Link (2, 3): Node 2 (Switch) to Node 3 (Bank Server) [BOTTLENECK] -->
+              <line id="nam-link-2-3" x1="310" y1="230" x2="540" y2="230" stroke="#000000" stroke-width="4.5" stroke-linecap="round"/>
+
+              <!-- Link (2, 4): Node 2 (Switch) to Node 4 (Decoy Honeypot) [SECURE REROUTE LINK] -->
+              <line id="nam-link-2-4" x1="310" y1="230" x2="520" y2="370" stroke="#7c3aed" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="6,4" opacity="0"/>
+              <text id="nam-honey-link-label" x="415" y="320" fill="#7c3aed" font-size="10" font-weight="bold" font-family="Arial, sans-serif" opacity="0">Honeypot Reroute (1➔2➔4)</text>
+
+              <!-- Dynamic Packets Layer (Chevrons traveling along links) -->
+              <g id="nam-packets-layer"></g>
+
+              <!-- Bottleneck Queue Layer (Visual red packets queued on top of Link 2-3) -->
+              <g id="nam-queue-layer"></g>
+
+              <!-- Dropped Packets Layer (Falling off Link 2-3) -->
+              <g id="nam-drops-layer"></g>
+
+              <!-- Node Definitions (Circular White Nodes with Heavy Black Stroke and Centered Bold Numbers) -->
+              
+              <!-- Node 0: Customer Host (Client) -->
+              <g id="nam-node0-group" transform="translate(155, 130)">
+                <circle id="nam-node-0-circle" r="30" fill="#ffffff" stroke="#000000" stroke-width="3.5" />
+                <text fill="#000000" font-size="26" font-weight="900" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="central">0</text>
+                <text y="-44" fill="#000088" font-size="10" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">Customer (n0)</text>
+                <text y="-56" fill="#10b981" font-size="8.5" font-family="Arial, sans-serif" text-anchor="middle">Legitimate Client</text>
+              </g>
+
+              <!-- Node 1: Attacker Host (Adversary) -->
+              <g id="nam-node1-group" transform="translate(155, 330)">
+                <circle id="nam-node-1-circle" r="30" fill="#ffffff" stroke="#000000" stroke-width="3.5" opacity="0.4" />
+                <text id="nam-node-1-num" fill="#000000" font-size="26" font-weight="900" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="central" opacity="0.4">1</text>
+                <text y="44" id="nam-node-1-label" fill="#64748b" font-size="10" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">Attacker (n1)</text>
+                <text y="58" id="nam-node-1-sub" fill="#64748b" font-size="8.5" font-family="Arial, sans-serif" text-anchor="middle">[IDLE - NO ATTACK]</text>
+              </g>
+
+              <!-- Node 2: SDN Edge Switch / Ingress Router -->
+              <g id="nam-node2-group" transform="translate(310, 230)">
+                <circle id="nam-node-2-circle" r="32" fill="#ffffff" stroke="#000000" stroke-width="3.5" />
+                <text fill="#000000" font-size="26" font-weight="900" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="central">2</text>
+                <text y="-46" id="nam-node-2-label" fill="#000000" font-size="10" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">Switch (n2)</text>
+                <text y="-58" id="nam-node-2-sub" fill="#64748b" font-size="8.5" font-family="Arial, sans-serif" text-anchor="middle">OpenFlow Ingress</text>
+              </g>
+
+              <!-- Node 3: Bank Server Core (Victim Target) -->
+              <g id="nam-node3-group" transform="translate(540, 230)">
+                <circle id="nam-node-3-circle" r="30" fill="#ffffff" stroke="#008800" stroke-width="3.5" />
+                <text fill="#000000" font-size="26" font-weight="900" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="central">3</text>
+                <text y="-44" id="nam-node-3-label" fill="#008800" font-size="10" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">Bank Server (n3)</text>
+                <text y="-58" id="nam-node-3-sub" fill="#10b981" font-size="8.5" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">[100% SECURED]</text>
+              </g>
+
+              <!-- Node 4: Decoy Honeypot (Dynamic SDN Reroute Target) -->
+              <g id="nam-node4-group" transform="translate(520, 370)" style="opacity: 0; transition: opacity 0.5s ease;">
+                <circle id="nam-node-4-circle" r="30" fill="#ffffff" stroke="#7c3aed" stroke-width="3.5" />
+                <text id="nam-node-4-num" fill="#000000" font-size="26" font-weight="900" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="central">4</text>
+                <text y="44" id="nam-node-4-label" fill="#7c3aed" font-size="10" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">Honeypot Decoy (n4)</text>
+                <text y="58" id="nam-node-4-sub" fill="#a855f7" font-size="8.5" font-weight="bold" font-family="Arial, sans-serif" text-anchor="middle">[STANDBY / OFFLINE]</text>
+              </g>
+
+            </svg>
+          </div>
+        </div>
+
+        <!-- Bottom NAM Time Ruler (Exact match to screenshot tick track) -->
+        <div class="nam-timeruler">
+          <div class="nam-ruler-ticks"></div>
+          <div class="nam-ruler-thumb" id="nam-ruler-thumb" style="left: 45%;">
+            TIME
+          </div>
+        </div>
+
+        <!-- Bottom NAM Output Log Pane -->
+        <div class="nam-bottom-log" id="nam-bottom-log">
+          <div>nam: event trace initialised for <code>out.nam</code>. Nodes: n0, n1, n2, n3, n4.</div>
+          <div>Link 0-2 (10Mb, 5ms), Link 1-2 (10Mb, 5ms), Bottleneck Link 2-3 (2Mb, DropTail Q=4), Reroute Link 2-4 (10Mb).</div>
+        </div>
+
+      </div>
+
+      <!-- Academic NS-2 Artifacts & Script Download Hub -->
+      <section class="card" style="margin-top: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="margin: 0; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>📁</span>
+              <span>NS-2 Research & Lab Artifacts</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0 0 0;">
+              Download authentic NS-2 script, trace file, and AWK analyzer for your presentation/report.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="/download/ns2-script" class="button-secondary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem; text-decoration: none;">
+              📜 <code>secure_reroute_ns2.tcl</code>
+            </a>
+            <a href="/download/ns2-trace" class="button-secondary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem; text-decoration: none;">
+              📄 <code>simulation.tr</code>
+            </a>
+            <a href="/download/ns2-nam" class="button-secondary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem; text-decoration: none;">
+              🎬 <code>simulation.nam</code>
+            </a>
+            <a href="/download/ns2-awk" class="button-secondary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem; text-decoration: none;">
+              📊 <code>pdr_and_drops.awk</code>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
   </div>
 
   <!-- Master JavaScript Engine -->
@@ -627,6 +1103,7 @@
       threats:   { title: "Threat Intelligence & Anomaly Alerts", subtitle: "Monitor security alerts and automated mitigation actions taken by the SDN controller" },
       rules:     { title: "SDN Firewall & Policy Management", subtitle: "Create, deploy, or delete SDN OpenFlow policy rules for suspicious activities" },
       honeypot:  { title: "Honeypot Forensics & Captured Payloads", subtitle: "Captured attacker interactions and probes on isolated fake services (Port 8000 / 9999)" },
+      ns2:       { title: "NS-2 Simulation & Packet Drop Analyzer", subtitle: "Trace-driven NS-2.35 network simulation • DropTail queue buffer drops • SDN Dynamic Honeypot Rerouting • AWK Metrics" },
       logs:      { title: "Forensic Audit & Event Logs", subtitle: "Analyze and export detailed event logs from the SDN defense fabric" }
     };
 
@@ -645,10 +1122,13 @@
     function showToast(title, message, type = "threat") {
       const container = document.getElementById("toast-container");
       if (!container) return;
+      while (container.children.length >= 2) {
+        container.removeChild(container.firstChild);
+      }
       const toast = document.createElement("div");
       toast.className = "toast-alert";
       
-      const icon = type === "threat" ? "🚨" : (type === "safe" ? "✅" : "🔄");
+      const icon = type === "threat" ? "🚨" : (type === "safe" ? "✅" : "🛡️");
       const borderColor = type === "threat" ? "#f43f5e" : (type === "safe" ? "#10b981" : "#38bdf8");
       toast.style.borderColor = borderColor;
 
@@ -665,7 +1145,7 @@
         toast.style.transform = "translateX(100%)";
         toast.style.transition = "all 0.4s ease";
         setTimeout(() => toast.remove(), 400);
-      }, 5000);
+      }, 3000);
     }
 
     function switchTab(tabName) {
@@ -701,6 +1181,8 @@
         fetchRules();
       } else if (tabName === "honeypot") {
         fetchHoneypotLogs();
+      } else if (tabName === "ns2") {
+        initNS2Simulator();
       } else if (tabName === "logs") {
         fetchLogs();
       }
@@ -935,40 +1417,46 @@
       requestAnimationFrame(step);
     }
 
+    function clearParticles() {
+      const svgParticlesGroup = document.getElementById('svg-particles-group');
+      if (svgParticlesGroup) {
+        svgParticlesGroup.innerHTML = '';
+      }
+    }
+
     function startParticleEngine() {
       if (particleAnimationInterval) clearInterval(particleAnimationInterval);
       
       particleAnimationInterval = setInterval(() => {
         if (currentRoutingState === "NORMAL") {
-          // Customer (135, 85) -> Switches (250, 160)
-          animateParticle(135, 85, 250, 160, 'green', 1100);
-          // Switches (590, 160) -> Bank (630, 85)
-          setTimeout(() => animateParticle(590, 160, 630, 85, 'green', 1100), 550);
-          // Switches (500, 220) <-> Controller (500, 280)
-          animateParticle(500, 220, 500, 280, 'green', 900);
-          // Controller (710, 345) -> Dashboard (710, 410)
-          animateParticle(710, 345, 710, 410, 'green', 900);
+          // Clean Customer Traffic actively flowing
+          animateParticle(135, 85, 250, 160, 'green', 1000);
+          setTimeout(() => animateParticle(590, 160, 630, 85, 'green', 1000), 500);
+          // Healthy OpenFlow control telemetry
+          animateParticle(500, 220, 500, 280, 'green', 1100);
+          animateParticle(710, 345, 710, 410, 'green', 1100);
         } 
         else if (currentRoutingState === "ATTACK") {
-          // Attacker (375, 85) -> Switches (410, 160)
-          animateParticle(375, 85, 410, 160, 'red', 700);
-          setTimeout(() => animateParticle(375, 85, 410, 160, 'red', 700), 350);
-          // Switches -> Controller
-          animateParticle(500, 220, 500, 280, 'red', 800);
-          // ML -> Controller
-          animateParticle(290, 410, 290, 345, 'red', 800);
+          // Attacker high-frequency DDoS flood towards Switches & Bank Server
+          animateParticle(375, 85, 410, 160, 'red', 500);
+          setTimeout(() => animateParticle(375, 85, 410, 160, 'red', 500), 250);
+          setTimeout(() => animateParticle(590, 160, 630, 85, 'red', 500), 350);
+          // Anomaly alert telemetry to Controller and ML Engine
+          animateParticle(500, 220, 500, 280, 'red', 600);
+          animateParticle(290, 410, 290, 345, 'red', 600);
+          animateParticle(710, 345, 710, 410, 'red', 700);
         } 
         else if (currentRoutingState === "SECURE") {
-          // Clean Customer Traffic
-          animateParticle(135, 85, 250, 160, 'green', 1100);
-          setTimeout(() => animateParticle(590, 160, 630, 85, 'green', 1100), 550);
+          // Clean Customer Traffic restored to Bank Server
+          animateParticle(135, 85, 250, 160, 'green', 1000);
+          setTimeout(() => animateParticle(590, 160, 630, 85, 'green', 1000), 500);
           // Rerouted Attacker Traffic into Honeypot (750, 160) -> (870, 85)
-          animateParticle(375, 85, 410, 160, 'red', 900);
-          setTimeout(() => animateParticle(750, 160, 870, 85, 'purple', 900), 450);
+          animateParticle(375, 85, 410, 160, 'red', 750);
+          setTimeout(() => animateParticle(750, 160, 870, 85, 'purple', 750), 375);
           // Controller -> Dashboard
-          animateParticle(710, 345, 710, 410, 'green', 900);
+          animateParticle(710, 345, 710, 410, 'green', 800);
         }
-      }, 1000);
+      }, 900);
     }
 
     function setLineState(lineId, state, markerEnd, markerStart=null) {
@@ -995,10 +1483,15 @@
       const honeyStatusBadge = document.getElementById('honey-status-badge');
       const sdnStatus = document.getElementById('sdn-status');
 
+      const nodeAtt = document.getElementById('node-att');
+      const nodeBank = document.getElementById('node-bank');
+      const nodeHoney = document.getElementById('node-honey');
+      const nodeCust = document.getElementById('node-cust');
+
       if (currentRoutingState === "NORMAL") {
         if (banner) {
           banner.className = "status-banner st-normal";
-          banner.innerHTML = "<span>🟢</span> <span>STATE 1: NORMAL ROUTING (Customer ➔ SDN Switches ➔ Bank Server Core)</span>";
+          banner.innerHTML = "<span>🟢</span> <span>STATE 1: NORMAL ROUTING (Customer ➔ SDN Switches ➔ Bank Server Core — 0 Drops, 100% PDR)</span>";
         }
 
         setLineState('line-cust-sw', 'active-green', 'arrow-green');
@@ -1009,14 +1502,39 @@
         setLineState('line-ml-ctrl', '', 'arrow-default');
         setLineState('line-ctrl-dash', 'active-green', 'arrow-green');
 
+        if (nodeAtt) {
+          nodeAtt.style.opacity = "0.45";
+          nodeAtt.style.border = "1px solid rgba(255,255,255,0.1)";
+          nodeAtt.style.boxShadow = "none";
+          const sub = nodeAtt.querySelector('.sub-label');
+          if (sub) sub.textContent = "192.168.100.112 [IDLE - NO ATTACK]";
+        }
+        if (nodeBank) {
+          nodeBank.style.border = "2px solid #10b981";
+          nodeBank.style.boxShadow = "0 0 15px rgba(16,185,129,0.3)";
+          const sub = nodeBank.querySelector('.sub-label');
+          if (sub) sub.textContent = "10.0.0.2 [100% OPERATIONAL]";
+        }
+        if (nodeHoney) {
+          nodeHoney.style.opacity = "0.55";
+          nodeHoney.style.border = "1px solid rgba(255,255,255,0.1)";
+          nodeHoney.style.boxShadow = "none";
+          const sub = nodeHoney.querySelector('.sub-label');
+          if (sub) sub.textContent = "10.0.0.5 [STANDBY]";
+        }
+        if (nodeCust) {
+          nodeCust.style.border = "2px solid #10b981";
+          nodeCust.style.boxShadow = "0 0 12px rgba(16,185,129,0.3)";
+        }
+
         if (labelScore) { labelScore.textContent = "score (Normal: 0.02)"; labelScore.style.fill = "#10b981"; }
         if (labelFlowsAlerts) { labelFlowsAlerts.textContent = "OpenFlow Control Channel (HEALTHY)"; labelFlowsAlerts.style.fill = "#10b981"; }
 
         if (rdCurrent) { rdCurrent.innerHTML = "Customer (10.0.0.1) ➔ Switches ➔ Bank Server (10.0.0.2:8855)"; rdCurrent.style.color = "var(--success-color)"; }
-        if (rdStatus) { rdStatus.innerHTML = "✓ Clean Financial Traffic Flowing Directly"; rdStatus.style.color = "var(--success-color)"; }
+        if (rdStatus) { rdStatus.innerHTML = "✓ Clean Financial Traffic Flowing Directly (0 Packet Drops)"; rdStatus.style.color = "var(--success-color)"; }
 
         if (mlStatusBadge) mlStatusBadge.innerHTML = "<span style='color:var(--success-color);'>Isolation Forest (Anomaly Score: Safe 0.02)</span>";
-        if (swStatusBadge) swStatusBadge.innerHTML = "<span style='color:var(--success-color);'>OpenFlow Path: S1 ➔ S2 ➔ S4</span>";
+        if (swStatusBadge) swStatusBadge.innerHTML = "<span style='color:var(--success-color);'>OpenFlow Path: S1 ➔ S2 ➔ S4 (Clean Flow)</span>";
         if (bankHealthBadge) bankHealthBadge.innerHTML = "<span style='color:var(--success-color);'>100% OPERATIONAL (Port 8855)</span>";
         if (honeyStatusBadge) honeyStatusBadge.innerHTML = "<span style='color:var(--purple-color);'>STANDBY (0.0.0.0:8000)</span>";
 
@@ -1034,26 +1552,51 @@
       else if (currentRoutingState === "ATTACK") {
         if (banner) {
           banner.className = "status-banner st-detect";
-          banner.innerHTML = "<span>🚨</span> <span>STATE 2: ATTACK DETECTED (Attacker ➔ SDN Switches ➔ ML Anomaly Triggered)</span>";
+          banner.innerHTML = "<span>🚨</span> <span>STATE 2: ATTACK DETECTED (High-Rate Volumetric DDoS Flood Targeting Bank Core!)</span>";
         }
 
         setLineState('line-cust-sw', '', 'arrow-default');
         setLineState('line-att-sw', 'active-red', 'arrow-red');
-        setLineState('line-sw-bank', '', 'arrow-default');
+        setLineState('line-sw-bank', 'active-red', 'arrow-red');
         setLineState('line-sw-honey', '', 'arrow-default');
         setLineState('line-sw-ctrl', 'active-red', 'arrow-red', 'arrow-red');
         setLineState('line-ml-ctrl', 'active-red', 'arrow-red');
         setLineState('line-ctrl-dash', 'active-red', 'arrow-red');
 
+        if (nodeAtt) {
+          nodeAtt.style.opacity = "1";
+          nodeAtt.style.border = "2px solid #f43f5e";
+          nodeAtt.style.boxShadow = "0 0 25px rgba(244,63,94,0.85)";
+          const sub = nodeAtt.querySelector('.sub-label');
+          if (sub) sub.textContent = "192.168.100.112 [🚨 CRITICAL DDOS FLOOD]";
+        }
+        if (nodeBank) {
+          nodeBank.style.border = "2px solid #f43f5e";
+          nodeBank.style.boxShadow = "0 0 25px rgba(244,63,94,0.7)";
+          const sub = nodeBank.querySelector('.sub-label');
+          if (sub) sub.textContent = "10.0.0.2:8855 [⚠️ CONGESTION / DROPS]";
+        }
+        if (nodeHoney) {
+          nodeHoney.style.opacity = "0.75";
+          nodeHoney.style.border = "1px dashed #a855f7";
+          nodeHoney.style.boxShadow = "0 0 10px rgba(168,85,247,0.3)";
+          const sub = nodeHoney.querySelector('.sub-label');
+          if (sub) sub.textContent = "10.0.0.5 [PREPARING DECOY VLAN]";
+        }
+        if (nodeCust) {
+          nodeCust.style.border = "1px solid #eab308";
+          nodeCust.style.boxShadow = "0 0 10px rgba(234,179,8,0.4)";
+        }
+
         if (labelScore) { labelScore.textContent = "score: CRITICAL (-1 / 0.98)"; labelScore.style.fill = "#f43f5e"; }
         if (labelFlowsAlerts) { labelFlowsAlerts.textContent = "flows / alerts: VOLUMETRIC FLOOD"; labelFlowsAlerts.style.fill = "#f43f5e"; }
 
-        if (rdCurrent) { rdCurrent.innerHTML = "Attacker (192.168.100.112) ➔ Target: Bank Server [CORRUPTED]"; rdCurrent.style.color = "var(--danger-color)"; }
+        if (rdCurrent) { rdCurrent.innerHTML = "Attacker (192.168.100.112) ➔ Target: Bank Server [CORRUPTED / DROPS]"; rdCurrent.style.color = "var(--danger-color)"; }
         if (rdStatus) { rdStatus.innerHTML = "⚠️ Malicious Flood Detected - SDN Isolating Socket..."; rdStatus.style.color = "var(--danger-color)"; }
 
         if (mlStatusBadge) mlStatusBadge.innerHTML = "<span style='color:var(--danger-color); font-weight:700;'>CRITICAL ANOMALY (Isolation Forest Score: -1)</span>";
         if (swStatusBadge) swStatusBadge.innerHTML = "<span style='color:var(--danger-color);'>Switch S2 Congested with DDoS</span>";
-        if (bankHealthBadge) bankHealthBadge.innerHTML = "<span style='color:var(--warning-color);'>UNDER ATTACK (Isolating...)</span>";
+        if (bankHealthBadge) bankHealthBadge.innerHTML = "<span style='color:var(--warning-color);'>UNDER ATTACK (Isolating Link...)</span>";
         if (honeyStatusBadge) honeyStatusBadge.innerHTML = "<span style='color:var(--purple-color);'>PREPARING DECOY VLAN</span>";
 
         if (sdnStatus) {
@@ -1069,7 +1612,7 @@
       else if (currentRoutingState === "SECURE") {
         if (banner) {
           banner.className = "status-banner st-secure";
-          banner.innerHTML = "<span>🔄</span> <span>STATE 3: SECURE REROUTING ACTIVE (Customer ➔ Bank, Attacker ➔ Honeypot Trap)</span>";
+          banner.innerHTML = "<span>🛡️</span> <span>STATE 3: SECURE REROUTING ACTIVE (Customer ➔ Bank Core, Attacker ➔ Honeypot Trap)</span>";
         }
 
         setLineState('line-cust-sw', 'active-green', 'arrow-green');
@@ -1079,6 +1622,31 @@
         setLineState('line-sw-ctrl', 'active-green', 'arrow-green', 'arrow-green');
         setLineState('line-ml-ctrl', '', 'arrow-default');
         setLineState('line-ctrl-dash', 'active-green', 'arrow-green');
+
+        if (nodeAtt) {
+          nodeAtt.style.opacity = "0.85";
+          nodeAtt.style.border = "2px solid #7c3aed";
+          nodeAtt.style.boxShadow = "0 0 15px rgba(124,58,237,0.5)";
+          const sub = nodeAtt.querySelector('.sub-label');
+          if (sub) sub.textContent = "192.168.100.112 [TRAPPED IN HONEYPOT]";
+        }
+        if (nodeBank) {
+          nodeBank.style.border = "2px solid #10b981";
+          nodeBank.style.boxShadow = "0 0 20px rgba(16,185,129,0.5)";
+          const sub = nodeBank.querySelector('.sub-label');
+          if (sub) sub.textContent = "10.0.0.2:8855 [100% PROTECTED ✓]";
+        }
+        if (nodeHoney) {
+          nodeHoney.style.opacity = "1";
+          nodeHoney.style.border = "2px solid #a855f7";
+          nodeHoney.style.boxShadow = "0 0 25px rgba(168,85,247,0.85)";
+          const sub = nodeHoney.querySelector('.sub-label');
+          if (sub) sub.textContent = "10.0.0.5:8000 [🛡️ TRAPPING ATTACK]";
+        }
+        if (nodeCust) {
+          nodeCust.style.border = "2px solid #10b981";
+          nodeCust.style.boxShadow = "0 0 15px rgba(16,185,129,0.4)";
+        }
 
         if (labelScore) { labelScore.textContent = "score (Trained ML Active)"; labelScore.style.fill = "#10b981"; }
         if (labelFlowsAlerts) { labelFlowsAlerts.textContent = "flows / alerts (Flow-Mod Pushed)"; labelFlowsAlerts.style.fill = "#38bdf8"; }
@@ -1105,6 +1673,7 @@
 
     function triggerAttackState(threatSrc = "192.168.100.112") {
       currentRoutingState = "ATTACK";
+      if (typeof ns2SetPhase === 'function') ns2SetPhase("ATTACK");
       addTimelineEvent(`High volumetric packet flood detected from ${threatSrc}`, "warn");
       addTimelineEvent("ML Isolation Forest Anomaly Triggered. Score: -1 (CRITICAL)", "crit");
       addTimelineEvent("SDN Controller isolating Bank Server link...", "warn");
@@ -1114,6 +1683,7 @@
 
     function triggerSecureState(threatSrc = "192.168.100.112") {
       currentRoutingState = "SECURE";
+      if (typeof ns2SetPhase === 'function') ns2SetPhase("REROUTE");
       addTimelineEvent("SDN Controller calculating dynamic reroute (routing.py)", "info");
       addTimelineEvent("OpenFlow flow-mod pushed: Legitimate traffic routed safely", "safe");
       addTimelineEvent(`Attacker ${threatSrc} diverted & trapped into Honeypot (TCP)`, "crit");
@@ -1124,29 +1694,44 @@
 
     function resetToNormal() {
       currentRoutingState = "NORMAL";
+      clearParticles();
+      if (typeof ns2SetPhase === 'function') ns2SetPhase("NORMAL");
       updateArchVisuals();
     }
 
     function manualSimulateNormal() {
       clearTimeout(routingTimeout);
       clearTimeout(autoNormalTimer);
+      isLifecycleRunning = false;
       resetToNormal();
       addTimelineEvent("Manual Override: Restored Normal Architectural Flow.", "safe");
+      showToast("Normal Condition Restored", "Network returned to normal condition.", "safe");
     }
 
     function manualSimulateAttack() {
-      clearTimeout(routingTimeout);
-      clearTimeout(autoNormalTimer);
-      triggerAttackState("192.168.100.112");
-      routingTimeout = setTimeout(() => {
-        triggerSecureState("192.168.100.112");
-      }, 3500);
+      executeAutomaticLifecycle("192.168.100.112");
+      fetch("/api/report-threat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source_ip: "192.168.100.112",
+          destination_ip: "10.0.0.2 (Bank API)",
+          port: 8855,
+          threat_type: "Volumetric DDoS HTTP Flood",
+          severity: "Critical",
+          payload: "SIMULATE-DDOS-FLOOD"
+        })
+      }).catch(() => {});
     }
 
     function manualSimulateSecure() {
       clearTimeout(routingTimeout);
       clearTimeout(autoNormalTimer);
       triggerSecureState("192.168.100.112");
+      autoNormalTimer = setTimeout(() => {
+        resetToNormal();
+        isLifecycleRunning = false;
+      }, 10000);
     }
 
     async function triggerQuickDemoAttack() {
@@ -1368,6 +1953,42 @@
     // ==================== REAL-TIME THREAT & REROUTE DETECTOR ====================
     let lastThreatCounter = -1;
     let lastRoutingCount = -1;
+    let isLifecycleRunning = false;
+
+    function executeAutomaticLifecycle(threatSrc = "192.168.100.112") {
+      if (isLifecycleRunning) return;
+      isLifecycleRunning = true;
+      clearTimeout(routingTimeout);
+      clearTimeout(autoNormalTimer);
+
+      // Phase 1: ATTACK DETECTED (Immediate!)
+      triggerAttackState(threatSrc);
+      fetchStats();
+      renderAlertTrendChart();
+      fetchThreats();
+      fetchHoneypotLogs();
+      fetchLivePackets();
+      fetchAllTraffic();
+
+      // Phase 2: Automatically transition to SECURE REROUTE STATE after 6s
+      routingTimeout = setTimeout(() => {
+        triggerSecureState(threatSrc);
+        fetchStats();
+        renderAlertTrendChart();
+        fetchThreats();
+        fetchHoneypotLogs();
+        fetchLivePackets();
+        fetchAllTraffic();
+
+        // Phase 3: Keep Secure Reroute active for 10s, then automatically restore NORMAL flow
+        autoNormalTimer = setTimeout(() => {
+          resetToNormal();
+          addTimelineEvent("Threat neutralized. Clean customer transactions routing smoothly.", "safe");
+          showToast("Normal Condition Restored", "All systems safe. Clean financial transactions active.", "safe");
+          isLifecycleRunning = false;
+        }, 10000);
+      }, 6000);
+    }
 
     async function pollLiveThreatActivity() {
       try {
@@ -1379,46 +2000,546 @@
         const threatSrc = latestThreat.source_ip || "192.168.100.112";
 
         if (lastThreatCounter === -1) {
+          // Record current baseline on page load; stay in NORMAL state
           lastThreatCounter = currentCounter;
           lastRoutingCount = currentRerouted;
+          resetToNormal();
         } else if (currentCounter > lastThreatCounter || currentRerouted > lastRoutingCount) {
-          // Attack or Reroute event detected in real-time!
+          // A REAL attack has arrived! Autonomously change states
           lastThreatCounter = currentCounter;
           lastRoutingCount = currentRerouted;
-
-          clearTimeout(routingTimeout);
-          clearTimeout(autoNormalTimer);
-
-          // 1. Immediately trigger Attack State
-          triggerAttackState(threatSrc);
-          fetchStats();
-          renderAlertTrendChart();
-          fetchThreats();
-          fetchHoneypotLogs();
-          fetchLivePackets();
-          fetchAllTraffic();
-
-          // 2. Transition to Secure Reroute State after 1.8s
-          routingTimeout = setTimeout(() => {
-            triggerSecureState(threatSrc);
-            fetchStats();
-            renderAlertTrendChart();
-            fetchThreats();
-            fetchHoneypotLogs();
-            fetchLivePackets();
-            fetchAllTraffic();
-
-            // 3. Keep Secure Reroute active for 25 seconds
-            autoNormalTimer = setTimeout(() => {
-              if (currentRoutingState === "SECURE") {
-                resetToNormal();
-                addTimelineEvent("Traffic normalized. SDN Default OpenFlow forwarding restored.", "safe");
-              }
-            }, 25000);
-          }, 1800);
+          executeAutomaticLifecycle(threatSrc);
         }
       } catch (e) {
         console.error(e);
+      }
+    }
+
+    // ==================== AUTHENTIC NAM (NETWORK ANIMATOR) DISCRETE SIMULATION ENGINE ====================
+    let ns2State = {
+      phase: "NORMAL", // NORMAL, ATTACK, REROUTE
+      isRunning: true,
+      speed: 1,
+      simTime: 0.000000,
+      totalSent: 0,
+      customerSent: 0,
+      attackerSent: 0,
+      deliveredBank: 0,
+      deliveredHoney: 0,
+      droppedPackets: 0,
+      queueCount: 0,
+      queueMax: 4,
+      timer: null,
+      stepUs: 251.2
+    };
+
+    function initNS2Simulator() {
+      const targetPhase = currentRoutingState === "ATTACK" ? "ATTACK" : (currentRoutingState === "SECURE" ? "REROUTE" : "NORMAL");
+      ns2SetPhase(targetPhase);
+      ns2State.isRunning = true;
+      if (!ns2State.timer) {
+        ns2State.timer = setInterval(namSimulationTick, 180 / ns2State.speed);
+      }
+      ns2UpdateNAMUI();
+      namLog(`nam: simulation synchronized in ${targetPhase} mode.`);
+    }
+
+    function ns2Play() {
+      ns2State.isRunning = true;
+      document.getElementById("nam-btn-play")?.classList.add("active");
+      document.getElementById("nam-btn-stop")?.classList.remove("btn-stop-active");
+      if (!ns2State.timer) {
+        ns2State.timer = setInterval(namSimulationTick, 180 / ns2State.speed);
+      }
+      namLog("nam: playback resumed forward.");
+    }
+
+    function ns2Stop() {
+      ns2State.isRunning = false;
+      document.getElementById("nam-btn-play")?.classList.remove("active");
+      document.getElementById("nam-btn-stop")?.classList.add("btn-stop-active");
+      if (ns2State.timer) {
+        clearInterval(ns2State.timer);
+        ns2State.timer = null;
+      }
+      namLog("nam: simulation paused at " + ns2State.simTime.toFixed(6) + "s.");
+    }
+
+    function ns2Rewind() {
+      ns2State.simTime = 0.000000;
+      ns2Reset();
+      namLog("nam: timeline rewound to 0.000000s.");
+    }
+
+    function ns2StepBack() {
+      ns2State.simTime = Math.max(0, ns2State.simTime - 0.05);
+      ns2UpdateNAMUI();
+    }
+
+    function ns2FastForward() {
+      ns2SetSpeed(5);
+      namLog("nam: speed accelerated to 5x.");
+    }
+
+    function ns2SetSpeed(spd) {
+      ns2State.speed = spd;
+      [1, 2, 5].forEach(s => {
+        document.getElementById(`nam-spd-${s}`)?.classList.toggle("active", s === spd);
+      });
+      if (ns2State.timer) {
+        clearInterval(ns2State.timer);
+        ns2State.timer = setInterval(namSimulationTick, 180 / ns2State.speed);
+      }
+    }
+
+    function ns2OnStepChange(val) {
+      const stepMap = { "1": "100.0us", "2": "251.2us", "3": "500.0us", "4": "1.0ms", "5": "2.5ms" };
+      const label = document.getElementById("nam-step-label");
+      if (label) label.textContent = "Step: " + (stepMap[val] || "251.2us");
+    }
+
+    function ns2Pan(dir) {
+      namLog(`nam: viewport pan ${dir}.`);
+    }
+
+    let ns2AutoDemoTimer = null;
+    let ns2AutoDemoStep = 0;
+
+    function ns2ToggleAutoDemo() {
+      const btn = document.getElementById("nam-btn-autodemo");
+      if (ns2AutoDemoTimer) {
+        clearInterval(ns2AutoDemoTimer);
+        ns2AutoDemoTimer = null;
+        if (btn) btn.innerHTML = "▶ Play Full Demo (1➔2➔3)";
+        showToast("Auto-Demo Paused", "Manual phase selection restored.", "info");
+        return;
+      }
+
+      showToast("Auto-Demo Started", "Running 3-Stage Lifecycle: Normal ➔ Attack ➔ Reroute", "safe");
+      ns2RunDemoStep(1);
+    }
+
+    function ns2RunDemoStep(step) {
+      ns2AutoDemoStep = step;
+      const btn = document.getElementById("nam-btn-autodemo");
+
+      if (step === 1) {
+        ns2SetPhase("NORMAL");
+        if (btn) btn.innerHTML = "⏸ Demo: State 1 Normal (5s)...";
+        ns2AutoDemoTimer = setTimeout(() => ns2RunDemoStep(2), 5500);
+      } else if (step === 2) {
+        ns2SetPhase("ATTACK");
+        if (btn) btn.innerHTML = "⏸ Demo: State 2 Attack (6s)...";
+        ns2AutoDemoTimer = setTimeout(() => ns2RunDemoStep(3), 6500);
+      } else if (step === 3) {
+        ns2SetPhase("REROUTE");
+        if (btn) btn.innerHTML = "⏸ Demo: State 3 Rerouted (8s)...";
+        ns2AutoDemoTimer = setTimeout(() => {
+          if (btn) btn.innerHTML = "▶ Play Full Demo (1➔2➔3)";
+          ns2AutoDemoTimer = null;
+          showToast("Lifecycle Complete", "Demonstration completed. Rerouting remains active.", "safe");
+        }, 8000);
+      }
+    }
+
+    function ns2SetPhase(phase) {
+      ns2State.phase = phase;
+
+      // Reset all counters on phase change so each phase is visually distinct
+      ns2State.totalSent = 0;
+      ns2State.customerSent = 0;
+      ns2State.attackerSent = 0;
+      ns2State.deliveredBank = 0;
+      ns2State.deliveredHoney = 0;
+      ns2State.droppedPackets = 0;
+      ns2State.queueCount = 0;
+
+      // Clear any in-flight packets/drops from the previous phase
+      const pLayer = document.getElementById("nam-packets-layer");
+      const dLayer = document.getElementById("nam-drops-layer");
+      if (pLayer) pLayer.innerHTML = "";
+      if (dLayer) dLayer.innerHTML = "";
+      ns2ClearQueue();
+
+      // UI Badges
+      const phaseBadge = document.getElementById("nam-phase-badge");
+      const dropBadge = document.getElementById("nam-drop-badge");
+      const pdrBadge = document.getElementById("nam-pdr-badge");
+      const honeyBadge = document.getElementById("nam-honey-badge");
+
+      // Explainer Box
+      const expTitle = document.getElementById("nam-scenario-title");
+      const expDesc = document.getElementById("nam-scenario-desc");
+      const expBox = document.getElementById("nam-scenario-box");
+
+      // Buttons
+      document.getElementById("nam-btn-p1")?.style.setProperty("outline", phase === "NORMAL" ? "2px solid #34d399" : "none");
+      document.getElementById("nam-btn-p2")?.style.setProperty("outline", phase === "ATTACK" ? "2px solid #f43f5e" : "none");
+      document.getElementById("nam-btn-p3")?.style.setProperty("outline", phase === "REROUTE" ? "2px solid #a855f7" : "none");
+
+      // SVG Nodes & Links
+      const node1Group = document.getElementById("nam-node1-group");
+      const node1Circle = document.getElementById("nam-node-1-circle");
+      const node1Num = document.getElementById("nam-node-1-num");
+      const node1Label = document.getElementById("nam-node-1-label");
+      const node1Sub = document.getElementById("nam-node-1-sub");
+      const link12 = document.getElementById("nam-link-1-2");
+
+      const node2 = document.getElementById("nam-node-2-circle");
+      const node3 = document.getElementById("nam-node-3-circle");
+      const node3Label = document.getElementById("nam-node-3-label");
+      const node3Sub = document.getElementById("nam-node-3-sub");
+
+      const node4group = document.getElementById("nam-node4-group");
+      const node4Sub = document.getElementById("nam-node-4-sub");
+      const link24 = document.getElementById("nam-link-2-4");
+      const honeyLabel = document.getElementById("nam-honey-link-label");
+
+      if (phase === "NORMAL") {
+        ns2State.customerSent = Math.max(10, ns2State.customerSent);
+        ns2State.deliveredBank = ns2State.customerSent;
+        ns2State.droppedPackets = 0;
+        ns2State.queueCount = 0;
+
+        if (phaseBadge) { phaseBadge.textContent = "STATE 1: NORMAL (Customer ➔ Bank Server)"; phaseBadge.style.color = "#34d399"; }
+        if (dropBadge) { dropBadge.textContent = "0 DROPS [d]"; dropBadge.style.color = "#34d399"; }
+        if (pdrBadge) { pdrBadge.textContent = "100.0% PDR"; pdrBadge.style.color = "#34d399"; }
+        if (honeyBadge) { honeyBadge.textContent = "OFFLINE (STANDBY)"; honeyBadge.style.color = "#94a3b8"; }
+
+        if (expBox) { expBox.style.background = "rgba(16,185,129,0.1)"; expBox.style.borderLeft = "4px solid #10b981"; }
+        if (expTitle) { expTitle.textContent = "✅ State 1: Normal Flow (No Attack Active)"; expTitle.style.color = "#34d399"; }
+        if (expDesc) { expDesc.textContent = "Legitimate customer financial transactions flowing smoothly across 0➔2➔3 to Bank Server. Attacker (Node 1) is silent/idle. Honeypot (Node 4) is standby. Zero packet drops, 100% PDR."; }
+
+        // Node 1 (Attacker) is IDLE & SILENT
+        if (node1Circle) { node1Circle.setAttribute("stroke", "#64748b"); node1Circle.setAttribute("opacity", "0.35"); }
+        if (node1Num) node1Num.setAttribute("opacity", "0.35");
+        if (node1Label) { node1Label.textContent = "Attacker (n1)"; node1Label.setAttribute("fill", "#64748b"); }
+        if (node1Sub) { node1Sub.textContent = "[IDLE - NO ATTACK]"; node1Sub.setAttribute("fill", "#64748b"); }
+        if (link12) link12.setAttribute("opacity", "0.2");
+
+        // Node 2 & 3
+        if (node2) node2.setAttribute("stroke", "#000000");
+        if (node3) node3.setAttribute("stroke", "#008800");
+        if (node3Label) node3Label.setAttribute("fill", "#008800");
+        if (node3Sub) { node3Sub.textContent = "[100% SECURED]"; node3Sub.setAttribute("fill", "#10b981"); }
+
+        // Node 4 (Honeypot) and Link 2-4 are OFFLINE / INVISIBLE
+        if (node4group) node4group.style.opacity = "0";
+        if (link24) link24.setAttribute("opacity", "0");
+        if (honeyLabel) honeyLabel.setAttribute("opacity", "0");
+
+        namLog("nam: event [state_change] NORMAL: Customer traffic routing 0➔2➔3. Attacker is idle. 0 drops.");
+      } 
+      else if (phase === "ATTACK") {
+        if (phaseBadge) { phaseBadge.textContent = "STATE 2: DDOS ATTACK (Queue Overflow on Link 2-3!)"; phaseBadge.style.color = "#f43f5e"; }
+        if (dropBadge) { dropBadge.textContent = "0 DROPS [d]"; dropBadge.style.color = "#f43f5e"; }
+        if (pdrBadge) { pdrBadge.textContent = "100.0% PDR"; pdrBadge.style.color = "#38bdf8"; }
+        if (honeyBadge) { honeyBadge.textContent = "OFFLINE (NOT DEPLOYED)"; honeyBadge.style.color = "#94a3b8"; }
+
+        if (expBox) { expBox.style.background = "rgba(244,63,94,0.12)"; expBox.style.borderLeft = "4px solid #f43f5e"; }
+        if (expTitle) { expTitle.textContent = "🚨 State 2: DDoS Attack Occurred (Buffer Congestion)"; expTitle.style.color = "#f43f5e"; }
+        if (expDesc) { expDesc.textContent = "Attacker (Node 1) blasts high-rate CBR flood towards Bank Server. Link 2-3 bottleneck queue overflows with red packets and DropTail packet drops occur! Honeypot is not active yet."; }
+
+        // Node 1 (Attacker) is ACTIVE RED
+        if (node1Circle) { node1Circle.setAttribute("stroke", "#cc0000"); node1Circle.setAttribute("opacity", "1"); }
+        if (node1Num) node1Num.setAttribute("opacity", "1");
+        if (node1Label) { node1Label.textContent = "Attacker (n1)"; node1Label.setAttribute("fill", "#cc0000"); }
+        if (node1Sub) { node1Sub.textContent = "[DDoS FLOOD ACTIVE]"; node1Sub.setAttribute("fill", "#f43f5e"); }
+        if (link12) link12.setAttribute("opacity", "1");
+
+        // Node 2 & 3 show congestion stress
+        if (node2) node2.setAttribute("stroke", "#cc0000");
+        if (node3) node3.setAttribute("stroke", "#cc0000");
+        if (node3Label) node3Label.setAttribute("fill", "#cc0000");
+        if (node3Sub) { node3Sub.textContent = "[CONGESTED / DROPS]"; node3Sub.setAttribute("fill", "#f43f5e"); }
+
+        // Node 4 is STILL OFFLINE because defense has not been activated yet!
+        if (node4group) node4group.style.opacity = "0.15";
+        if (node4Sub) { node4Sub.textContent = "[STANDBY - NOT DEPLOYED]"; node4Sub.setAttribute("fill", "#94a3b8"); }
+        if (link24) link24.setAttribute("opacity", "0.08");
+        if (honeyLabel) honeyLabel.setAttribute("opacity", "0.08");
+
+        namLog("nam: event [ATTACK_BURST] Attacker (1) flooding link 2-3. Buffer queue limit (4) exceeded. Drops occurring!");
+      } 
+      else if (phase === "REROUTE") {
+        ns2State.customerSent = Math.max(10, ns2State.customerSent);
+        ns2State.deliveredBank = ns2State.customerSent;
+        ns2State.droppedPackets = 0;
+        ns2State.queueCount = 0;
+
+        if (phaseBadge) { phaseBadge.textContent = "STATE 3: SECURE REROUTE ACTIVE (Attacker ➔ Honeypot n4)"; phaseBadge.style.color = "#a855f7"; }
+        if (dropBadge) { dropBadge.textContent = "0 DROPS [d]"; dropBadge.style.color = "#34d399"; }
+        if (pdrBadge) { pdrBadge.textContent = "100.0% PDR"; pdrBadge.style.color = "#34d399"; }
+        if (honeyBadge) { honeyBadge.textContent = "🛡️ ACTIVE (TRAPPING ATTACK)"; honeyBadge.style.color = "#c084fc"; }
+
+        if (expBox) { expBox.style.background = "rgba(168,85,247,0.14)"; expBox.style.borderLeft = "4px solid #a855f7"; }
+        if (expTitle) { expTitle.textContent = "🛡️ State 3: Secure Rerouting Active (Defense Engaged)"; expTitle.style.color = "#c084fc"; }
+        if (expDesc) { expDesc.textContent = "SDN Controller installs OpenFlow rule on Switch 2: Attacker (Node 1) is dynamically steered into Honeypot Decoy (Node 4)! Link 2-3 queue cleared, drops stop, and Bank Server is 100% protected!"; }
+
+        // Node 1 is TRAPPED
+        if (node1Circle) { node1Circle.setAttribute("stroke", "#7c3aed"); node1Circle.setAttribute("opacity", "1"); }
+        if (node1Num) node1Num.setAttribute("opacity", "1");
+        if (node1Label) { node1Label.textContent = "Attacker (n1)"; node1Label.setAttribute("fill", "#7c3aed"); }
+        if (node1Sub) { node1Sub.textContent = "[TRAPPED ➔ HONEYPOT]"; node1Sub.setAttribute("fill", "#a855f7"); }
+        if (link12) link12.setAttribute("opacity", "1");
+
+        // Node 2 & 3 recovered
+        if (node2) node2.setAttribute("stroke", "#7c3aed");
+        if (node3) node3.setAttribute("stroke", "#008800");
+        if (node3Label) node3Label.setAttribute("fill", "#008800");
+        if (node3Sub) { node3Sub.textContent = "[100% SECURED]"; node3Sub.setAttribute("fill", "#10b981"); }
+
+        // Node 4 and Link 2-4 are FULLY ILLUMINATED & ACTIVE!
+        if (node4group) node4group.style.opacity = "1";
+        if (node4Sub) { node4Sub.textContent = "[HONEYPOT ACTIVE - TRAPPING]"; node4Sub.setAttribute("fill", "#c084fc"); }
+        if (link24) { link24.setAttribute("opacity", "1"); link24.setAttribute("stroke-dasharray", "none"); }
+        if (honeyLabel) honeyLabel.setAttribute("opacity", "1");
+
+        namLog("nam: [SDN_FLOW_MOD] Controller diverted Attacker stream to Node 4 (Honeypot). Link 2-3 queue drained! 0 drops. Bank core 100% secured.");
+      }
+      ns2UpdateNAMUI();
+    }
+
+    function ns2Reset() {
+      if (ns2AutoDemoTimer) {
+        clearInterval(ns2AutoDemoTimer);
+        ns2AutoDemoTimer = null;
+        const btn = document.getElementById("nam-btn-autodemo");
+        if (btn) btn.innerHTML = "▶ Play Full Demo (1➔2➔3)";
+      }
+      ns2State.totalSent = 0;
+      ns2State.customerSent = 0;
+      ns2State.attackerSent = 0;
+      ns2State.deliveredBank = 0;
+      ns2State.deliveredHoney = 0;
+      ns2State.droppedPackets = 0;
+      ns2State.queueCount = 0;
+      ns2ClearQueue();
+      const pLayer = document.getElementById("nam-packets-layer");
+      const dLayer = document.getElementById("nam-drops-layer");
+      if (pLayer) pLayer.innerHTML = "";
+      if (dLayer) dLayer.innerHTML = "";
+      ns2SetPhase("NORMAL");
+      namLog("nam: simulation reset to initial state.");
+    }
+
+    function namLog(msg) {
+      const logEl = document.getElementById("nam-bottom-log");
+      if (!logEl) return;
+      const d = document.createElement("div");
+      d.innerHTML = `<code>${ns2State.simTime.toFixed(6)}</code> ${msg}`;
+      logEl.appendChild(d);
+      logEl.scrollTop = logEl.scrollHeight;
+      if (logEl.children.length > 30) logEl.removeChild(logEl.firstChild);
+    }
+
+    function namSimulationTick() {
+      if (!ns2State.isRunning) return;
+
+      if (ns2State.phase === "NORMAL") {
+        const dLayer = document.getElementById("nam-drops-layer");
+        if (dLayer && dLayer.children.length > 0) dLayer.innerHTML = "";
+      }
+
+      ns2State.simTime += (0.0035 * ns2State.speed);
+      const tStr = ns2State.simTime.toFixed(6);
+
+      // 1. Customer Legitimate Traffic: Node 0 ➔ Node 2 (Blue Chevrons)
+      if (Math.random() < 0.65) {
+        ns2State.totalSent++;
+        ns2State.customerSent++;
+        namAnimateChevron(155, 130, 310, 230, 34.2, "#0000ff", () => {
+          // Reached Node 2
+          if (ns2State.phase === "ATTACK" && ns2State.queueCount >= ns2State.queueMax) {
+            // Drop victimized customer packet (blue) because link 2-3 is congested by attack!
+            ns2State.droppedPackets++;
+            namAnimatePacketDrop(335, 230, "#0000ff");
+            namLog(`d ${tStr} 2 3 tcp 512 ------- 1 0.0 3.0 [DROP: Link 2-3 Queue Full]`);
+          } else {
+            // Crosses cleanly to Node 3 (Bank Core)
+            namAnimateChevron(310, 230, 540, 230, 0, "#0000ff", () => {
+              ns2State.deliveredBank++;
+              ns2UpdateNAMUI();
+            });
+          }
+        });
+      }
+
+      // 2. Attacker Traffic: Node 1 ➔ Node 2 (ONLY active during ATTACK or REROUTE)
+      if (ns2State.phase === "ATTACK") {
+        // High-rate DDoS flood: 3 red packets per tick
+        ns2State.totalSent += 3;
+        ns2State.attackerSent += 3;
+
+        for (let i = 0; i < 3; i++) {
+          const delay = i * 60;
+          setTimeout(() => {
+            namAnimateChevron(155, 330, 310, 230, -34.2, "#ff0000", () => {
+              // Reached Node 2 — try to enqueue on bottleneck link 2-3
+              if (ns2State.queueCount < ns2State.queueMax) {
+                ns2State.queueCount++;
+                ns2RenderQueue();
+                // Drain after short delay (packet leaves queue towards node 3)
+                setTimeout(() => {
+                  ns2State.queueCount = Math.max(0, ns2State.queueCount - 1);
+                  ns2RenderQueue();
+                  // Malicious packet hits bank server
+                  namAnimateChevron(310, 230, 540, 230, 0, "#ff0000", () => {
+                    ns2UpdateNAMUI();
+                  });
+                }, 400);
+              } else {
+                // Queue full: PACKET DROP! Physical chevron falls off link below Node 2
+                ns2State.droppedPackets++;
+                const dropX = 340 + (Math.random() * 60);
+                namAnimatePacketDrop(dropX, 230, "#ff0000");
+                namLog(`d ${tStr} 2 3 cbr 1000 ------- 2 1.0 3.0 [DROP: DropTail Queue Overflow]`);
+              }
+            });
+          }, delay);
+        }
+      } 
+      else if (ns2State.phase === "REROUTE") {
+        // Attacker traffic dynamically steered by SDN to Node 4 (Honeypot Decoy)!
+        // Zero packets go to link 2-3, so ZERO queue buildup and ZERO drops!
+        ns2State.totalSent++;
+        ns2State.attackerSent++;
+
+        namAnimateChevron(155, 330, 310, 230, -34.2, "#ff0000", () => {
+          // Switch 2 (SDN flow-mod) steers packet away from bank into Node 4 (Honeypot)
+          namAnimateChevron(310, 230, 520, 370, 38.7, "#7c3aed", () => {
+            ns2State.deliveredHoney++;
+            namLog(`r ${tStr} 2 4 cbr 1000 ------- 3 1.0 4.0 [TRAPPED IN HONEYPOT (n4)]`);
+            ns2UpdateNAMUI();
+          });
+        });
+      }
+      // When phase === "NORMAL", Attacker (Node 1) produces ZERO packets.
+
+      ns2UpdateNAMUI();
+    }
+
+    function namAnimateChevron(x1, y1, x2, y2, angleDeg, color, onArrival) {
+      const layer = document.getElementById("nam-packets-layer");
+      if (!layer) return;
+
+      const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      // Classic NAM chevron shape (arrowhead block)
+      polygon.setAttribute("points", "-10,-5 2,-5 10,0 2,5 -10,5 -4,0");
+      polygon.setAttribute("fill", color);
+      polygon.setAttribute("stroke", "#000000");
+      polygon.setAttribute("stroke-width", "1");
+      layer.appendChild(polygon);
+
+      const duration = 600 / ns2State.speed;
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const curX = x1 + (x2 - x1) * progress;
+        const curY = y1 + (y2 - y1) * progress;
+
+        polygon.setAttribute("transform", `translate(${curX}, ${curY}) rotate(${angleDeg})`);
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          if (polygon.parentNode) polygon.parentNode.removeChild(polygon);
+          if (onArrival) onArrival();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function namAnimatePacketDrop(x, y, color) {
+      const dropsLayer = document.getElementById("nam-drops-layer");
+      if (!dropsLayer) return;
+
+      const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      poly.setAttribute("points", "-8,-4 2,-4 8,0 2,4 -8,4 -3,0");
+      poly.setAttribute("fill", color);
+      poly.setAttribute("stroke", "#000000");
+      poly.setAttribute("stroke-width", "1");
+      dropsLayer.appendChild(poly);
+
+      const duration = 750 / ns2State.speed;
+      const startTime = performance.now();
+
+      function dropStep(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const curY = y + (progress * 55); // falls downwards off the link!
+        const curAngle = 90 + (progress * 45); // tumbles downwards
+
+        poly.setAttribute("transform", `translate(${x}, ${curY}) rotate(${curAngle})`);
+        poly.setAttribute("opacity", (1 - progress).toString());
+
+        if (progress < 1) {
+          requestAnimationFrame(dropStep);
+        } else {
+          if (poly.parentNode) poly.parentNode.removeChild(poly);
+        }
+      }
+      requestAnimationFrame(dropStep);
+    }
+
+    function ns2RenderQueue() {
+      const qLayer = document.getElementById("nam-queue-layer");
+      if (!qLayer) return;
+      qLayer.innerHTML = "";
+
+      // Render red chevrons queued side-by-side along link 2-3 (exactly matching NAM screenshot!)
+      // Link 2-3 goes from x=310,y=230 to x=540,y=230 — queue packets just right of switch (n2)
+      for (let i = 0; i < ns2State.queueCount; i++) {
+        const qPoly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        qPoly.setAttribute("points", "-11,-6 3,-6 12,0 3,6 -11,6 -5,0");
+        qPoly.setAttribute("fill", "#ff0000");
+        qPoly.setAttribute("stroke", "#880000");
+        qPoly.setAttribute("stroke-width", "1");
+        // Space packets along link 2-3, starting ~35px right of node 2 center
+        const qX = 358 + (i * 26);
+        const qY = 220; // slightly above link line (y=230) to sit on top of it, like in reference
+        qPoly.setAttribute("transform", `translate(${qX}, ${qY}) rotate(0)`);
+        qLayer.appendChild(qPoly);
+      }
+    }
+
+    function ns2ClearQueue() {
+      ns2State.queueCount = 0;
+      const qLayer = document.getElementById("nam-queue-layer");
+      if (qLayer) qLayer.innerHTML = "";
+    }
+
+    function ns2UpdateNAMUI() {
+      const clock = document.getElementById("nam-digital-clock");
+      const thumb = document.getElementById("nam-ruler-thumb");
+      const dropBadge = document.getElementById("nam-drop-badge");
+      const pdrBadge = document.getElementById("nam-pdr-badge");
+
+      if (clock) clock.textContent = ns2State.simTime.toFixed(6);
+
+      if (thumb) {
+        // Slider sweeps across 5% to 95%
+        const pct = 5 + ((ns2State.simTime % 10) / 10) * 90;
+        thumb.style.left = `${pct}%`;
+      }
+
+      if (dropBadge) {
+        dropBadge.textContent = `${ns2State.droppedPackets} DROPS [d]`;
+        dropBadge.style.color = ns2State.droppedPackets > 0 ? "#f43f5e" : "#34d399";
+      }
+
+      if (pdrBadge) {
+        if (ns2State.phase === "NORMAL" || ns2State.phase === "REROUTE") {
+          pdrBadge.textContent = "100.0% PDR";
+          pdrBadge.style.color = "#34d399";
+        } else {
+          const total = Math.max(1, ns2State.customerSent);
+          const pdr = Math.min(100, Math.max(28, ((ns2State.deliveredBank / total) * 100))).toFixed(1);
+          pdrBadge.textContent = `${pdr}% PDR`;
+          pdrBadge.style.color = pdr > 80 ? "#34d399" : (pdr > 50 ? "#f59e0b" : "#f43f5e");
+        }
       }
     }
 
@@ -1427,6 +2548,7 @@
     addTimelineEvent("OpenFlow Switches, Ryu Controller & ML Engine synchronized.", "info");
     resetToNormal();
     startParticleEngine();
+    initNS2Simulator();
 
     // Set initial tab
     switchTab(activeTabName);
