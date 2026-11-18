@@ -1696,6 +1696,12 @@
       currentRoutingState = "NORMAL";
       clearParticles();
       if (typeof ns2SetPhase === 'function') ns2SetPhase("NORMAL");
+      if (typeof ns2State !== 'undefined') {
+        ns2State.droppedPackets = 0;
+        ns2State.queueCount = 0;
+        ns2State.deliveredBank = ns2State.customerSent = Math.max(10, ns2State.customerSent || 0);
+        ns2State.deliveredHoney = 0;
+      }
       updateArchVisuals();
     }
 

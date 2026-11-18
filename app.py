@@ -478,32 +478,55 @@ def toggle_ml():
 @app.route("/api/stats")
 @app.route("/api/live-status")
 def stats():
-    flows = get_recent_flows()
-    routing_events = get_routing_events()
-    logs = load_logs()
-    
+    # --- Always read directly from disk files so data survives any restart ---
+    flows          = get_recent_flows()          # logs/flows_log.json  (429 entries)
+    routing_events = get_routing_events()        # logs/routing_log.json
+
+    # Count from flows_log (fields: status = "SAFE" | "THREAT DETECTED")
     threat_count = sum(1 for f in flows if f.get("status") == "THREAT DETECTED")
-    safe_count = sum(1 for f in flows if f.get("status") == "SAFE")
-    
-    if safe_count == 0 and len(logs) > 0:
-        safe_count = sum(1 for l in logs if l.get("status") == "SAFE")
-    if threat_count == 0 and len(logs) > 0:
-        threat_count = sum(1 for l in logs if l.get("status") == "THREAT DETECTED")
-        
-    total = len(flows) if len(flows) > 0 else (threat_count + safe_count)
-    if safe_count + threat_count > total:
-        total = safe_count + threat_count
-        
+    safe_count   = sum(1 for f in flows if f.get("status") == "SAFE")
+    total        = len(flows)
+
+    # If flows_log sparse, fall back to logs.json
+    if total < 5:
+        logs = load_logs()
+        threat_count = max(threat_count, sum(1 for l in logs if l.get("status") == "THREAT DETECTED"))
+        safe_count   = max(safe_count,   sum(1 for l in logs if l.get("status") == "SAFE"))
+        total        = max(total, len(logs))
+
     rerouted = len(routing_events)
-    
+
+    # Restore in-memory counter from disk if it was reset by restart
+    global THREAT_EVENT_COUNTER, LATEST_THREAT_EVENT
+    if THREAT_EVENT_COUNTER == 0 and rerouted > 0:
+        THREAT_EVENT_COUNTER = rerouted
+        try:
+            hp_path = os.path.join(BASE_DIR, "logs", "honeypot_log.json")
+            if os.path.exists(hp_path):
+                with open(hp_path) as _hf:
+                    _hp = json.load(_hf)
+                if _hp:
+                    last = _hp[-1]
+                    LATEST_THREAT_EVENT = {
+                        "counter": THREAT_EVENT_COUNTER,
+                        "timestamp": last.get("timestamp", ""),
+                        "source_ip": last.get("attacker_ip", ""),
+                        "destination_ip": last.get("service", ""),
+                        "threat_type": "DDoS / Honeypot Trap",
+                        "severity": "Critical",
+                        "action": "BLOCKED"
+                    }
+        except Exception:
+            pass
+
     return jsonify({
-        "total": max(1, total),
-        "threats": threat_count,
-        "safe": safe_count,
-        "rerouted": rerouted,
-        "threat_counter": THREAT_EVENT_COUNTER,
-        "latest_threat": LATEST_THREAT_EVENT,
-        "routing_events_count": len(routing_events)
+        "total":                max(total, threat_count + safe_count),
+        "threats":              threat_count,
+        "safe":                 safe_count,
+        "rerouted":             rerouted,
+        "threat_counter":       THREAT_EVENT_COUNTER,
+        "latest_threat":        LATEST_THREAT_EVENT,
+        "routing_events_count": rerouted
     })
 
 @app.route("/api/alerts-per-hour")
@@ -575,7 +598,11 @@ def api_routing():
 @app.route("/api/live-packets")
 def live_packets():
     flows = get_recent_flows()
-    return jsonify(flows[-50:])
+    if flows:
+        return jsonify(flows[-50:])
+    # Fallback: return from persisted logs.json when in-memory flows are empty
+    logs = load_logs()
+    return jsonify(logs[-50:] if logs else [])
 
 
 # === Export Routes ===
@@ -687,8 +714,57 @@ def start_sniffer():
     except Exception as e:
         print(f"[!] Sniffer failed (requires elevated privileges/Scapy): {e}")
 
+def restore_counters_from_disk():
+    """On startup, reload the THREAT_EVENT_COUNTER and LATEST_THREAT_EVENT
+    from the persisted honeypot / routing logs so the dashboard shows real
+    numbers immediately — even after a server restart."""
+    global THREAT_EVENT_COUNTER, LATEST_THREAT_EVENT
+
+    # 1. Restore threat counter from routing_log.json
+    routing_log_path = os.path.join(BASE_DIR, "logs", "routing_log.json")
+    try:
+        if os.path.exists(routing_log_path):
+            with open(routing_log_path, "r") as f:
+                routing_data = json.load(f)
+            if isinstance(routing_data, list):
+                THREAT_EVENT_COUNTER = len(routing_data)
+                print(f"[STARTUP] Restored THREAT_EVENT_COUNTER = {THREAT_EVENT_COUNTER} from routing_log.json")
+    except Exception as e:
+        print(f"[STARTUP] Could not restore from routing_log.json: {e}")
+
+    # 2. Restore LATEST_THREAT_EVENT from honeypot_log.json
+    try:
+        if os.path.exists(HONEYPOT_LOG):
+            with open(HONEYPOT_LOG, "r") as f:
+                hp_data = json.load(f)
+            if isinstance(hp_data, list) and len(hp_data) > 0:
+                last = hp_data[-1]
+                LATEST_THREAT_EVENT = {
+                    "counter": THREAT_EVENT_COUNTER,
+                    "timestamp": last.get("timestamp", ""),
+                    "source_ip": last.get("attacker_ip", ""),
+                    "destination_ip": last.get("service", ""),
+                    "threat_type": "DDoS / Honeypot Trap",
+                    "severity": "Critical",
+                    "action": "BLOCKED"
+                }
+                print(f"[STARTUP] Restored LATEST_THREAT_EVENT from honeypot_log.json")
+    except Exception as e:
+        print(f"[STARTUP] Could not restore from honeypot_log.json: {e}")
+
+    # 3. Also pre-fill PACKET_LOG from logs.json so Live Packet Stream works
+    try:
+        existing_logs = load_logs()
+        if existing_logs:
+            PACKET_LOG.extend(existing_logs[-200:])  # last 200 entries
+            print(f"[STARTUP] Pre-filled PACKET_LOG with {len(existing_logs[-200:])} entries from logs.json")
+    except Exception as e:
+        print(f"[STARTUP] Could not pre-fill PACKET_LOG: {e}")
+
+
 if __name__ == "__main__":
     ensure_logs_file()
+    restore_counters_from_disk()
     sniffer_thread = threading.Thread(target=start_sniffer, daemon=True)
     sniffer_thread.start()
     app.run(host="0.0.0.0", port=8855, debug=False)
